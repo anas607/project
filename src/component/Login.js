@@ -1,0 +1,235 @@
+//=======mui=======//
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { Alert, Snackbar, Backdrop } from "@mui/material";
+import { login, updateField } from "../reducer/login";
+import { CircularProgress } from "@mui/material";
+import Alertjs from "../wrong/alert";
+import { useState } from "react";
+import axios from "axios";
+import { BaseUrl, LOGIN } from "../API/api";
+import LoadingOverlay from "../wrong/loding";
+import { useNavigate } from "react-router-dom";
+import ErrorAlert from "../wrong/alert";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../reducer/user";
+import Cookies from "universal-cookie";
+import { postData } from "../API/apiService";
+export default function Login() {
+  const state_user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    name: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+  console.log(form);
+  function handleChange(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("password", form.password);
+
+    try {
+      const response = await postData(`${BaseUrl}${LOGIN}`, formData);
+
+      const token = response.data?.access_token;
+
+      if (response.success) {
+        dispatch(
+          setUserData({
+            user: response.data.user,
+            roles: response.data.roles,
+          })
+        );
+
+        const cookies = new Cookies();
+        cookies.set("access_token", token, {
+          path: "/",
+          maxAge: 86400,
+        });
+
+        navigate("/dachbord");
+      } else {
+        setError("بيانات الدخول غير صحيحة");
+        setOpenAlert(true);
+        setTimeout(() => {
+          setOpenAlert(false);
+          setError("");
+        }, 2000);
+      }
+    } catch (error) {
+      setError(error.message || "حدث خطأ أثناء تسجيل الدخول");
+      setOpenAlert(true);
+      setTimeout(() => {
+        setOpenAlert(false);
+        setError("");
+      }, 2000);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <>
+      <LoadingOverlay open={loading} />
+
+      <Box sx={{ display: "flex", height: "100vh" }}>
+        {/* قسم الصورة */}
+        <Box
+          sx={{
+            flex: 3,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <img src="hello.png" style={{ width: "100%", height: "100%" }} />
+        </Box>
+        <ErrorAlert
+          open={openAlert}
+          message={error}
+          onClose={() => setOpenAlert(false)}
+        />
+
+        {/* قسم الكارد */}
+        <Card
+          sx={{
+            width: "20%",
+            px: 3,
+            pt: 4,
+            pb: 4,
+            backgroundColor: (theme) => theme.palette.primary.main,
+            boxShadow: "-10px 0px 30px rgb(70, 80, 72)",
+          }}
+        >
+          <form onSubmit={handleSubmit}>
+            <CardContent>
+              <img
+                src="logo.png"
+                style={{
+                  width: "90px",
+                  height: "90px",
+                  marginTop: "2%",
+                  filter: "brightness(0) invert(1)",
+                }}
+              />
+              <Typography
+                variant="h4"
+                sx={{
+                  color: (theme) => theme.palette.secondary.main,
+                  mt: "10%",
+                }}
+              >
+                تسجيل الدخول
+              </Typography>
+
+              <Typography
+                variant="h6"
+                sx={{ color: (theme) => theme.palette.secondary.main }}
+              >
+                مرحبا بعودتك
+              </Typography>
+
+              <Box sx={{ pr: 2, width: "100%" }}>
+                <TextField
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  label=" اسم المستخدم "
+                  type="text"
+                  variant="outlined"
+                  sx={{
+                    width: "109%",
+                    direction: "rtl",
+                    mt: "15%",
+                    borderRadius: "10px",
+                    backgroundColor: (theme) => theme.palette.secondary.main,
+                    mb: 3,
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                      height: "50px",
+                      boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                        boxShadow: "0 0 6px rgba(0,0,0,0.3)",
+                      },
+                    },
+                  }}
+                />
+
+                <TextField
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  label=" كلمة المرور "
+                  type="password"
+                  variant="outlined"
+                  sx={{
+                    width: "109%",
+                    direction: "rtl",
+                    borderRadius: "10px",
+                    backgroundColor: (theme) => theme.palette.secondary.main,
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                      height: "50px",
+                      boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                        boxShadow: "0 0 6px rgba(0,0,0,0.3)",
+                      },
+                    },
+                  }}
+                />
+              </Box>
+
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                sx={{
+                  borderRadius: "20px",
+                  backgroundColor: (theme) => theme.palette.secondary.main,
+                  color: (theme) => theme.palette.primary.main,
+                  fontSize: "1.1rem",
+                  mt: "25%",
+                  width: "60%",
+                  mb: 2,
+                  direction: "rtl",
+                  textTransform: "none",
+                }}
+              >
+                تسجيل الدخول
+              </Button>
+            </CardContent>
+          </form>
+        </Card>
+      </Box>
+    </>
+  );
+}

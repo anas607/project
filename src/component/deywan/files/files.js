@@ -1,0 +1,1044 @@
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import AddIcon from '@mui/icons-material/Add';
+import { Typography, Grid ,Paper,Modal,Checkbox,StepLabel, TextField} from '@mui/material';
+import NoteIcon from '@mui/icons-material/Note';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import SidBar from '../dachboard/SIDEBAR/sidbar';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import Appar from '../dachboard/SIDEBAR/appar';
+import { useState } from 'react';
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
+
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepButton from '@mui/material/StepButton';
+import { styled } from '@mui/material/styles';
+import Step_1 from './steps/step_1';
+import Step_2 from './steps/step_2';
+import Step_3 from './steps/step_3';
+import Step_4 from './steps/step_4';
+
+const CustomConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.vertical}`]: {
+    margin: 0,
+    padding: 0,
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    borderColor: '#ccc',
+    borderLeftWidth: 2,
+    minHeight: 70, // تقليل المسافة بين الدوائر
+    marginLeft: 18,
+  },
+}));
+
+
+ const transactions = [
+    { id: 1, name: 'معاملة 1', status: 'مفعّلة', date: '2025-06-27' },
+    { id: 2, name: 'معاملة 2', status: 'غير مفعّلة', date: '2025-05-15' },
+    { id: 3, name: 'معاملة 3', status: 'مفعّلة', date: '2025-04-01' },
+    { id: 4, name: 'معاملة 4', status: 'غير مفعّلة', date: '2025-02-10' },
+        { id: 5, name: 'معاملة 5', status: 'قيد الدراسة', date: '2025-03-10' },
+
+  ];
+
+
+const steps=['المعلومات العامة',' استمارة المعاملة', 'المرفقات', 'معاينة']
+
+
+const getCardColor = (status) => {
+  switch (status) {
+    case 'مفعّلة':
+      return 'rgb(14, 74, 35)'; // أخضر فاتح
+    case 'غير مفعّلة':
+      return 'rgb(102, 101, 101)'; // أحمر فاتح
+    case 'قيد الدراسة':
+      return '#FFC107'; // أصفر فاتح
+    default:
+      return '#ffffff';
+  }
+};
+export default function Files(){
+ const[showFile,setShowFile]=useState(false)
+ const [showaddfile,setShowAddFile]=useState(false)
+ const[activeStep,setActiveStep]=useState(0)
+  const [completed, setCompleted] = useState({});
+
+function handleBack(){
+   if (activeStep > 0) {
+      setActiveStep((prev) => prev - 1);
+    }
+}
+function handleStep(step){
+  setActiveStep(step);
+}
+  function handleNext(){
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prev) => prev + 1);
+    }
+  }
+ 
+
+  
+
+    return(
+        <>
+       <Box
+  sx={{
+    direction: "rtl",
+    height: '100vh',
+    
+    display: "flex"
+  }}
+>
+  
+  <SidBar />
+
+  
+  <Box sx={{ flexGrow: 1, padding: '2%', display: 'flex', flexDirection: 'column' ,backgroundColor:"rgba(233,232,232,0.5)"}}>
+
+    {/*  صف العنوان + البحث + الإشعار */}
+    <Appar/>
+
+  
+
+    
+  
+   
+  
+   
+ <Box
+  sx={{
+  //  backgroundColor:"rgb(233,232,232)",
+    p: 2,
+    borderRadius: 5,
+    maxWidth: '3000px', maxHeight:'2000px',
+    width: '1600px',
+    alignSelf: 'rtl', 
+  }}
+>
+   <Grid container spacing={2}>
+
+  {/* زر رفع ملف */}
+  <Grid item xs={12} sm={6} md={3}>
+    <Button
+    onClick={()=>{setShowAddFile(true)}}
+      variant="outlined"
+      fullWidth
+      sx={{
+        height: 200,
+        borderStyle: 'dashed',border:'4px dashed rgb(14,75,35) ',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',borderRadius:"5%"
+      }}
+    >
+       <Box position="relative" display="inline-flex" width={40} height={40}>
+      <TextSnippetIcon sx={{ fontSize: 50 }} />
+      <AddIcon
+        sx={{
+          position: 'absolute',
+          top: 2,
+          right: 2,
+          fontSize: 16,
+          backgroundColor: 'rgb(233, 218, 218)',
+          borderRadius: '50%',
+        }}
+      />
+    </Box>
+<Typography  sx={{mt:2}} style={{fontSize:'20px',fontWeight:'700',mt:-2}}>اضافة معاملة</Typography>
+    <Typography style={{fontSize:'20px',fontWeight:'700',mt:-3}}>بشكل  يدوي </Typography>
+
+    </Button>
+  </Grid>
+{/* add file */}
+ <Modal
+      open={showaddfile}
+      aria-labelledby="add-employee-modal"
+      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <Paper
+        elevation={4}
+        sx={{
+         width: '850px',
+      height: '800px',
+          p: 4,
+          borderRadius: 3,
+          direction: 'rtl',
+          outline: 'none',
+          display: 'flex',
+          flexDirection: 'row',boxShadow:'3px 3px 3px gray',
+          gap: 4,
+        }}
+      >
+        {/* الجزء الأيمن: الستيبّر */}
+      <Box sx={{ position: 'relative', Width: 50, pt: 2, height: 400 }}>
+  {/* الخط الخلفي اليدوي */}
+  <Box
+    sx={{
+      position: 'absolute',
+      top: 10, // بداية الخط (عدّل حسب الحاجة)
+      bottom: 10,
+      left: 12, // يمر خلف الدوائر تمامًا (عدّل حسب موقع الأيقونة)
+      width: 2,
+      bgcolor: '#ccc',
+      zIndex: 0,
+    }}
+  />
+  
+  <Stepper
+    activeStep={activeStep}
+    orientation="vertical"
+    connector={<></>} // نلغي الموصلات الافتراضية
+  >
+    {steps.map((label, index) => (
+      <Step key={label} sx={{ py: 2, position: 'relative', zIndex: 1 }}>
+        <StepLabel
+          onClick={() => handleStep(index)}
+          sx={{
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            '.MuiStepLabel-iconContainer': {
+              order: 2,
+               pl: -3, zIndex: 2
+            },
+            '.MuiStepLabel-label': {
+              order: 1,
+              color: activeStep === index ? 'rgb(14,74,35)' : 'gray',
+              fontWeight: activeStep === index ? '700' : 'normal',
+              textAlign: 'right',
+              whiteSpace: 'nowrap',fontSize:"18px",
+            },
+          }}
+          StepIconProps={{
+            style: {
+              color: activeStep === index ? 'rgb(14,74,35)' : '#ccc',width:'40px',height:'40px'
+            },
+          }}
+        >
+          {label}
+        </StepLabel>
+      </Step>
+    ))}
+  </Stepper>
+</Box>
+
+
+
+
+        {/* الجزء الأوسط: المحتوى */}
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' ,mr:-2 }}>
+          {/* العنوان */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="h6" sx={{ fontSize:"24px", color: "rgb(14,74,35)",fontWeight:700 }}>
+              {steps[activeStep]}
+            </Typography>
+            <HighlightOffIcon
+              onClick={() => setShowAddFile(false)}
+              sx={{ cursor: 'pointer', color: 'rgb(14,74,35)',mt:-2 ,fontSize:'30px'}}
+            />
+          </Box>
+
+          <hr style={{
+            height: "4px",
+            width: "90%",
+  background: (() => {
+      if (activeStep === 0) return "linear-gradient(to left, rgb(14,74,35) 40%, rgba(206, 199, 199, 0.43) 60%)";
+      if (activeStep === 1) return "linear-gradient(to left, rgb(14,74,35) 60%, rgba(206, 199, 199, 0.43) 40%)";
+      if (activeStep === 2) return "linear-gradient(to left, rgb(14,74,35) 80%, rgba(206, 199, 199, 0.43) 20%)";
+      if (activeStep === 3) return "linear-gradient(to left, rgb(14,74,35) 100%, rgb(14,74,35) 100%)";
+      return "rgba(206, 199, 199, 0.43)";
+    })(),            border: "none",
+            margin: "1rem 0",
+            borderRadius: "2px",mb:2,
+            marginTop: "0"
+          }} />
+
+          {/* محتوى كل خطوة (تضع التفاصيل لاحقًا) */}
+         {activeStep==0&&
+         <Step_1/>
+         }
+         {activeStep==1&&
+         <Step_2/>
+         }
+         {activeStep==2&&
+         <Step_3/>
+         }
+         {activeStep==3&&
+          <Step_4/>
+         }
+
+          {/* أزرار التنقل */}
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            mt: 2
+          }}>
+            {activeStep!==0 &&  <Button
+              onClick={handleBack}
+             
+              sx={{
+                backgroundColor: 'rgb(215,34,24)',
+                color: 'white',
+                borderRadius: '25px',
+               width:'30%',height:'54px',fontSize:'24px',fontWeight:'700',
+                '&:hover': {
+                  backgroundColor: 'darkred'
+                }
+              }}
+            >
+              السابق
+            </Button>}
+           
+
+            <Button
+              onClick={handleNext}
+             
+              sx={{
+                backgroundColor: 'rgb(14,74,35)',
+                color: 'white',
+                borderRadius: '25px',
+                 width:'30%',height:'54px',fontSize:'24px',fontWeight:'700',mr:activeStep==0 ? 55 : 20,
+                '&:hover': {
+                  backgroundColor: 'rgb(10,50,25)'
+                }
+              }}
+            >
+              {activeStep==3 ? "اضافة" : "التالي"}
+            </Button>
+          </Box>
+        </Box>
+      </Paper>
+    </Modal>
+{/* add ============================file============================================= */}
+  {/* زر word لتحميل ملف من الجهاز */}
+  <Grid item xs={12} sm={6} md={3}>
+    <label htmlFor="upload-word-file">
+      <input
+        id="upload-word-file"
+        type="file"
+        accept=".doc,.docx"
+        style={{ display: 'none' }}
+      />
+      <Button
+        component="span"
+        variant="outlined"
+        fullWidth
+        sx={{
+           height: 200,
+        borderStyle: 'dashed',border:'4px dashed rgb(14,75,35) ',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',borderRadius:"5%"
+        }}
+      >
+         <Box position="relative" display="inline-flex" width={40} height={40}>
+      <InsertDriveFileIcon sx={{ fontSize: 50 }} />
+      <Typography
+        variant="caption"
+        sx={{
+          position: 'absolute',
+          top: '70%',
+          left: '40%',
+          transform: 'translate(-50%, -50%)',
+          fontWeight: '600',
+          color: 'white', // أو أي لون يناسبك
+          fontSize: '18px',
+        }}
+      >
+        W
+      </Typography>
+    </Box>
+    <Typography  sx={{mt:2}} style={{fontSize:'20px',fontWeight:'700'}}>اضافة معاملة</Typography>
+    <Typography style={{fontSize:'20px',fontWeight:'700',}}>بواسطة ملف وورد </Typography>
+
+      </Button>
+    </label>
+  </Grid>
+
+
+              {/* أوراق المعاملات */}
+              {transactions.map((item) => (
+                <Grid item xs={12} sm={6} md={3} key={item.id}>
+                  <Paper
+                  onClick={()=>{setShowFile(true)}}
+                    elevation={3}
+                    sx={{
+                      height: 178,cursor:'pointer',
+                      p: 2,
+                      backgroundColor: getCardColor(item.status),
+                      position: 'relative',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',borderRadius:"5%"
+                    }}
+                  >
+                    {/* الأيقونة - في الأعلى اليسار */}
+                    <NoteIcon
+                    
+                      sx={{ position: 'absolute', top: 8, left: 8, color:  item.status === 'مفعّلة'
+                              ? 'rgb(1, 53, 19)'
+                              : item.status === 'غير مفعّلة'
+                              ? 'rgb(83, 82, 82)'
+                              : 'orange',
+                        
+                        
+                        fontSize:"64px" }}
+                    />
+
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' ,mt:2}}>
+                      {/* التاريخ */}
+                      <Typography  sx={{fontSize:"14px" ,fontWeight:"700"}} variant="body2" color="white">
+                        {item.date}
+                      </Typography>
+
+                      {/* الحالة */}
+                       <Typography
+                        variant="body2"
+                        sx={{
+                          color:
+                           'white',
+                          fontWeight: 700,fontSize:"14px",
+                          mt: 0.5,
+                        }}
+                      >
+                        {item.status}
+                      </Typography>
+
+                      {/* الاسم */}
+                      <Typography variant="subtitle1"  sx={{ mt: 0.5 ,fontSize:"24px", fontWeight: 700 ,color:'white'}}>
+                        {item.name}
+                      </Typography>
+                    </Box>
+
+                    {/* زر التفعيل / إلغاء */}
+                       {/* الزر يظهر فقط إذا ليست "قيد الدراسة" */}
+                    {item.status !== 'قيد الدراسة' && (
+                      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button
+                          variant="contained"
+                         
+                          sx={{
+                            borderRadius: '20px',height:'34px',width:'30%',
+                            backgroundColor: 
+                                "white",
+                            color:
+                            item.status==='مفعّلة' ? 'rgb(14, 74, 35)' : 'rgb(215, 34, 24)',
+                            textTransform: 'none',
+fontSize: '12px',fontWeight:'700',                            px: 2,
+                            py: 0.5,
+                          }}
+                        >
+                          {item.status === 'مفعّلة' ? '  إلغاء تفعيل' : 'تفعيل'}
+                        </Button>
+                      </Box>
+                    )}
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        </Box>
+        { <Modal
+ open={showFile}
+  onClose={() => setShowFile(false)}
+  
+  aria-labelledby="add-employee-modal"
+  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+>
+  
+  <Paper
+    elevation={4}
+    sx={{
+      width: '800px',
+      height: '775px',
+      p: 2,
+      borderRadius: 3,
+      direction: 'rtl',
+      outline: 'none',
+      
+    }}
+  >
+    <HighlightOffIcon
+      onClick={() => setShowFile(false)}
+      sx={{ mr: 91, position: 'absolute' ,cursor:"pointer",fontSize:'30px' }}
+    />
+    <Typography
+         variant="h6"
+         sx={{
+           mb: 3,
+           fontWeight: '700',fontSize:'32px',mt:3,
+           color: 'black',
+           mr: 30,
+           pb: 2,
+         }}
+       >
+         بيان برنامج تدريبي
+       </Typography>
+   
+       <Grid container spacing={2}>
+         {/* الاسم الأول + رقم الجوال */}
+         <Grid container spacing={2}>
+           <Grid item xs={6}>
+             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2}}>
+               <Typography sx={{  fontSize:"20px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>الاسم الأول:</Typography>
+                <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: 1,
+                 }
+               }}
+             />
+             </Box>
+           </Grid>
+           <Grid item xs={6}>
+             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+               <Typography  sx={{  fontSize:"20px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>رقم الجوال :</Typography>
+                <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: 1,
+                 }
+               }}
+             />
+             </Box>
+           </Grid>
+         </Grid>
+   
+         {/* اسم الأب + الهاتف الأرضي */}
+         <Grid container spacing={2}>
+           <Grid item xs={6}>
+             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+               <Typography  sx={{  fontSize:"20px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>الاسم الأب:</Typography>
+                <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: 1,
+                 }
+               }}
+             />
+             </Box>
+           </Grid>
+           <Grid item xs={6}>
+             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+               <Typography  sx={{  fontSize:"20px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>الهاتف الأرضي :</Typography>
+                <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: 1,
+                 }
+               }}
+             />
+             </Box>
+           </Grid>
+         </Grid>
+   
+         {/* اسم العائلة + السكن */}
+         <Grid container spacing={2}>
+           <Grid item xs={6}>
+             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+               <Typography  sx={{  fontSize:"20px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>الاسم العائلة:</Typography>
+               <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: 1,
+                 }
+               }}
+             />
+             </Box>
+           </Grid>
+           <Grid item xs={6}>
+             <Box sx={{ display: 'flex', alignItems: 'center', mb: -1 }}>
+               <Typography sx={{ fontSize:"20px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>
+                 عنوان السكن المعتمد :
+               </Typography>
+                <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: 1,
+                 }
+               }}
+             />
+             </Box>
+           </Grid>
+         </Grid>
+   
+         {/* الرقم الوطني */}
+         <Grid item xs={12} sm={6}>
+           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+             <Typography  sx={{  fontSize:"20px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>الرقم الوطني :</Typography>
+             <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: 1,
+                 }
+               }}
+             />
+           </Box>
+         </Grid>
+   
+         {/* باقي النموذج كما هو */}
+        <Grid item xs={12}>
+           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -1 }}>
+             <Typography  sx={{  fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>  الاختصاص:</Typography>
+              <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: 1,
+                 }
+               }}
+             />
+           <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1, mr:2 ,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> رئيسي </Typography>
+   <Checkbox size="small"  sx={{mr:-1 ,color: " rgb(14,74,35)"}}/>
+           </Box>
+         
+         
+          <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> فرعي </Typography>
+   <Checkbox size="small"  sx={{mr:-1,color: " rgb(14,74,35)"}}/>
+           </Box>
+       
+            
+                <Typography sx={{whiteSpace: 'nowrap',fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}} >مديرية الصحة:</Typography>
+             <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: -1,
+                 }
+               }}
+             />
+           </Box>
+         </Grid>
+   
+         <Grid item xs={12}>
+           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -1 }}>
+             <Typography sx={{ whiteSpace: 'nowrap' ,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>مقبول في :</Typography>
+            
+           <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1, whiteSpace: 'nowrap' ,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> مفاضلة ترميمية</Typography>
+   <Checkbox size="small"  sx={{mr:-1 ,color: " rgb(14,74,35)"}}/>
+           </Box>
+         
+         
+          <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1,whiteSpace: 'nowrap' ,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>  مفاضلة عامة</Typography>
+   <Checkbox size="small"  sx={{mr:-1,color: " rgb(14,74,35)"}}/>
+           </Box>
+       
+             <Typography sx={{mr:2,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>المحافظة:</Typography>
+              <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: -1,
+                 }
+               }}
+             />
+                <Typography sx={{fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>السنة:</Typography>
+              <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: -6,
+                 }
+               }}
+             />
+           </Box>
+         </Grid>
+   
+         <Grid item xs={12}>
+           <Box sx={{ mt: 2 ,display: 'flex', alignItems: 'center'}}>
+             <Typography sx={{whiteSpace: 'nowrap' ,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}} >عدد سنوات الاختصاص حسب نظام الاقامة  : </Typography>
+             <TextField
+                        variant="standard"
+                        fullWidth
+                        sx={{
+                          width: '20%',
+                          input: {
+                            px: 1,
+                            fontSize: "13px",
+                            borderBottom: '1px dashed gray !important',
+                          },
+                        }}
+                        InputProps={{
+                          disableUnderline: true,
+                          sx: {
+                            
+                            px: 1,
+                            minHeight: '28px',
+                            mt: -2,
+                            mr: -1,
+                          }
+                        }}
+                      />
+                </Box>
+         </Grid>
+   
+         <Grid item xs={12}>
+           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -1 }}>
+             <Typography sx={{whiteSpace: 'nowrap' ,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>ناجح في الاختبار النهائي الكتابي دورة شهر :</Typography>
+            
+           <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> نيسان</Typography>
+   <Checkbox size="small" sx={{color: " rgb(14,74,35)"}}/>
+           </Box>
+         
+         
+          <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1,whiteSpace: 'nowrap',fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> تشرين الاول</Typography>
+   <Checkbox size="small" sx={{color: " rgb(14,74,35)"}} />
+           </Box>
+       
+             <Typography sx={{mr:2,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>السنة:</Typography>
+             <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: -6,
+                 }
+               }}
+             />
+           </Box>
+         </Grid>
+   
+         <Grid item xs={12}>
+           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -1 }}>
+             <Typography sx={{whiteSpace: 'nowrap' ,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>ناجح في الاختبار النهائي العملي دورة شهر :</Typography>
+            <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> نيسان</Typography>
+   <Checkbox size="small"sx={{color: " rgb(14,74,35)"}}/>
+           </Box>
+             <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1,whiteSpace: 'nowrap',fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> تشرين الاول</Typography>
+   <Checkbox size="small"sx={{color: " rgb(14,74,35)"}} />
+           </Box>
+             <Typography  sx={{mr:2,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>السنة:</Typography>
+             <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: -6,
+                 }
+               }}
+             />
+           </Box>
+         </Grid>
+   
+         <Grid item xs={12}>
+           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -1 }}>
+             <Typography sx={{whiteSpace: 'nowrap' ,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>ناجح في الاختبار السنة الاولى  دورة شهر :</Typography>
+            <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1 ,mr:1.2,ffontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> نيسان</Typography>
+   <Checkbox size="small" sx={{color: " rgb(14,74,35)"}}/>
+           </Box>
+             <Box sx={{ display: 'flex'}}>
+    
+   <Typography sx={{mt:1,whiteSpace: 'nowrap',fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}> تشرين الاول</Typography>
+   <Checkbox size="small" sx={{color: " rgb(14,74,35)"}}/>
+           </Box>
+             <Typography  sx={{mr:2,fontSize:"18px",fontWeight:'700' ,color:'rgb(98,91,113)'}}>السنة:</Typography>
+             <TextField
+               variant="standard"
+               fullWidth
+               sx={{
+                 width: '20%',
+                 input: {
+                   px: 1,
+                   fontSize: "13px",
+                   borderBottom: '1px dashed gray !important',
+                 },
+               }}
+               InputProps={{
+                 disableUnderline: true,
+                 sx: {
+                   
+                   px: 1,
+                   minHeight: '28px',
+                   mt: -2,
+                   mr: -6,
+                 }
+               }}
+             />
+           </Box>
+         </Grid>
+
+      {/* المرفقات */}
+      <Grid item xs={12}>
+       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3, mt: 1 }}>
+  <Typography>
+    المرفقات:
+    <label htmlFor="upload-image-file">
+      <input
+        id="upload-image-file"
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
+      <Button
+        component="span"
+        variant="outlined"
+        fullWidth
+        sx={{
+          height: 130,
+          width: 130,
+          borderStyle: 'dashed',
+          border: '2px dashed rgba(197, 193, 193, 0.79)',
+          display: 'flex',
+          flexDirection: 'column',    
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '10%',
+          textAlign: 'center',mr:9,mt:-1
+        }}
+      >
+        <NoteIcon sx={{ fontSize: 30, color: 'black', mb: 1 }} />
+        <Typography sx={{ fontSize: '16px' ,fontWeight:'700' ,color:'black'}}>
+          صورة مصدقة عن شهادة البورد
+        </Typography>
+      </Button>
+    </label>
+  </Typography>
+
+
+   
+          
+        </Box>
+      </Grid>
+    </Grid>
+  </Paper>
+  
+</Modal>}     
+
+
+
+</Box>
+
+
+
+  
+
+
+
+</>)}
+   
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+       

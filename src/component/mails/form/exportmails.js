@@ -1,230 +1,32 @@
-import React, { useEffect, useState } from "react";
+
+
+
+
 import {
   Box,
   Typography,
-  Avatar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+ 
   Paper,
    Modal,
   Grid,
   Button,
   Checkbox,
-  IconButton,
+  
   TextField,
-  Menu,
-  MenuItem,
-  AppBar,
+ 
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import NoteIcon from '@mui/icons-material/Note';import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import SidBar from "./dachboard/SIDEBAR/sidbar";
-import Appar from "./dachboard/SIDEBAR/appar";
-import ArticleIcon from '@mui/icons-material/Article';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
- import {useDispatch,useSelector }  from "react-redux"
-import { getData } from "../../API/apiService";
-import { fetchexportouter } from "../../reducer/deywan/outer/outer";
-import { fetchimportouter } from "../../reducer/deywan/outer/importouter";
-import Loading from "../../wrong/mails/loading";
 
 
 
+export default function EXPORTMAILS({open,onClose}){
+    return(
 
+<>
 
-const Outer_Magales = () => {
-  const stateexport=useSelector((state)=>state.outerexport)
-    const stateimport=useSelector((state)=>state.outereimport)
-
-const dispatch=useDispatch()
-
-   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedType, setSelectedType] = useState("البريد الوارد");
-  const [openModal, setOpenModal] = useState(false);
-   const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const isInbox = selectedType === "البريد الوارد";
-  const rows = isInbox ? stateimport : stateexport;
-useEffect(() => {
-  const fetchData = async () => {
-  
-    try {
-      let response;
-
-      if (selectedType === "البريد الوارد") {
-        response = await getData();
-      } else {
-        response = await getData();
-      }
-
-      const realData = Array.isArray(response.data?.[0]) ? response.data[0] : response.data;
-
-      if (selectedType === "البريد الوارد") {
-        dispatch(fetchexportouter(realData));
-      } else {
-        dispatch(fetchimportouter(realData));
-      }
-
-    } catch (err) {
-      const errorMessage =
-        err?.response?.data?.message || err?.message || "حدث خطأ غير متوقع";
-
-     
-    
-  };  };
-
-  fetchData();
-}, [selectedType]);
-  return (
-    <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
-      <SidBar />
-      <Box flex={1} p={2}>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={3}
-          
-        >
-        
-
-        
-
-          
-        </Box>
- <Appar/>
-      <Box
-          
-            display="flex"
-            alignItems="center"
-            sx={{ cursor: "pointer", gap: 1 ,mb:3 }}
-            onClick={handleClick}
-           
-          >
-            <MenuIcon />
-            <Typography fontWeight="bold">{selectedType}</Typography>
-             <ArrowDropDownCircleOutlinedIcon   onClick={() => {
-    setSelectedType(prev =>
-      prev === "البريد الوارد" ? "البريد الصادر" : "البريد الوارد"
-    );
-  }}
-/>
-          </Box>
-
-     <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" }}>
-  <Table sx={{width:"98%"}}>
-   <TableHead>
-  <TableRow sx={{ backgroundColor: "#1f4d38" }}>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      رقم  المعاملة
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      صورة الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      اسم الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      رقم الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      نوع المعاملة
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      {isInbox ? "المرسل" : "المستقبل"}
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      تاريخ التقديم
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      {/* أيقونة */}
-    </TableCell>
-  </TableRow>
-</TableHead>
-{stateexport.error ? "error" : ""}
-{stateimport.error ? "error": ""}
-{stateexport.isloading? <Loading/> : ""
-
-}
-
-{stateimport.isloading? <Loading/>: ""
-  
-}
-<TableBody>
-  {rows.map((row, index) => (
-    <TableRow key={index} sx={{ borderBottom: "2px solid #1f4d38" }}>
-
-      <TableCell align="center">{row.id}</TableCell>
-      <TableCell align="center">
-        <Avatar src={row.senderImg || row.receiverImg} />
-      </TableCell>
-      <TableCell align="center">
-        {isInbox ? row.senderName : row.receiverName}
-      </TableCell>
-      <TableCell align="center">
-        {isInbox ? row.senderPhone : row.receiverPhone}
-      </TableCell>
-            <TableCell align="center">{row.mailTitle}</TableCell>
-
-      <TableCell align="center">
-        {isInbox ? row.senderName : row.receiverName}
-      </TableCell>
-      <TableCell align="center">{row.dateSubmitted}</TableCell>
-      <TableCell align="center">
-        {isInbox ? row.dateReceived : row.dateSent}
-      </TableCell>
-      <TableCell align="center">
-        <IconButton
-          onClick={() => setOpenModal(true)}
-          sx={{
-            border: "1px solid rgba(212, 208, 212, 0.31)",
-            borderRadius: "50px",
-            width: 30,
-            height: 30,
-            padding: "8px",
-            backgroundColor: (theme) => theme.palette.primary.main,
-            color: (theme) => theme.palette.secondary.main,
-          }}
-        >
-          <ArticleIcon sx={{ fontSize: 20 }} />
-          <ArrowUpwardIcon
-            sx={{
-              position: "absolute",
-              top: 11,
-              right: 2,
-              fontSize: 6,
-              backgroundColor: "white",
-              color: "black",
-              transform: "rotate(60deg)",
-              borderRadius: "50%",
-              padding: "2px",
-            }}
-          />
-        </IconButton>
-      </TableCell>
-    </TableRow>
-  ))}
-</TableBody>
-
-
-
-  </Table>
-</TableContainer>
-
-
-
-      </Box>
-
-     { <Modal
- open={openModal}
-  onClose={() => setOpenModal(false)}
+<Modal
+ open={open}
+  onClose={onClose}
   
   aria-labelledby="add-employee-modal"
   sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -243,7 +45,7 @@ useEffect(() => {
     }}
   >
     <HighlightOffIcon
-      onClick={() => setOpenModal(false)}
+      onClick={onClose}
       sx={{ mr: 70, position: 'absolute' ,cursor:"pointer" }}
     />
     <Typography
@@ -812,9 +614,13 @@ useEffect(() => {
     </Grid>
   </Paper>
   
-</Modal>}
-    </Box>
-  );
-};
+</Modal>
 
-export default Outer_Magales;
+
+</>
+
+
+
+
+    )
+}

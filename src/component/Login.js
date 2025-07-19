@@ -8,13 +8,13 @@ import Box from "@mui/material/Box";
 import { Alert, Snackbar, Backdrop } from "@mui/material";
 import { login, updateField } from "../reducer/login";
 import { CircularProgress } from "@mui/material";
-import Alertjs from "../wrong/alert";
+import Alertjs from "../wrong/auth/alert";
 import { useState } from "react";
 import axios from "axios";
 import { BaseUrl, LOGIN } from "../API/api";
-import LoadingOverlay from "../wrong/loding";
+import LoadingOverlay from "../wrong/auth/loding";
 import { useNavigate } from "react-router-dom";
-import ErrorAlert from "../wrong/alert";
+import ErrorAlert from "../wrong/auth/alert";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../reducer/user";
 import Cookies from "universal-cookie";
@@ -87,13 +87,13 @@ export default function Login() {
     <>
       <LoadingOverlay open={loading} />
 
-      <Box sx={{ display: "flex", height: "100vh" }}>
+      <Box sx={{ display: "flex", height: "100vh" ,overflow:'hidden' }}>
         {/* قسم الصورة */}
         <Box
           sx={{
             flex: 3,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            // backgroundSize: "cover",
+            // backgroundPosition: "center",
           }}
         >
           <img src="hello.png" style={{ width: "100%", height: "100%" }} />
@@ -107,7 +107,7 @@ export default function Login() {
         {/* قسم الكارد */}
         <Card
           sx={{
-            width: "20%",
+            width: "23%",height:'100%',
             px: 3,
             pt: 4,
             pb: 4,
@@ -120,17 +120,17 @@ export default function Login() {
               <img
                 src="logo.png"
                 style={{
-                  width: "90px",
-                  height: "90px",
-                  marginTop: "2%",
+                  width: "170px",
+                  height: "170px",
+                  marginTop: "5%",
                   filter: "brightness(0) invert(1)",
                 }}
               />
               <Typography
-                variant="h4"
+                variant="h2"
                 sx={{
                   color: (theme) => theme.palette.secondary.main,
-                  mt: "10%",
+                  mt: "10%",mb:"2",fontSize:'36px',fontWeight:'700'
                 }}
               >
                 تسجيل الدخول
@@ -138,7 +138,7 @@ export default function Login() {
 
               <Typography
                 variant="h6"
-                sx={{ color: (theme) => theme.palette.secondary.main }}
+                sx={{ mt: 2,color: (theme) => theme.palette.secondary.main }}
               >
                 مرحبا بعودتك
               </Typography>
@@ -152,7 +152,7 @@ export default function Login() {
                   type="text"
                   variant="outlined"
                   sx={{
-                    width: "109%",
+                    width: "100%",
                     direction: "rtl",
                     mt: "15%",
                     borderRadius: "10px",
@@ -181,16 +181,17 @@ export default function Login() {
                   value={form.password}
                   onChange={handleChange}
                   label=" كلمة المرور "
-                  type="password"
+                  type="كلمة المرور "
+                  
                   variant="outlined"
                   sx={{
-                    width: "109%",
+                    width: "100%",
                     direction: "rtl",
-                    borderRadius: "10px",
+                    borderRadius: "8px",
                     backgroundColor: (theme) => theme.palette.secondary.main,
                     mb: 2,
                     "& .MuiOutlinedInput-root": {
-                      borderRadius: "10px",
+                      borderRadius: "8px",
                       height: "50px",
                       boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
                       "& fieldset": {
@@ -213,12 +214,12 @@ export default function Login() {
                 variant="contained"
                 fullWidth
                 sx={{
-                  borderRadius: "20px",
+                  borderRadius: "23px",
                   backgroundColor: (theme) => theme.palette.secondary.main,
                   color: (theme) => theme.palette.primary.main,
-                  fontSize: "1.1rem",
+                  fontSize: "20px",fontWeight:'700',
                   mt: "25%",
-                  width: "60%",
+                  width: "55%",
                   mb: 2,
                   direction: "rtl",
                   textTransform: "none",

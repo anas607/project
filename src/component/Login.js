@@ -5,10 +5,9 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Alert, Snackbar, Backdrop } from "@mui/material";
-import { login, updateField } from "../reducer/login";
-import { CircularProgress } from "@mui/material";
-import Alertjs from "../wrong/auth/alert";
+import { InputAdornment, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 import { useState } from "react";
 import axios from "axios";
 import { BaseUrl, LOGIN } from "../API/api";
@@ -23,7 +22,10 @@ export default function Login() {
   const state_user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+const [showPassword, setShowPassword] = useState(false);
+const togglePasswordVisibility = () => {
+  setShowPassword((prev) => !prev);
+};
   const [form, setForm] = useState({
     name: "",
     password: "",
@@ -145,68 +147,99 @@ export default function Login() {
 
               <Box sx={{ pr: 2, width: "100%" }}>
                 <TextField
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  label=" اسم المستخدم "
-                  type="text"
-                  variant="outlined"
-                  sx={{
-                    width: "100%",
-                    direction: "rtl",
-                    mt: "15%",
-                    borderRadius: "10px",
-                    backgroundColor: (theme) => theme.palette.secondary.main,
-                    mb: 3,
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "10px",
-                      height: "50px",
-                      boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
-                      "& fieldset": {
-                        borderColor: "transparent",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "transparent",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "transparent",
-                        boxShadow: "0 0 6px rgba(0,0,0,0.3)",
-                      },
-                    },
-                  }}
-                />
+  name="name"
+  value={form.name}
+  onChange={handleChange}
+  label="اسم المستخدم"
+  type="text"
+  dir="rtl"
+ 
+  variant="outlined"
+  sx={{
+    width: "100%",
+    borderRadius: "8px",
+    backgroundColor: (theme) => theme.palette.secondary.main,
+    mb: 2,
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "8px",
+      height: "60px",
+      boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
+      paddingRight: "8px",
+      "& fieldset": {
+        borderColor: "transparent",
+      },
+      "&:hover fieldset": {
+        borderColor: "transparent",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "transparent",
+        boxShadow: "0 0 6px rgba(0,0,0,0.3)",
+      },
+    },
+  }}
+/>
 
-                <TextField
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  label=" كلمة المرور "
-                  type="كلمة المرور "
-                  
-                  variant="outlined"
-                  sx={{
-                    width: "100%",
-                    direction: "rtl",
-                    borderRadius: "8px",
-                    backgroundColor: (theme) => theme.palette.secondary.main,
-                    mb: 2,
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "8px",
-                      height: "50px",
-                      boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
-                      "& fieldset": {
-                        borderColor: "transparent",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "transparent",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "transparent",
-                        boxShadow: "0 0 6px rgba(0,0,0,0.3)",
-                      },
-                    },
-                  }}
-                />
+
+               <TextField
+  name="password"
+  value={form.password}
+  onChange={handleChange}
+  label="كلمة المرور"
+  type={showPassword ? "text" : "password"}
+  dir="rtl"
+  
+  variant="outlined"
+  sx={{
+    width: "100%",
+    borderRadius: "8px",
+    backgroundColor: (theme) => theme.palette.secondary.main,
+    mb: 2,
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "8px",
+      height: "60px",
+      boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
+      paddingRight: "8px", // يعطي مسافة صغيرة بين النص والأيقونة
+      "& fieldset": {
+        borderColor: "transparent",
+      },
+      "&:hover fieldset": {
+        borderColor: "transparent",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "transparent",
+        boxShadow: "0 0 6px rgba(0,0,0,0.3)",
+      },
+    },"& label.MuiInputLabel-root": {
+  right: 16,
+  left: "auto",
+  textAlign: "right",
+  
+},
+
+  }}
+  InputProps={{
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton
+          onClick={togglePasswordVisibility}
+          edge="end"
+          size="small"
+          sx={{
+            padding: "4px",
+            color: "rgba(0, 0, 0, 0.6)",
+          }}
+        >
+          {showPassword ? (
+            <VisibilityOff fontSize="small" />
+          ) : (
+            <Visibility fontSize="small" />
+          )}
+        </IconButton>
+      </InputAdornment>
+    ),
+  }}
+/>
+
               </Box>
 
               <Button

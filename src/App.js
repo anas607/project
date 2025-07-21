@@ -59,6 +59,7 @@ function App() {
           {/* deywan */}
 
           <Route element={<ProtectedRoute />}>
+
             <Route path="/dachbord" element={<Leader />} />
             <Route path="/enter" element={<Enter />} />
             <Route path="/outer" element={<Outer />} />
@@ -67,7 +68,7 @@ function App() {
               <Route path="/files" element={<Files />} />
             </Route>
             <Route path="/archiv" element={<Archiv />} />
-          </Route>
+          </Route>  
 
           {/* ===============deywan ========================*/}
           {/* manger_dewan */}

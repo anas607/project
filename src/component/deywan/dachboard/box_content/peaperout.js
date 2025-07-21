@@ -8,8 +8,15 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 
 import { VictoryPie } from "victory";
-import Polar from "../chart/polar";
 import PolarOut from "../chart/polarout";
+import { BaseUrl, showExternalStatistics } from "../../../../API/api";
+import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../../../API/apiService";
+
+import { useEffect } from "react";
+import externalStatistics, {
+  setExternalStatistics,
+} from "../../../../reducer/externalStatistics";
 
 const polarData = [
   { x: "محول", y: 45 },
@@ -19,6 +26,29 @@ const polarData = [
 
 const COLORS = ["#1E88E5", "#D32F2F", "#FBC02D"];
 export default function PeaperOut() {
+  // const dispatch = useDispatch();
+  // const { approved, pending, rejected } = useSelector(
+  //   (state) => state.externalStatistics
+  // );
+
+  // useEffect(() => {
+  //   const fetchExternalStatistics = async () => {
+  //     try {
+  //       const response = await getData(`${BaseUrl}${showExternalStatistics}`);
+
+  //       if (response?.data?.data) {
+  //         dispatch(setExternalStatistics(response.data.data));
+  //       } else {
+  //         console.warn("الرد لا يحتوي على البيانات المتوقعة:", response);
+  //       }
+  //     } catch (error) {
+  //       console.error("فشل في جلب الإحصائيات:", error);
+  //     }
+  //   };
+
+  //   fetchExternalStatistics();
+  // }, [dispatch]);
+
   return (
     <>
       {" "}
@@ -48,10 +78,8 @@ export default function PeaperOut() {
                 color: "rgb(14,74,35)",
               }}
               variant="h5"
-            >
-              897
-            </Typography>
-
+            ></Typography>
+            {/* {approved + rejected + pending} */}1
             <Typography
               sx={{
                 fontSize: "10px",
@@ -63,7 +91,6 @@ export default function PeaperOut() {
             >
               عدد معاملات البريد الخارجي
             </Typography>
-
             <Box display="flex" alignItems="center" mb={1}>
               <Box
                 sx={{
@@ -71,6 +98,7 @@ export default function PeaperOut() {
                   height: 8,
                   borderRadius: "30%",
                   backgroundColor: "rgb(14,74,35)",
+
                   mr: 1,
                 }}
               />
@@ -87,12 +115,11 @@ export default function PeaperOut() {
                     color: "#666",
                   }}
                 >
-                  123
+                  {/* {approved} */}2
                 </Box>
                 من البريد المحول
               </Typography>
             </Box>
-
             <Box display="flex" alignItems="center" mb={1}>
               <Box
                 sx={{
@@ -111,12 +138,11 @@ export default function PeaperOut() {
                   component="span"
                   sx={{ ml: 1, fontWeight: "500", color: "#666" }}
                 >
-                  123
+                  {/* {rejected} */}3
                 </Box>
                 من البريد المرفوض
               </Typography>
             </Box>
-
             <Box display="flex" alignItems="center">
               <Box
                 sx={{
@@ -135,7 +161,7 @@ export default function PeaperOut() {
                   component="span"
                   sx={{ ml: 1, fontWeight: "500", color: "#666" }}
                 >
-                  123
+                  {/* {pending} */}
                 </Box>
                 من البريد قيد الدراسة
               </Typography>

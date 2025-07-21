@@ -21,8 +21,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setEmployees } from "../../../../reducer/employees";
 import Cookies from "universal-cookie";
 
-const cookies = new Cookies();
-
 export default function SmallBoxes() {
   const dispatch = useDispatch();
   const employees = useSelector((state) => state.employees.data);

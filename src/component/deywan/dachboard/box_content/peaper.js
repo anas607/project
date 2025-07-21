@@ -6,11 +6,49 @@ import Inventory2Icon from "@mui/icons-material/Inventory2";
 import GroupRemoveOutlinedIcon from "@mui/icons-material/GroupRemoveOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
+import { BaseUrl, showInternalStatistics } from "../../../../API/api";
+import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../../../API/apiService";
 
+import { useEffect } from "react";
+import internalStatistics, {
+  setInternalStatistics,
+} from "../../../../reducer/internalStatistics";
 import { VictoryPie } from "victory";
 import Polar from "../chart/polar";
 
 export default function Peaper() {
+  const dispatch = useDispatch();
+  const { approved, pending, rejected } = useSelector(
+    (state) => state.internalStatistics
+  );
+  useEffect(() => {
+    const fetchInternalStatistics = async () => {
+      try {
+        const response = await getData(`${BaseUrl}${showInternalStatistics}`);
+
+        if (response?.success === true && typeof response.data === "object") {
+          const stats = {
+            approved: response.data.approved ?? 0,
+            pending: response.data.pending ?? 0,
+            rejected: response.data.rejected ?? 0,
+          };
+
+          dispatch(setInternalStatistics(stats));
+        } else {
+          console.warn(
+            "الرد لم يكن ناجحًا أو لا يحتوي على البيانات:",
+            response.data
+          );
+        }
+      } catch (error) {
+        console.error("فشل في جلب الإحصائيات:", error);
+      }
+    };
+
+    fetchInternalStatistics();
+  }, [dispatch]);
+
   return (
     <>
       {" "}
@@ -40,7 +78,7 @@ export default function Peaper() {
               }}
               variant="h5"
             >
-              897
+              {approved + rejected + pending}
             </Typography>
 
             <Typography
@@ -74,9 +112,14 @@ export default function Peaper() {
               >
                 <Box
                   component="span"
-                  sx={{ ml: 1, fontWeight: "500", color: "#666" }}
+                  sx={{
+                    ml: 1,
+                    fontWeight: "500",
+                    // fontSize: "20px",
+                    color: "#666",
+                  }}
                 >
-                  123
+                  {approved}
                 </Box>
                 من البريد المحول
               </Typography>
@@ -100,9 +143,14 @@ export default function Peaper() {
               >
                 <Box
                   component="span"
-                  sx={{ ml: 1, fontWeight: "500", color: "#666" }}
+                  sx={{
+                    ml: 1,
+                    fontWeight: "500",
+                    color: "#666",
+                    // fontSize: "20px",
+                  }}
                 >
-                  123
+                  {rejected}
                 </Box>
                 من البريد المرفوض
               </Typography>
@@ -126,9 +174,14 @@ export default function Peaper() {
               >
                 <Box
                   component="span"
-                  sx={{ ml: 1, fontWeight: "500", color: "#666" }}
+                  sx={{
+                    ml: 1,
+                    fontWeight: "500",
+                    color: "#666",
+                    // fontSize: "20px",
+                  }}
                 >
-                  123
+                  {pending}
                 </Box>
                 من البريد قيد الدراسة
               </Typography>

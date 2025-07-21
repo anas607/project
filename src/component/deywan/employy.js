@@ -12,43 +12,67 @@ import {
 import SidBar from "./dachboard/SIDEBAR/sidbar";
 import SatelliteIcon from "@mui/icons-material/Satellite";
 import Appar from "./dachboard/SIDEBAR/appar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { getData, postData } from "../../API/apiService";
-import { BaseUrl, registerEmployee } from "../../API/api";
-
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { postData } from "../../API/apiService";
+import { BaseUrl, registerEmployee } from "../../API/api";
 import { setEmployees } from "../../reducer/employees";
-import {
-  updateEmployeeField,
-  resetEmployeeForm,
-} from "../../reducer/employeeRegister";
-import axios from "axios"; // إذا لم يكن موجودًا
+import { resetEmployeeForm } from "../../reducer/employeeRegister";
 
-//  const transactions = [
-//     { id: 1, name: 'ون بيس 1', phone: '0993489839', home: 'حلب' ,status:'فعال', avatar: 'https://randomuser.me/api/portraits/women/1.jpg'},
-//     { id: 2, name: 'ون بيس 2', phone: ' 0993489839', home: 'دمشق',status:'فعال' , avatar: 'https://randomuser.me/api/portraits/women/1.jpg'},
-//     { id: 3, name: 'ون بيس 3', phone: '0993489839', home: 'سبيستون' ,status:'غير فعال', avatar: 'https://randomuser.me/api/portraits/women/1.jpg'},
-//     { id: 4, name: 'زن بيس 4', phone: ' 0993489839', home: 'خالتي' ,status:'غير فعال',avatar: 'https://randomuser.me/api/portraits/women/1.jpg'},
-//         { id: 5, name: 'معاملة 5', phone: ' 0993489839', home: 'ادلب',status:'فعال', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
-//     { id: 6, name: 'زن بيس 6', phone: ' 0993489839', home: 'حسكة' ,status:'غير فعال',avatar: 'https://randomuser.me/api/portraits/women/1.jpg'},
+// const transactions = [
+//   {
+//     id: 1,
+//     name: "ون بيس 1",
+//     phone: "0993489839",
+//     home: "حلب",
+//     is_acitve: "1",
+//     avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+//   },
+//   {
+//     id: 2,
+//     name: "ون بيس 2",
+//     phone: " 0993489839",
+//     home: "دمشق",
+//     is_acitve: "1",
+//     avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+//   },
+//   {
+//     id: 3,
+//     name: "ون بيس 3",
+//     phone: "0993489839",
+//     home: "سبيستون",
+//     is_acitve: "غير 1",
+//     avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+//   },
+//   {
+//     id: 4,
+//     name: "زن بيس 4",
+//     phone: " 0993489839",
+//     home: "خالتي",
+//     is_acitve: "غير 1",
+//     avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+//   },
+//   {
+//     id: 5,
+//     name: "معاملة 5",
+//     phone: " 0993489839",
+//     home: "ادلب",
+//     is_acitve: "1",
+//     avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+//   },
+//   {
+//     id: 6,
+//     name: "زن بيس 6",
+//     phone: " 0993489839",
+//     home: "حسكة",
+//     is_acitve: "غير 1",
+//     avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+//   },
+// ];
 
-//   ];
-
-const getCardColor = (isActive) => {
-  switch (isActive) {
-    case 1:
-      return "rgb(14, 74, 35)";
-    case 0:
-      return "rgb(215, 34, 24)"; // أحمر فاتح
-
-    default:
-      return "#ffffff";
-  }
-};
 export default function Employee() {
   const dispatch = useDispatch();
   const employees = useSelector((state) => state.employees.data);
@@ -154,6 +178,7 @@ export default function Employee() {
                   fullWidth
                   sx={{
                     height: 200,
+                    width: "290px",
                     borderStyle: "dashed",
                     border: "4px dashed rgb(14,74,35)",
                     display: "flex",
@@ -252,27 +277,8 @@ export default function Employee() {
                         >
                           اسم الموظف
                         </Typography>
-                        {/* <input
-                          type="text"
-                          style={{
-                            width: "60%",
-                            height: "30px",
-                            padding: "8px",
-                            border: "1px solid #ccc",
-                          }}
-                        /> */}
-
                         <input
                           type="text"
-                          value={employee.name}
-                          onChange={(e) =>
-                            dispatch(
-                              updateEmployeeField({
-                                field: "name",
-                                value: e.target.value,
-                              })
-                            )
-                          }
                           style={{
                             width: "60%",
                             height: "30px",
@@ -297,15 +303,6 @@ export default function Employee() {
                             padding: "8px",
                             border: "1px solid #ccc",
                           }}
-                          value={employee.email}
-                          onChange={(e) =>
-                            dispatch(
-                              updateEmployeeField({
-                                field: "email",
-                                value: e.target.value,
-                              })
-                            )
-                          }
                         />
                       </Box>
 
@@ -338,24 +335,10 @@ export default function Employee() {
                               color: "#333",
                               backgroundColor: "#fff",
                             }}
-                            value={employee.avatar}
-                            onChange={(e) =>
-                              dispatch(
-                                updateEmployeeField({
-                                  field: "avatar",
-                                  value: e.target.value,
-                                })
-                              )
-                            }
                           >
                             تحميل صورة
                             {/* input مخفي */}
-                            <input
-                              type="file"
-                              hidden
-                              accept="image/*"
-                              onChange={(e) => setAvatarFile(e.target.files[0])}
-                            />
+                            <input type="file" hidden accept="image/*" />
                             <SatelliteIcon sx={{ mr: 10, color: "gray" }} />
                           </Button>
 
@@ -378,19 +361,9 @@ export default function Employee() {
                             padding: "8px",
                             border: "1px solid #ccc",
                           }}
-                          value={employee.password}
-                          onChange={(e) =>
-                            dispatch(
-                              updateEmployeeField({
-                                field: "password",
-                                value: e.target.value,
-                              })
-                            )
-                          }
                         />
                       </Box>
                     </Grid>
-
                     {/* العمود الأيسر */}
                     <Grid item xs={8} sm={6}>
                       <Box sx={{ mb: 3, mr: -3 }}>
@@ -408,15 +381,6 @@ export default function Employee() {
                             padding: "8px",
                             border: "1px solid #ccc",
                           }}
-                          value={employee.phone}
-                          onChange={(e) =>
-                            dispatch(
-                              updateEmployeeField({
-                                field: "phone",
-                                value: e.target.value,
-                              })
-                            )
-                          }
                         />
                       </Box>
 
@@ -435,15 +399,6 @@ export default function Employee() {
                             padding: "8px",
                             border: "1px solid #ccc",
                           }}
-                          value={employee.address}
-                          onChange={(e) =>
-                            dispatch(
-                              updateEmployeeField({
-                                field: "address",
-                                value: e.target.value,
-                              })
-                            )
-                          }
                         />
                       </Box>
                     </Grid>
@@ -452,7 +407,7 @@ export default function Employee() {
                   <Box sx={{ mt: 20, mr: 62, width: "70%" }}>
                     <Button
                       variant="contained"
-                      onClick={handleSubmit}
+                      color="rgb(14,74,35)"
                       sx={{
                         borderRadius: "20px",
                         width: "40%",
@@ -469,7 +424,6 @@ export default function Employee() {
               </Modal>
               {/* /////////////////======================modal for add employee//////////////////=============== */}
               {/* /////////////////modal for edit employee////////////////// */}
-
               <Modal
                 open={showEditEmployee}
                 onClose={() => setShowEditEmployee(false)}
@@ -607,7 +561,6 @@ export default function Employee() {
                         />
                       </Box>
                     </Grid>
-
                     {/* العمود الأيسر */}
                     <Grid item xs={8} sm={6}>
                       <Box sx={{ mb: 3, mr: -3 }}>
@@ -673,7 +626,6 @@ export default function Employee() {
                 </Paper>
               </Modal>
               {/* /////////////////=========modal for edit employee=============////////////////// */}
-
               {/* أوراق موظفين */}
               {employees.map((seleectedEditEmployee) => (
                 <Grid item xs={12} sm={6} md={3} key={seleectedEditEmployee.id}>
@@ -685,16 +637,11 @@ export default function Employee() {
                       p: 2,
                       backgroundColor: "rgba(255, 255, 255, 0.02)",
                       border:
-                        seleectedEditEmployee.status === "فعال"
+                        seleectedEditEmployee.is_acitve === "1"
                           ? "3px solid rgb(1, 53, 19)"
-                          : seleectedEditEmployee.status === "غير فعال"
+                          : seleectedEditEmployee.is_acitve === "غير 1"
                           ? "3px solid rgba(139, 2, 2, 1)"
                           : "gray",
-                      p: 2,
-                      backgroundColor: getCardColor(
-                        seleectedEditEmployee.is_active
-                      ),
-
                       position: "relative",
                       display: "flex",
                       flexDirection: "column",
@@ -713,7 +660,6 @@ export default function Employee() {
                       }}
                       src={seleectedEditEmployee.avatar}
                     />
-
                     <Box
                       sx={{
                         display: "flex",
@@ -723,47 +669,67 @@ export default function Employee() {
                     >
                       <Typography
                         variant="body2"
-                        color="white"
-                        sx={{ fontSize: "14px", fontWeight: "700", mt: 1 }}
+                        sx={{
+                          color:
+                            seleectedEditEmployee.is_acitve === 1
+                              ? "rgb(14, 74, 35)"
+                              : "rgba(139, 2, 2, 1)",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                          mt: 1,
+                        }}
                       >
                         {seleectedEditEmployee.name}
                       </Typography>
 
                       <Typography
                         variant="body2"
-                        color="white"
-                        sx={{ fontSize: "14px", fontWeight: "700", mt: 1 }}
+                        sx={{
+                          color:
+                            seleectedEditEmployee.is_acitve === 1
+                              ? "rgb(14, 74, 35)"
+                              : "rgba(139, 2, 2, 1)",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                          mt: 1,
+                        }}
                       >
                         {seleectedEditEmployee.phone}
                       </Typography>
-                      {/* 
+
                       <Typography
-                        sx={{ fontSize: "14px", fontWeight: "700", mt: 1 }}
+                        sx={{
+                          fontSize: "14px",
+                          fontWeight: "700",
+                          mt: 1,
+                          color:
+                            seleectedEditEmployee.is_acitve === 1
+                              ? "rgb(14, 74, 35)"
+                              : "rgba(139, 2, 2, 1)",
+                        }}
                         variant="body2"
-                        color="white"
                       >
                         {seleectedEditEmployee.home}
-                      </Typography> */}
+                      </Typography>
 
                       {/* الحالة */}
                       <Typography
                         variant="body2"
                         sx={{
-                          color: "white",
+                          color:
+                            seleectedEditEmployee.is_acitve === 1
+                              ? "rgb(14, 74, 35)"
+                              : "rgba(139, 2, 2, 1)",
                           fontWeight: 700,
                           fontSize: "14px",
                           mt: 1,
                         }}
                       >
-                        {seleectedEditEmployee.is_active === 1
-                          ? "فعال"
-                          : "غير فعال"}
+                        {seleectedEditEmployee.is_acitve}
                       </Typography>
                     </Box>
-
                     {/* زر التفعيل / إلغاء */}
                     {/* الزر يظهر فقط إذا ليست "قيد الدراسة" */}
-
                     <Box
                       sx={{ display: "flex", justifyContent: "space-between" }}
                     >
@@ -772,16 +738,24 @@ export default function Employee() {
                         variant="contained"
                         sx={{
                           borderRadius: "15px",
-                          backgroundColor: "white",
                           fontSize: "12px",
                           fontWeight: "700",
+                          backgroundColor: "rgba(255, 255, 255, 0.02)",
+                          border:
+                            seleectedEditEmployee.is_acitve === 1
+                              ? "3px solid rgb(1, 53, 19)"
+                              : seleectedEditEmployee.is_acitve === 0
+                              ? "3px solid rgba(139, 2, 2, 1)"
+                              : "gray",
+
                           color:
-                            seleectedEditEmployee.ia_active === 1
+                            seleectedEditEmployee.is_acitve === 1
                               ? "rgb(14, 74, 35)"
-                              : "rgb(215, 34, 24)",
+                              : "rgba(139, 2, 2, 1)",
                           textTransform: "none",
-                          width: "30%",
+                          width: "35%",
                           height: "34px",
+                          whiteSpace: "nowrap",
                           px: 2,
                           py: 0.5,
                         }}
@@ -792,14 +766,21 @@ export default function Employee() {
                         variant="contained"
                         sx={{
                           borderRadius: "15px",
-                          backgroundColor: "white",
+                          backgroundColor: "rgba(255, 255, 255, 0.02)",
+                          border:
+                            seleectedEditEmployee.is_acitve === 1
+                              ? "3px solid rgb(1, 53, 19)"
+                              : seleectedEditEmployee.is_acitve === 0
+                              ? "3px solid rgba(139, 2, 2, 1)"
+                              : "gray",
+                          whiteSpace: "nowrap",
+
                           color:
-                            seleectedEditEmployee.is_active === 1
+                            seleectedEditEmployee.is_acitve === 1
                               ? "rgb(14, 74, 35)"
-                              : "rgb(215, 34, 24)",
-                          whiteSpace: "wrap",
+                              : "rgba(139, 2, 2, 1)",
                           textTransform: "none",
-                          width: "30%",
+                          width: "35%",
                           height: "34px",
                           fontSize: "12px",
                           fontWeight: "700",
@@ -807,7 +788,7 @@ export default function Employee() {
                           py: 0.5,
                         }}
                       >
-                        {seleectedEditEmployee.is_active === 1
+                        {seleectedEditEmployee.is_acitve === 1
                           ? "إلغاء تفعيل"
                           : "تفعيل"}
                       </Button>

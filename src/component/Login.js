@@ -5,16 +5,15 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Alert, Snackbar, Backdrop } from "@mui/material";
-import { login, updateField } from "../reducer/login";
-import { CircularProgress } from "@mui/material";
-import Alertjs from "../wrong/alert";
+import { InputAdornment, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 import { useState } from "react";
 import axios from "axios";
 import { BaseUrl, LOGIN } from "../API/api";
-import LoadingOverlay from "../wrong/loding";
+import LoadingOverlay from "../wrong/auth/loding";
 import { useNavigate } from "react-router-dom";
-import ErrorAlert from "../wrong/alert";
+import ErrorAlert from "../wrong/auth/alert";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../reducer/user";
 import Cookies from "universal-cookie";
@@ -23,7 +22,10 @@ export default function Login() {
   const state_user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
   const [form, setForm] = useState({
     name: "",
     password: "",
@@ -87,13 +89,13 @@ export default function Login() {
     <>
       <LoadingOverlay open={loading} />
 
-      <Box sx={{ display: "flex", height: "100vh" }}>
+      <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
         {/* قسم الصورة */}
         <Box
           sx={{
             flex: 3,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            // backgroundSize: "cover",
+            // backgroundPosition: "center",
           }}
         >
           <img src="hello.png" style={{ width: "100%", height: "100%" }} />
@@ -107,7 +109,8 @@ export default function Login() {
         {/* قسم الكارد */}
         <Card
           sx={{
-            width: "20%",
+            width: "23%",
+            height: "100%",
             px: 3,
             pt: 4,
             pb: 4,
@@ -120,17 +123,20 @@ export default function Login() {
               <img
                 src="logo.png"
                 style={{
-                  width: "90px",
-                  height: "90px",
-                  marginTop: "2%",
+                  width: "170px",
+                  height: "170px",
+                  marginTop: "5%",
                   filter: "brightness(0) invert(1)",
                 }}
               />
               <Typography
-                variant="h4"
+                variant="h2"
                 sx={{
                   color: (theme) => theme.palette.secondary.main,
                   mt: "10%",
+                  mb: "2",
+                  fontSize: "36px",
+                  fontWeight: "700",
                 }}
               >
                 تسجيل الدخول
@@ -138,7 +144,7 @@ export default function Login() {
 
               <Typography
                 variant="h6"
-                sx={{ color: (theme) => theme.palette.secondary.main }}
+                sx={{ mt: 2, color: (theme) => theme.palette.secondary.main }}
               >
                 مرحبا بعودتك
               </Typography>
@@ -148,20 +154,20 @@ export default function Login() {
                   name="name"
                   value={form.name}
                   onChange={handleChange}
-                  label=" اسم المستخدم "
+                  label="اسم المستخدم"
                   type="text"
+                  dir="rtl"
                   variant="outlined"
                   sx={{
-                    width: "109%",
-                    direction: "rtl",
-                    mt: "15%",
-                    borderRadius: "10px",
+                    width: "100%",
+                    borderRadius: "8px",
                     backgroundColor: (theme) => theme.palette.secondary.main,
-                    mb: 3,
+                    mb: 2,
                     "& .MuiOutlinedInput-root": {
-                      borderRadius: "10px",
-                      height: "50px",
+                      borderRadius: "8px",
+                      height: "60px",
                       boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
+                      paddingRight: "8px",
                       "& fieldset": {
                         borderColor: "transparent",
                       },
@@ -180,19 +186,20 @@ export default function Login() {
                   name="password"
                   value={form.password}
                   onChange={handleChange}
-                  label=" كلمة المرور "
-                  type="password"
+                  label="كلمة المرور"
+                  type={showPassword ? "text" : "password"}
+                  dir="rtl"
                   variant="outlined"
                   sx={{
-                    width: "109%",
-                    direction: "rtl",
-                    borderRadius: "10px",
+                    width: "100%",
+                    borderRadius: "8px",
                     backgroundColor: (theme) => theme.palette.secondary.main,
                     mb: 2,
                     "& .MuiOutlinedInput-root": {
-                      borderRadius: "10px",
-                      height: "50px",
+                      borderRadius: "8px",
+                      height: "60px",
                       boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
+                      paddingRight: "8px", // يعطي مسافة صغيرة بين النص والأيقونة
                       "& fieldset": {
                         borderColor: "transparent",
                       },
@@ -204,6 +211,32 @@ export default function Login() {
                         boxShadow: "0 0 6px rgba(0,0,0,0.3)",
                       },
                     },
+                    "& label.MuiInputLabel-root": {
+                      right: 16,
+                      left: "auto",
+                      textAlign: "right",
+                    },
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={togglePasswordVisibility}
+                          edge="end"
+                          size="small"
+                          sx={{
+                            padding: "4px",
+                            color: "rgba(0, 0, 0, 0.6)",
+                          }}
+                        >
+                          {showPassword ? (
+                            <VisibilityOff fontSize="small" />
+                          ) : (
+                            <Visibility fontSize="small" />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
                   }}
                 />
               </Box>
@@ -213,12 +246,13 @@ export default function Login() {
                 variant="contained"
                 fullWidth
                 sx={{
-                  borderRadius: "20px",
+                  borderRadius: "23px",
                   backgroundColor: (theme) => theme.palette.secondary.main,
                   color: (theme) => theme.palette.primary.main,
-                  fontSize: "1.1rem",
+                  fontSize: "20px",
+                  fontWeight: "700",
                   mt: "25%",
-                  width: "60%",
+                  width: "55%",
                   mb: 2,
                   direction: "rtl",
                   textTransform: "none",

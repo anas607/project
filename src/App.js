@@ -11,59 +11,15 @@ import Outer from "./component/deywan/outer";
 import Files from "./component/deywan/files/files";
 import Archiv from "./component/deywan/archive";
 import Employee from "./component/deywan/employy";
-import Transaction from "./component/deywan/Transaction";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  Button,
-} from "@mui/material";
+
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { orange, green, white } from "@mui/material/colors";
-import Leader_Raees from "./component/reees/dachboard/leder";
-import Enter_Raees from "./component/reees/enter";
-import Outer_Raees from "./component/reees/outer";
-import Employee_Raees from "./component/reees/employy";
-import Archiv_Raees from "./component/reees/archive";
-import Leader_Shahadat from "./component/shahadat/dachboard/leder";
-import Enter_Shahadat from "./component/shahadat/enter";
-import Employee_Shahadat from "./component/shahadat/employy";
-import Archiv_Shahadat from "./component/shahadat/archive";
-import Outer_Shahadat from "./component/shahadat/outer";
-import Leader_Malea from "./component/malea/dachboard/leder";
-import Enter_Malea from "./component/malea/enter";
-import Outer_Malea from "./component/malea/outer";
-import Employee_Malea from "./component/malea/employy";
-import Archiv_Malea from "./component/malea/archive";
-import Leader_Mofadla from "./component/mofadla/dachboard/leder";
-import Enter_Mofadla from "./component/mofadla/enter";
-import Outer_Mofadla from "./component/mofadla/outer";
-import Employee_Mofadla from "./component/mofadla/employy";
-import Archiv_Mofadla from "./component/mofadla/archive";
-import Leader_Magales from "./component/magales/dachboard/leder";
-import Enter_Magales from "./component/magales/enter";
-import Outer_Magales from "./component/magales/outer";
-import Employee_Magales from "./component/magales/employy";
-import Archiv_Magales from "./component/magales/archive";
-import Leader_Exam from "./component/exsams/dachboard/leder";
-import Outer_Exam from "./component/exsams/outer";
-import Enter_Exam from "./component/exsams/enter";
-import Archiv_Exam from "./component/exsams/archive";
-import Employee_Exam from "./component/exsams/employy";
-import Enter_EMagales from "./component/magales/manager_magales/enter";
-import Outer_EMagales from "./component/magales/manager_magales/outer";
-import Enter_ERaees from "./component/reees/manager_raees/enter";
-import Outer_ERaees from "./component/reees/manager_raees/outer";
-import Enter_EDeywan from "./component/deywan/manger_deywan/enter";
-import Outer_EDeywan from "./component/deywan/manger_deywan/outer";
-import Enter_EShahadat from "./component/shahadat/manager_shahadat/enter";
-import Outer_EShahadat from "./component/shahadat/manager_shahadat/outer";
-import ProtectedRoute from "./component/ProtectedRoute";
+
+import ProtectedRoute from "./component/protected/ProtectedRoute";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setScreenSize } from "./reducer/screenSlice ";
+import NotFound from "./component/protected/NOTFOUND";
 
 const theme = createTheme({
   palette: {
@@ -98,13 +54,18 @@ function App() {
           {/* <Login /> */}
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/*" element={<NotFound />} />
+
           {/* deywan */}
+
           <Route element={<ProtectedRoute />}>
             <Route path="/dachbord" element={<Leader />} />
             <Route path="/enter" element={<Enter />} />
             <Route path="/outer" element={<Outer />} />
             <Route path="/employee" element={<Employee />} />
-            <Route path="/files" element={<Files />} />
+            <Route element={<ProtectedRoute allowedRole={"رئيس الديوان"} />}>
+              <Route path="/files" element={<Files />} />
+            </Route>
             <Route path="/archiv" element={<Archiv />} />
           </Route>
 

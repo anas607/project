@@ -155,32 +155,43 @@ export default function Navgation() {
           <div className="relative w-fit inline-block">
             <MailIcon sx={{ marginRight: 7, fontSize: 32 }} />
             <Box
-              sx={(theme) => ({
+              sx={{
                 position: "absolute",
-                top: 14.4,
-                right: -1,
-                width: 8,
-                height: 8,
-                bgcolor: currentPath === "/enter" ? "rgb(14, 74, 35)" : "white",
+                top: "30%",
+                right: 45,
+                width: 22,
+                height: 22,
                 borderRadius: "50%",
+                bgcolor: currentPath === "/outer" ? "rgb(14, 74, 35)" : "white",
                 border:
-                  currentPath === "/enter"
-                    ? "3px solid rgb(14, 74, 35)"
-                    : "3px solid white",
-              })}
+                  currentPath === "/outer"
+                    ? "2px solid rgb(14, 74, 35)"
+                    : "2px solid white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 10,
+                transition: "all 0.2s ease-in-out",
+
+                "&:hover": {
+                  bgcolor: "rgb(14, 74, 35)", // الأخضر عند الهوفر
+                  border: "2px solid rgb(14, 74, 35)",
+
+                  "& svg": {
+                    color: "white", // يخلي السهم أبيض وقت الهوفر
+                  },
+                },
+              }}
             >
               <KeyboardBackspaceIcon
                 style={{
                   position: "absolute",
-                  right: -2,
-                  top: -4,
-                  zIndex: 2,
+                  right: "10",
                   strokeWidth: 0.1,
-                  fontSize: 12,
+                  fontSize: "16px",
 
                   opacity: currentPath === "/enter" ? 1 : 0.9,
                   color: currentPath === "/enter" ? "white" : "black",
-                  transform: "scaleX(-1)",
                 }}
               />
             </Box>

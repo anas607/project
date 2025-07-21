@@ -86,7 +86,7 @@ export default function Peaper() {
                 fontSize: "10px",
                 fontWeight: "700",
                 marginTop: "1%",
-                marginBottom: "5%",
+              //  marginBottom: "5%",
               }}
               variant="h5"
             >
@@ -101,7 +101,7 @@ export default function Peaper() {
                   borderRadius: "30%",
                   backgroundColor: "rgb(70, 71, 59)",
                   display: "flex",
-                  mt: "2",
+                  mt: 2,
                   mr: 1,
                 }}
               />

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -30,17 +31,32 @@ import NoData from "../../wrong/mails/noData";
 // بيانات البريد الوارد (وارد)
 
 
-
+const headerStyle = {
+  color: "white",
+ fontWeight: "700" ,fontSize:'20px',
+  py: 1.5,whiteSpace:'nowrap'
+};
+const headStyle = {
+  color: "black",
+ fontWeight: "700" ,fontSize:'18px',
+  py: 1.5,borderBottom: "3px solid rgb(14, 74, 35)" 
+};
 
 const Outer = () => {
+  const stateRole=useSelector((state)=>state.user.roles[0])
+const isMaleaManager=stateRole.includes("رئيس المالية")
+const isSub_Admin=stateRole.includes("نائب المدير")
+
+const allowedRoles = ["رئيس الإقامة", "رئيس الشهادات","رئيس المجالس","رئيس المفاضلة"];
+const isManager = allowedRoles.some(role => stateRole.includes(role));
+
   const stateexport=useSelector((state)=>state.outerexport)
   const dispatch = useDispatch()
     const stateimport=useSelector((state)=>state.outereimport)
-
+console.log(stateimport.data)
    const [anchorEl, setAnchorEl] = useState(null);
   const [selectedType, setSelectedType] = useState("البريد الوارد");
   const [openModal, setOpenModal] = useState(false);
-const[close,setclose]=useState(false)
    const handleClick = (event) => setAnchorEl(event.currentTarget);
   const isInbox = selectedType === "البريد الوارد";
   const rows = isInbox ? stateimport.data : stateexport.data;
@@ -88,35 +104,66 @@ useEffect(() => {
 />
           </Box>
 
-     <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6}}>
+     <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6, overflowY: 'auto',maxHeight: '700px', }}>
   <Table sx={{width:"1573px", height:'88px'}}>
    <TableHead sx={{width:"1573px", height:'88px'}}>
   <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px' }}>
-      نوع المعاملة
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      صورة الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      اسم الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      رقم الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      {isInbox ? "المرسل" : "المستقبل"}
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      تاريخ التقديم
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      {/* أيقونة */}
-    </TableCell>
+    {isMaleaManager ? (
+      <>
+        <TableCell align="center" sx={headerStyle}>رقم المعاملة</TableCell>
+        <TableCell align="center" sx={headerStyle}>اسم الطبيب</TableCell>
+        <TableCell align="center" sx={headerStyle}>رقم الإيصال</TableCell>
+        <TableCell align="center" sx={headerStyle}>نوع المعاملة</TableCell>
+        <TableCell align="center" sx={headerStyle}>رسوم المعاملة</TableCell>
+        <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
+        <TableCell align="center" sx={headerStyle}>
+          {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
+        </TableCell>
+      </>
+    ) : isManager ? (
+  <>
+    <TableCell align="center" sx={headerStyle}>رقم المعاملة</TableCell>
+    <TableCell align="center" sx={headerStyle}>صورة طبيب</TableCell>
+    <TableCell align="center" sx={headerStyle}>اسم الطبيب</TableCell>
+    <TableCell align="center" sx={headerStyle}>رقم الطبيب</TableCell>
+    <TableCell align="center" sx={headerStyle}>نوع المعاملة</TableCell>
+    <TableCell align="center" sx={headerStyle}>{isInbox ? "المرسل" : "المستقبل"}</TableCell>
+    <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
+    <TableCell align="center" sx={headerStyle}>{isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}</TableCell>
+  </> ): isSub_Admin?(<>
+  
+  
+  <TableCell align="center" sx={headerStyle}>رقم المعاملة</TableCell>
+    <TableCell align="center" sx={headerStyle}>صورة طبيب</TableCell>
+    <TableCell align="center" sx={headerStyle}>اسم الطبيب</TableCell>
+    <TableCell align="center" sx={headerStyle}>رقم الطبيب</TableCell>
+    <TableCell align="center" sx={headerStyle}>نوع المعاملة</TableCell>
+        <TableCell align="center" sx={headerStyle}>{isInbox ? "" : "الحالة"} </TableCell>
+
+    <TableCell align="center" sx={headerStyle}>{isInbox ? "المرسل" : "المستقبل"}</TableCell>
+    <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
+    <TableCell align="center" sx={headerStyle}>{isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}</TableCell>
+  
+  
+  
+  </>):(
+      <>
+        <TableCell align="center" sx={headerStyle}>نوع المعاملة</TableCell>
+        <TableCell align="center" sx={headerStyle}>صورة الطبيب</TableCell>
+        <TableCell align="center" sx={headerStyle}>اسم الطبيب</TableCell>
+        <TableCell align="center" sx={headerStyle}>رقم الطبيب</TableCell>
+        <TableCell align="center" sx={headerStyle}>
+          {isInbox ? "المرسل" : "المستقبل"}
+        </TableCell>
+        <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
+        <TableCell align="center" sx={headerStyle}>
+          {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
+        </TableCell>
+      </>
+    )}
+    <TableCell align="center" sx={headerStyle}>  </TableCell>
   </TableRow>
+  
 </TableHead>
 
 
@@ -136,7 +183,163 @@ useEffect(() => {
               ) : rows.length === 0 ? (
                 
 <NoData/>                 
-              ) : (
+              ) :(
+              isMaleaManager ? (
+  rows.map((row, index) => (
+    <TableRow key={index}>
+      <TableCell sx={headStyle} align="center">{row.uuid}</TableCell>
+      <TableCell sx={headStyle} align="center">{row.doctor_name}</TableCell>
+      <TableCell sx={headStyle}align="center">{row.receipt_number}</TableCell>
+      <TableCell sx={headStyle}align="center">{row.form_name}</TableCell>
+      <TableCell sx={headStyle} align="center">{row.form_cost} ل.س</TableCell>
+      <TableCell sx={headStyle} align="center">{row.submitted_at}</TableCell>
+      <TableCell sx={headStyle} align="center">
+        {isInbox ? row.received_at
+: row.sent_at}
+      </TableCell>
+      <TableCell align="center">
+        <IconButton
+                       
+                        sx={{
+                          border: "1px solid rgba(212, 208, 212, 0.31)",
+                          borderRadius: "50px",
+                          ml: -4,
+                          width: 52,
+                          height: 52,
+                          padding: "8px",
+                          backgroundColor: (theme) => theme.palette.primary.main,
+                          color: (theme) => theme.palette.secondary.main,
+                        }}
+                      >
+                        <ArticleIcon sx={{ fontSize: 30 }} />
+                        <ArrowUpwardIcon
+                          sx={{
+                            position: "absolute",
+                            top: 24,
+                            right: 10,
+                            fontSize: 6,
+                            backgroundColor: "white",
+                            color: "black",
+                            transform: "rotate(60deg)",
+                            borderRadius: "50%",
+                            padding: "2px",
+                            border: "3px solid rgb(14, 74, 35)",
+                          }}
+                        />
+                      </IconButton>
+      </TableCell>
+    </TableRow>
+  ))
+) : isManager ? (
+  rows.map((row, index) => (
+    <TableRow key={index}>
+      <TableCell sx={headStyle} align="center">{row.transactionNumber}</TableCell>
+      <TableCell align="center">
+        <Avatar
+          sx={{ width: 56, height: 56, margin: 'auto' }}
+          src={row.doctorImage}
+        />
+      </TableCell>
+      <TableCell sx={headStyle} align="center">{row.doctorName}</TableCell>
+      <TableCell sx={headStyle} align="center">{row.doctorNumber}</TableCell>
+      <TableCell sx={headStyle} align="center">{row.transactionType}</TableCell>
+      <TableCell sx={headStyle} align="center">{isInbox ? row.senderName : row.receiverName}</TableCell>
+      <TableCell sx={headStyle} align="center">{row.dateSubmitted}</TableCell>
+      <TableCell sx={headStyle} align="center">{isInbox ? row.dateReceived : row.dateSent}</TableCell>
+      <TableCell align="center">
+ <IconButton
+                        onClick={() => setOpenModal(true)}
+                        sx={{
+                          border: "1px solid rgba(212, 208, 212, 0.31)",
+                          borderRadius: "50px",
+                          ml: -4,
+                          width: 52,
+                          height: 52,
+                          padding: "8px",
+                          backgroundColor: (theme) => theme.palette.primary.main,
+                          color: (theme) => theme.palette.secondary.main,
+                        }}
+                      >
+                        <ArticleIcon sx={{ fontSize: 30 }} />
+                        <ArrowUpwardIcon
+                          sx={{
+                            position: "absolute",
+                            top: 24,
+                            right: 10,
+                            fontSize: 6,
+                            backgroundColor: "white",
+                            color: "black",
+                            transform: "rotate(60deg)",
+                            borderRadius: "50%",
+                            padding: "2px",
+                            border: "3px solid rgb(14, 74, 35)",
+                          }}
+                        />
+                      </IconButton>      </TableCell>
+    </TableRow>
+  ))
+
+
+
+  
+):isSub_Admin?(
+
+(
+  rows.map((row, index) => (
+    <TableRow key={index}>
+      <TableCell sx={headStyle} align="center">{row.transactionNumber}</TableCell>
+      <TableCell align="center">
+        <Avatar
+          sx={{ width: 56, height: 56, margin: 'auto' }}
+          src={row.from_avatar}
+        />
+      </TableCell>
+      <TableCell sx={headStyle} align="center">{row.from_name}</TableCell>
+      <TableCell sx={headStyle} align="center">{row.from_phone}</TableCell>
+      <TableCell sx={headStyle} align="center">{row.transactionType}</TableCell>
+            <TableCell sx={headStyle} align="center">{isInbox ? "" : row.status}</TableCell>
+
+      <TableCell sx={headStyle} align="center">{isInbox ? row.senderName : row.to}</TableCell>
+      <TableCell sx={headStyle} align="center">{row.dateSubmitted}</TableCell>
+      <TableCell sx={headStyle} align="center">{isInbox ? row.received_at : row.sender_at}</TableCell>
+      <TableCell align="center">
+ <IconButton
+                        // onClick={() => setOpenModal(true)}
+                        sx={{
+                          border: "1px solid rgba(212, 208, 212, 0.31)",
+                          borderRadius: "50px",
+                          ml: -4,
+                          width: 52,
+                          height: 52,
+                          padding: "8px",
+                          backgroundColor: (theme) => theme.palette.primary.main,
+                          color: (theme) => theme.palette.secondary.main,
+                        }}
+                      >
+                        <ArticleIcon sx={{ fontSize: 30 }} />
+                        <ArrowUpwardIcon
+                          sx={{
+                            position: "absolute",
+                            top: 24,
+                            right: 10,
+                            fontSize: 6,
+                            backgroundColor: "white",
+                            color: "black",
+                            transform: "rotate(60deg)",
+                            borderRadius: "50%",
+                            padding: "2px",
+                            border: "3px solid rgb(14, 74, 35)",
+                          }}
+                        />
+                      </IconButton>      </TableCell>
+    </TableRow>
+  ))
+
+
+)
+
+
+):(
                 rows.map((row, index) => (
                   <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)" }}>
                     <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">{row.mailTitle}</TableCell>
@@ -194,7 +397,7 @@ useEffect(() => {
                     </TableCell>
                   </TableRow>
                 ))
-              )}
+              ))}
             </TableBody>
 
 

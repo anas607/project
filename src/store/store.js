@@ -11,6 +11,11 @@ import transactionsReducer from "../reducer/transaction";
 
 import outerexportReducer from "../reducer/deywan/outer/outer";
 import outereimportReducer from "../reducer/deywan/outer/importouter";
+import enterimportReducer from "../reducer/deywan/managerenter/imort"
+import enterexportReducer from "../reducer/deywan/managerenter/export"
+import fetchallReducer from "../reducer/managerexam/showspeclice"
+import fetchprogramReducer from "../reducer/managerexam/showallprograms"
+import fetchmarkReducer from "../reducer/managerexam/showmark"
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -25,6 +30,11 @@ export default configureStore({
     // =======
     outerexport: outerexportReducer,
     outereimport: outereimportReducer,
+    enterimport:enterimportReducer,
+    enterexport:enterexportReducer,
+    fetchall:fetchallReducer,
+    fetchprogram:fetchprogramReducer
+    ,fetchmark:fetchmarkReducer,
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

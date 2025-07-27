@@ -37,6 +37,7 @@ export const getData = async (url, customHeaders = {}) => {
     const response = await axios.get(url, { headers });
     return response.data;
   } catch (error) {
+     console.error("AXIOS ERROR:", error); 
     throw error.response ? error.response.data : error;
   }
 };
@@ -46,6 +47,7 @@ export const postData = async (
   body = {},
   customHeaders = {},
   isFormData = false
+ 
 ) => {
   const token = getToken();
 
@@ -66,6 +68,7 @@ export const postData = async (
     });
     return response.data;
   } catch (error) {
+    //  console.error("AXIOS ERROR:", error); 
     throw error.response ? error.response.data : error;
   }
 };

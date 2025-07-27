@@ -12,18 +12,16 @@ export default function SidBar(){
         
          <Card
         sx={{
-          width: 200,
-          height: 500,
+           width: '381px',
+          height: '960px',
          backgroundColor: 'white',
-          borderRadius: '2%',
-           height: '100vh',
-           width:"20%"
+          borderRadius: '2px',
           
         
         }}
       >
         
-      <img src='logo.png'  style={{ width: '90px', height: '90px',marginTop:"10%" }}></img>
+      <img src='logo.png'  style={{ width: '153px', height: '151px',marginTop:"10%" }}></img>
            
              
             <Navgation/>

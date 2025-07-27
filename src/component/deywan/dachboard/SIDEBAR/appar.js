@@ -68,7 +68,7 @@ export default function Appar() {
             fontWeight: "700",
             marginTop: "1.9%",
             mr: 0.3,
-            width: "1257px",
+            width: "1457px",
             direction: "rtl",
             "& .MuiOutlinedInput-root": {
               borderRadius: "7px",
@@ -94,61 +94,51 @@ export default function Appar() {
         />
 
         {/* زر الإشعارات */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            ml: 7,
-            mt: 3,
-            gap: 9,
-          }}
-        >
-          <IconButton
-            ref={notifBtnRef}
-            onClick={handleToggleNotifications}
-            sx={{
-              border: "1px solid rgba(212, 208, 212, 0.31)",
-              position: "relative",
-              borderRadius: "50px",
-              width: "64px",
-              height: "64px",
-              padding: "8px",
-              backgroundColor: (theme) => theme.palette.primary.main,
-              color: (theme) => theme.palette.secondary.main,
-            }}
-          >
-            <NotificationsIcon sx={{ fontSize: "30px" }} />{" "}
-            <Box
-              sx={(theme) => ({
-                position: "absolute",
-                top: 18.4,
-                right: 18,
-                width: 7,
-                height: 7,
-                bgcolor: "white",
-                borderRadius: "50%",
-                border: `2px solid ${theme.palette.primary.main}`,
-              })}
-            />
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              setShowLogOut(true);
-            }}
-            sx={{
-              border: "1px solid rgba(212, 208, 212, 0.31)",
-              borderRadius: "50px",
-              padding: "8px",
-              width: "64px",
-              height: "64px",
-              backgroundColor: "rgb(71, 59, 68)",
+       <Box sx={{ display: "flex", gap: 3,mt:3 }}>
+            <IconButton
+              ref={notifBtnRef}
+              onClick={handleToggleNotifications}
+              sx={{
+                border: "1px solid rgba(212, 208, 212, 0.31)",
+                borderRadius: "50px",
+                width: "64px",
+                height: "64px",
+                padding: "8px",
+                backgroundColor: (theme) => theme.palette.primary.main,
+                color: (theme) => theme.palette.secondary.main,
+                position: "relative",
+              }}
+            >
+              <NotificationsIcon sx={{ fontSize: "30px" }} />
+              <Box
+                sx={(theme) => ({
+                  position: "absolute",
+                  top: 18.4,
+                  right: 18,
+                  width: 7,
+                  height: 7,
+                  bgcolor: "white",
+                  borderRadius: "50%",
+                  border: `2px solid ${theme.palette.primary.main}`,
+                })}
+              />
+            </IconButton>
 
-              color: (theme) => theme.palette.secondary.main,
-            }}
-          >
-            <PowerSettingsNewIcon sx={{ fontSize: "30px" }} />
-          </IconButton>
-        </Box>
+            <IconButton
+              onClick={() => setShowLogOut(true)}
+              sx={{
+                border: "1px solid rgba(212, 208, 212, 0.31)",
+                borderRadius: "50px",
+                padding: "8px",
+                width: "64px",
+                height: "64px",
+                backgroundColor: "rgb(71, 59, 68)",
+                color: (theme) => theme.palette.secondary.main,
+              }}
+            >
+              <PowerSettingsNewIcon sx={{ fontSize: "30px" }} />
+            </IconButton>
+          </Box>
       </Box>
 
       {/* بوكس الإشعارات المنبثق */}

@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
   IconButton,
- 
+ Button
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -25,6 +25,8 @@ import { BaseUrl, show_import_internal_mails, show_internal_mails_export } from 
 import Loading from "../../wrong/mails/loading";
 import NoData from "../../wrong/mails/noData";
 import EnternalMails from "../mails/form/enternalimportmodal";
+import { useSelector } from "react-redux";
+import CreatMails from "../mails/form/creatform";
 
 
 
@@ -35,15 +37,24 @@ const headStyle = {
   py: 1.5,
 };
 const Enter = () => {
+    const [creat, setCreat] = useState(false);
+  
+   const stateRole=useSelector((state)=>state.user.roles[0])
+  const isSub_Admin=stateRole.includes("نائب المدير")
+const [selectedUuid, setSelectedUuid] = useState(null);
+
   const [inboxRows, setInboxRows] = useState([]);
+  console.log(inboxRows)
+ 
 const [outboxRows, setOutboxRows] = useState([]);
+ console.log(outboxRows)
 const [loading, setLoading] = useState(false);
 
 const [error, setError] = useState(null);
    const [anchorEl, setAnchorEl] = useState(null);
   const [selectedType, setSelectedType] = useState("البريد الوارد");
   const [openModal, setOpenModal] = useState(false);
-
+console.log(outboxRows)
    const handleClick = (event) => setAnchorEl(event.currentTarget);
   const isInbox = selectedType === "البريد الوارد";
 const rows = selectedType === "البريد الوارد" ? inboxRows : outboxRows;
@@ -82,6 +93,16 @@ useEffect(() => {
   fetchData();
 }, [selectedType]);
 
+// const handleOpenModal = (uuid) => {
+//   setSelectedUuid(uuid);
+//   setOpenModal(true);
+// };
+
+const handleOpenModal = (uuid) => {
+  setSelectedUuid(uuid);
+  setTimeout(() => setOpenModal(true), 0); // أو 100ms لو بدك تتأكد
+};
+
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
       <SidBar />
@@ -116,6 +137,20 @@ useEffect(() => {
     );
   }}
 />
+  {!isInbox && <>
+     <Button onClick={()=>{
+      setCreat(true)
+     }} variant="contained" color="rgb(14,74,35)" sx={{borderRadius:"30px" ,width:"11%",height:"50px",backgroundColor:"rgb(14,74,35)",color:"white",mr:149 ,fontSize:'20px',fontWeight:'700'}}>
+            إنشاء بريد
+          </Button>
+    
+    </>}
+     {<CreatMails
+     open={creat}
+      onClose={()=>setCreat(false)}
+      
+     />
+    }
           </Box>
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none",mt:6 }}>
@@ -133,7 +168,16 @@ useEffect(() => {
         <TableCell align="center" sx={headStyle}>اسم المكتب</TableCell>
         <TableCell align="center" sx={headStyle}>تاريخ الاستلام</TableCell>
       </>
-    ) : (
+    )  : isSub_Admin ? (
+  <>
+    <TableCell align="center" sx={headStyle}>رقم البريد</TableCell>
+    <TableCell align="center" sx={headStyle}>اسم المكتب</TableCell>
+        <TableCell align="center" sx={headStyle}>رقم المكتب</TableCell>
+
+    <TableCell align="center" sx={headStyle}>عنوان البريد</TableCell>
+    <TableCell align="center" sx={headStyle}>تاريخ الإرسال</TableCell>
+  </>
+) :(
       <>
         <TableCell align="center" sx={headStyle}>اسم المكتب</TableCell>
         <TableCell align="center" sx={headStyle}>رقم المكتب</TableCell>
@@ -165,33 +209,64 @@ useEffect(() => {
         borderBottom: "3px solid rgb(14, 74, 35)",
       }}
     >
-      <TableCell align="center" sx={{ py: 1.5 ,fontWeight: "700" ,fontSize:'16px'}}>{row.id}</TableCell>
+      <TableCell align="center" sx={{ py: 1.5 ,fontWeight: "700" ,fontSize:'16px'}}>{row.uuid}</TableCell>
 
       {isInbox ? (
         <>
           <TableCell align="center">
-            <Avatar src={row.senderImg} sx={{ width: 56, height: 56, margin: "auto" }} />
+            <Avatar src={row.from_avatar} sx={{ width: 56, height: 56, margin: "auto" }} />
           </TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.senderName}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.senderPhone}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.mailTitle}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.officeName}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.dateReceived}</TableCell>
+          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_name}</TableCell>
+          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_phone}</TableCell>
+          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.subject}</TableCell>
+          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_office}</TableCell>
+          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.received_at}</TableCell>
         </>
-      ) : (
-        <>
-          <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.officeName}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.officePhone}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.mailTitle}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.status}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.dateReceived}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.dateSent}</TableCell>
-        </>
+      ) : isSub_Admin?(<> <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
+            {row.to.join(", ")}
+          </TableCell>
+          <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
+            {row.to_phones.join(", ")}
+          </TableCell>
+          <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
+            {row.subject}
+          </TableCell>
+          <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
+            {row.received_at}
+          </TableCell>
+          <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
+            {row.sender_at || "—"}
+          </TableCell></>) :(
+       <>
+  <TableCell align="center" sx={{ fontWeight: "700", fontSize: '16px' }}>
+    {row.to.join(', ')}
+  </TableCell>
+  <TableCell align="center" sx={{ fontWeight: "700", fontSize: '16px' }}>
+    {row.to_phones.join(', ')}
+  </TableCell>
+  <TableCell align="center" sx={{ fontWeight: "700", fontSize: '16px' }}>
+    {row.subject}
+  </TableCell>
+  <TableCell align="center" sx={{ fontWeight: "700", fontSize: '16px' ,color: row.status === "مرفوضة"
+        ? "red"
+        : row.status === "مرسلة"
+        ? "green"
+        : "black",}}>
+    {row.status}
+  </TableCell>
+  <TableCell align="center" sx={{ fontWeight: "700", fontSize: '16px' }}>
+    {row.received_at}
+  </TableCell>
+  <TableCell align="center" sx={{ fontWeight: "700", fontSize: '16px' }}>
+    {row.sender_at || '—'}
+  </TableCell>
+</>
+
       )}
 
       <TableCell align="center">
         <IconButton
-          onClick={() => setOpenModal(true)
+          onClick={() => handleOpenModal(row.uuid)
             
           }
           
@@ -236,7 +311,8 @@ useEffect(() => {
 
   {<EnternalMails
   open={openModal}
-  onclose={()=>{setOpenModal(false)}}
+  onClose={()=>{setOpenModal(false)}}
+  uuid={selectedUuid}
   />
 }
     </Box>

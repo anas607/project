@@ -20,6 +20,9 @@ import Cookies from "universal-cookie";
 import { postData } from "../API/apiService";
 export default function Login() {
   const state_user = useSelector((state) => state.user);
+    const Role_user = useSelector((state) => state.user.roles);
+
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -33,7 +36,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
   const [loading, setLoading] = useState(false);
-  console.log(form);
+  //console.log(form);
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
@@ -46,7 +49,7 @@ export default function Login() {
     formData.append("password", form.password);
 
     try {
-      const response = await postData(`${BaseUrl}${LOGIN}`, formData);
+      const response = await postData(`${BaseUrl}${LOGIN}`, formData );
 
       const token = response.data?.access_token;
 
@@ -63,8 +66,16 @@ export default function Login() {
           path: "/",
           maxAge: 86400,
         });
+const userRoles = response.data.roles || [];
 
-        navigate("/dachbord");
+const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات"];
+const managerRoles = ["رئيس الديوان", "رئيس الإقامة", "رئيس المجالس", "رئيس المالية", "رئيس المفاضلة", "رئيس الشهادات","رئيس الامتحانات","المدير" ,"نائب المدير"];
+
+if (userRoles.some(role => managerRoles.includes(role))) {
+  navigate("/dachbord");
+} else if (userRoles.some(role => employeeRoles.includes(role))) {
+  navigate("/enter_emdewan");}
+
       } else {
         setError("بيانات الدخول غير صحيحة");
         setOpenAlert(true);

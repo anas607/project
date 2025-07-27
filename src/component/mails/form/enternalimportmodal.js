@@ -10,10 +10,36 @@ import {
 
 } from "@mui/material";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useEffect, useState } from "react";
+import { getData } from "../../../API/apiService";
+import { BaseUrl, SHOW_INTERNAL_MAIL } from "../../../API/api";
+import { useSelector } from "react-redux";
 
 
 
-export default function EnternalMails({open,onclose}){
+export default function EnternalMails({open,onClose,uuid}){
+const stateMalea=useSelector((state)=>state.user.roles[0])
+const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات"];
+const isManager = employeeRoles.some(role => stateMalea.includes(role));
+    const [mailData, setMailData] = useState({subject:"",body:"",updated_at:"",from:""});
+useEffect(()=>{
+if (open && uuid) {
+      fetchMail();
+    }
+  }, [open, uuid]);
+const fetchMail = async () => {
+    try {
+const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
+      setMailData(res);
+      console.log("المعاملة:", res);
+    } catch (err) {
+      // console.error(  err.response.data.message)  
+
+
+    }
+  };
+
+  if (!open) return null;
     return(
 <>
 
@@ -52,71 +78,69 @@ export default function EnternalMails({open,onclose}){
     }}
   >
     <HighlightOffIcon
-       onClick={onclose}
+       onClick={onClose}
       sx={{ position: 'absolute', top: 16, left: 16, cursor: 'pointer', fontSize:'30px'}}
     />
 
-    {/* نصوص العنوان الكبيرة */}
-    <Typography fontWeight="700" fontSize="24px"color="black">
-       الجمهورية العربية السورية
-    </Typography>
-    <Typography fontWeight="700" fontSize="24px" color="black">
-      وزارة الصحة
-    </Typography>
-    <Typography fontWeight="700" fontSize="24px" color="black">
-      الهيئة السورية للاختصاصات الطبية
-    </Typography>
-   {/* العنوان */}
-<Typography fontSize="24px" fontWeight="700" mt={2}>
-  <Box component="span" color="gray">العنوان :</Box>{' '}
-  <Box component="span" color="black">تسليم شهادة</Box>
-</Typography>
+   {!mailData ? (
+        <Typography textAlign="center" mt={10}>جاري تحميل البيانات...</Typography>
+      ) : (
+        <>
+          <Typography fontWeight="700" fontSize="24px" color="black">الجمهورية العربية السورية</Typography>
+          <Typography fontWeight="700" fontSize="24px" color="black">وزارة الصحة</Typography>
+          <Typography fontWeight="700" fontSize="24px" color="black">الهيئة السورية للاختصاصات الطبية</Typography>
+
+          <Typography fontSize="24px" fontWeight="700" mt={2}>
+            <Box component="span" color="gray">العنوان :</Box>{' '}
+            <Box component="span" color="black">{mailData.subject}</Box>
+          </Typography>
 
 {/* الموضوع */}
 <Typography fontSize="14px" fontWeight="400" color="rgb(34,42,37)" sx={{ whiteSpace: 'pre-line' }}>
   <span style={{ fontSize: '24px', fontWeight: '700', color: 'gray' }}>الموضوع :</span>{' '}
-  <span style={{ fontSize: '24px', fontWeight: '700', color: 'black' }}>تعديل آلية تسليم شهادات البورد السوري</span>
-  {"\n\n"}
+  
   <Typography fontSize="18px" fontWeight="500" color="rgb(34,42,37)">
 
-  بناءً على متطلبات تسهيل الإجراءات الإدارية، وحرصاً على تيسير استلام شهادات البورد السوري للأطباء الأخصائيين المقيمين خارج محافظات مراكز الهيئة، تقرر ما يلي:
-  {"\n\n"}
-  يُسمح للأطباء المتقدمين لاستلام شهادات البورد السوري بإرسال أصول الوثائق المطلوبة عبر البريد الرسمي.
-  {"\n"}
-  أو عن طريق وكلاء قانونيون بموجب وكالات موثقة ومصدقة أصولاً، على أن يتم التأكد من صحة الوثائق والأصول.
-  {"\n"}
-  المرسلة ومطابقتها للسجلات المعتمدة في الهيئة، و تسليم الشهادة للطبيب شخصياً عند حضوره إلى مقر الهيئة، أو إرسالها له عبر البريد الرسمي إلى العنوان المحدد بناءً على طلب خطي، و في حال الاستلام عبر.
-  {"\n"}
-  وكيل، يجب إرفاق نسخة مصدقة من الوكالة القانونية الممنوحة له.
-  {"\n\n"}
-  يُعمل بهذا التعديل اعتباراً من تاريخه، ويُعمم على كافة الدوائر المعنية للتنفيذ بدقة.
-  {"\n\n"}
-  وتفضلوا بقبول فائق الاحترام
-</Typography>
+   {mailData.body} 
 
+</Typography>
 </Typography>
     {/* التوقيع */}
     <Typography fontWeight="700" fontSize="20px" sx={{mr:54}}>
       <Box component="span" sx={{color:"black"}}>الاسم:</Box>{''}
-            <Box component="span" sx={{color:"gray" ,whiteSpace:'-moz-pre-wrap'}}>        الدكتور يونس قبلان
+            <Box component="span" sx={{color:"gray" ,whiteSpace:'-moz-pre-wrap'}}>          {mailData.from}
 </Box>
 
     </Typography>
    <Typography fontWeight="700" fontSize="20px" sx={{mr:54}}>
       <Box component="span" sx={{color:"black"}}>التاريخ:</Box>{''}
-            <Box component="span" sx={{color:"gray"}}>        1/2/2035  
+            <Box component="span" sx={{color:"gray"}}>      {new Date(mailData.updated_at).toLocaleDateString()}
 </Box>
 
     </Typography>
     {/* زر الإرسال */}
-    <Box sx={{ display: 'flex', justifyContent: 'flex-end',mt:2 }}>
-     <Button variant="contained" color="rgb(14,74,35)" sx={{borderRadius:"20px" ,width:"36%",backgroundColor:"rgb(14,74,35)",color:"white",ml:56,fontWeight:"700", fontSize:"20px"}}>
-        ارسال
-      </Button>
-    </Box>
+    {!isManager && (
+  <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+    <Button
+      variant="contained"
+      sx={{
+        borderRadius: "20px",
+        width: "36%",
+        backgroundColor: "rgb(14,74,35)",
+        color: "white",
+        ml: 56,
+        fontWeight: "700",
+        fontSize: "20px"
+      }}
+    >
+      ارسال
+    </Button>
+  </Box>
+)}
+</>
+      )}
   </Paper>
 </Modal>
-
 
 </>
 

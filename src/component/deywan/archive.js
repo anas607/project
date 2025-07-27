@@ -207,24 +207,24 @@ useEffect(() => {
       )}
       {selectedType === "البريد الداخلي الوارد" && (
         <>
-          <TableCell  sx={headStyle}align="center">{row.id}</TableCell>
-          <TableCell sx={headStyle} align="center"><Avatar sx={{margin:'auto',width: 56, height: 56}}src={row.senderImg} /></TableCell>
-          <TableCell sx={headStyle} align="center">{row.senderName}</TableCell>
-          <TableCell sx={headStyle} align="center">{row.senderPhone}</TableCell>
-          <TableCell  sx={headStyle}align="center">{row.mailTitle}</TableCell>
-          <TableCell  sx={headStyle}align="center">{row.officeName}</TableCell>
-          <TableCell sx={headStyle} align="center">{row.dateReceived}</TableCell>
+          <TableCell  sx={headStyle}align="center">{row.uuid}</TableCell>
+          <TableCell sx={headStyle} align="center"><Avatar sx={{margin:'auto',width: 56, height: 56}}src={row.from_avatar} /></TableCell>
+          <TableCell sx={headStyle} align="center">{row.from_name}</TableCell>
+          <TableCell sx={headStyle} align="center">{row.from_phone}</TableCell>
+          <TableCell  sx={headStyle}align="center">{row.subject}</TableCell>
+          <TableCell  sx={headStyle}align="center">{row.from_office}</TableCell>
+          <TableCell sx={headStyle} align="center">{row.received_at}</TableCell>
         </>
       )}
       {selectedType === "البريد الداخلي الصادر" && (
         <>
-          <TableCell  sx={headStyle} align="center">{row.id}</TableCell>
-          <TableCell  sx={headStyle} align="center">{row.officeName}</TableCell>
-          <TableCell  sx={headStyle} align="center">{row.senderPhone}</TableCell>
-          <TableCell sx={headStyle}  align="center">{row.mailTitle}</TableCell>
+          <TableCell  sx={headStyle} align="center">{row.uuid}</TableCell>
+          <TableCell  sx={headStyle} align="center">{row.from_office}</TableCell>
+          <TableCell  sx={headStyle} align="center">{row.from_phone}</TableCell>
+          <TableCell sx={headStyle}  align="center">{row.subject}</TableCell>
           <TableCell  sx={headStyle} align="center">مُرسل</TableCell>
-          <TableCell  sx={headStyle} align="center">{row.dateReceived}</TableCell>
-          <TableCell  sx={headStyle} align="center">{row.dateSubmitted}</TableCell>
+          <TableCell  sx={headStyle} align="center">{row.received_at}</TableCell>
+          <TableCell  sx={headStyle} align="center">{row.sender_at}</TableCell>
         </>
       )}
 

@@ -1,301 +1,26 @@
-import React, { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+
 import {
-  Box,
   Typography,
-  Avatar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-   Modal,
   Grid,
-  Button,
+  Paper,
+  Modal,
   Checkbox,
-  IconButton,
+  StepLabel,
   TextField,
-  Menu,
-  MenuItem,
-  AppBar,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import NoteIcon from '@mui/icons-material/Note';import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import SidBar from './SIDEBAR/sidbar'
-import Appar from './SIDEBAR/appar'
-import ArticleIcon from '@mui/icons-material/Article';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
- import {useDispatch,useSelector }  from "react-redux"
-import { fetchimportouter } from "../../../reducer/deywan/outer/importouter";
-import { fetchexportouter } from "../../../reducer/deywan/outer/outer";
-import Loading from "../../../wrong/mails/loading";
-import NoData from "../../../wrong/mails/noData";
-// بيانات البريد الوارد (وارد)
-const headerStyle = {
-  color: "white",
- fontWeight: "700" ,fontSize:'20px',
-  py: 1.5,whiteSpace:'nowrap'
-};
+import NoteIcon from "@mui/icons-material/Note";
 
-// بيانات البريد الصادر (صادر)
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
-
-
-
-const headStyle = {
-  color: "black",
- fontWeight: "700" ,fontSize:'20px',
-  py: 1.5,
-};
-
-const Outer_EDeywan = () => {
-  const stateexport=useSelector((state)=>state.outerexport)
-
-    const dispatch = useDispatch()
-      const stateimport=useSelector((state)=>state.outereimport)
-      console.log(stateimport.data)
-
-      const stateMalea=useSelector((state)=>state.user.roles[0])
-      const isMaleaManager=stateMalea.includes("موظف المالية")
-  // const out=useSelector((state)=>state.dewan_outer)
-  // console.log(out)
-   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedType, setSelectedType] = useState("البريد الوارد");
-  const [openModal, setOpenModal] = useState(false);
-const[close,setclose]=useState(false)
-   const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const isInbox = selectedType === "البريد الوارد";
-  const rows = isInbox ? stateimport.data : stateexport.data;
-useEffect(() => {
-  if (selectedType === "البريد الوارد") {
-    dispatch(fetchimportouter());
-  } else {
-    dispatch(fetchexportouter());
-  }
-}, [selectedType, dispatch]);
+export default function ForwordMails({ open, onclose }) {
   return (
-    <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
-      <SidBar />
-      <Box flex={1} p={2}>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={3}
-          
-        >
-        
-
-        
-
-          
-        </Box>
- <Appar/>
-      <Box
-                
-                  display="flex"
-                  alignItems="center"
-                  sx={{ cursor: "pointer", gap: 1 ,mb:3 }}
-                  onClick={handleClick}
-                  style={{marginTop:'3%'}}
-                >
-                  <MenuIcon sx={{mr:1}} />
-                  <Typography fontWeight="700" sx={{fontSize:'24px'}}>{selectedType}</Typography>
-                   <ArrowDropDownCircleOutlinedIcon  sx={{fontSize:'30px'}} onClick={() => {
-          setSelectedType(prev =>
-            prev === "البريد الوارد" ? "البريد الصادر" : "البريد الوارد"
-          );
-        }}
-      />
-                </Box>
-
-      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6 ,overflowY: 'auto',maxHeight: '700px', }}>
-       <Table sx={{width:"1573px", height:'88px'}}>
-        <TableHead sx={{width:"1573px", height:'88px'}}>
-       <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
-         {isMaleaManager ? <>
-         
-         
-          <>
-                 <TableCell align="center" sx={headerStyle}>رقم المعاملة</TableCell>
-                 <TableCell align="center" sx={headerStyle}>اسم الطبيب</TableCell>
-                 <TableCell align="center" sx={headerStyle}>رقم الإيصال</TableCell>
-                 <TableCell align="center" sx={headerStyle}>نوع المعاملة</TableCell>
-                 <TableCell align="center" sx={headerStyle}>رسوم المعاملة</TableCell>
-                 <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
-                 <TableCell align="center" sx={headerStyle}>
-                   {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
-                 </TableCell>
-               </>
-         
-         
-         </>:<><TableCell align="center" sx={headStyle}>
-      رقم  المعاملة
-    </TableCell>
-    <TableCell align="center" sx={headStyle}>
-      صورة الطبيب
-    </TableCell>
-    <TableCell align="center" sx={headStyle}>
-      اسم الطبيب
-    </TableCell>
-    <TableCell align="center" sx={headStyle}>
-      رقم الطبيب
-    </TableCell>
-    <TableCell align="center" sx={headStyle}>
-      نوع المعاملة
-    </TableCell>
-    <TableCell align="center"sx={headStyle}>
-      {isInbox ? "المرسل" : "المستقبل"}
-    </TableCell>
-    <TableCell align="center" sx={headStyle}>
-      تاريخ التقديم
-    </TableCell>
-    <TableCell align="center" sx={headStyle}>
-      {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
-    </TableCell></>}
-               
-    <TableCell align="center" sx={headStyle}>
-      
-      {/* أيقونة */}
-    </TableCell>
+    <>
     
-  </TableRow>
-</TableHead>
-
-
-
-<TableBody> {(isInbox ? stateimport.isloading : stateexport.isloading) ? (
-                <TableRow>
-                  <TableCell sx={{color:"rgba(29, 216, 94, 1)"}} colSpan={8} align="center">
-                    <Loading />
-                  </TableCell>
-                </TableRow>
-              ) : (isInbox ? stateimport.error : stateexport.error) ? (
-                <TableRow>
-                  <TableCell colSpan={8} align="center" sx={{ color: 'red', fontWeight: 'bold' }}>
-                    {(isInbox ? stateimport.error : stateexport.error)}
-                  </TableCell>
-                </TableRow>
-              ) : rows.length === 0 ? (
-                
-<NoData/>                 
-              ) :( isMaleaManager ? (
-                rows.map((row, index) => (
-                  <TableRow key={index}>
-                    <TableCell sx={headStyle} align="center">{row.uuid}</TableCell>
-                    <TableCell sx={headStyle} align="center">{row.doctor_name}</TableCell>
-                    <TableCell sx={headStyle}align="center">{row.receipt_number}</TableCell>
-                    <TableCell sx={headStyle}align="center">{row.form_name}</TableCell>
-                    <TableCell sx={headStyle} align="center">{row.form_cost} ل.س</TableCell>
-                    <TableCell sx={headStyle} align="center">{row.submitted_at}</TableCell>
-                    <TableCell sx={headStyle} align="center">
-                      {isInbox ? row.received_at
-              : row.sent_at}
-                    </TableCell>
-                    <TableCell align="center">
-                      <IconButton
-                                     
-                                      sx={{
-                                        border: "1px solid rgba(212, 208, 212, 0.31)",
-                                        borderRadius: "50px",
-                                        ml: -4,
-                                        width: 52,
-                                        height: 52,
-                                        padding: "8px",
-                                        backgroundColor: (theme) => theme.palette.primary.main,
-                                        color: (theme) => theme.palette.secondary.main,
-                                      }}
-                                    >
-                                      <ArticleIcon sx={{ fontSize: 30 }} />
-                                      <ArrowUpwardIcon
-                                        sx={{
-                                          position: "absolute",
-                                          top: 24,
-                                          right: 10,
-                                          fontSize: 6,
-                                          backgroundColor: "white",
-                                          color: "black",
-                                          transform: "rotate(60deg)",
-                                          borderRadius: "50%",
-                                          padding: "2px",
-                                          border: "3px solid rgb(14, 74, 35)",
-                                        }}
-                                      />
-                                    </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ):(
-  rows.map((row, index) => (
-    <TableRow key={index} sx={{ borderBottom: "2px solid #1f4d38" }}>
-
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.id}</TableCell>
-      <TableCell align="center">
-        <Avatar  sx={{ width: 56, height: 56, margin: "auto" }}  src={row.senderImg || row.receiverImg} />
-      </TableCell>
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
-        {isInbox ? row.senderName : row.receiverName}
-      </TableCell>
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
-        {isInbox ? row.senderPhone : row.receiverPhone}
-      </TableCell>
-            <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.mailTitle}</TableCell>
-
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
-        {isInbox ? row.senderName : row.receiverName}
-      </TableCell>
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }}  align="center">{row.dateSubmitted}</TableCell>
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
-        {isInbox ? row.dateReceived : row.dateSent}
-      </TableCell>
-      <TableCell align="center">
-        <IconButton
-          onClick={() => setOpenModal(true)}
-          sx={{
-            border: "1px solid rgba(212, 208, 212, 0.31)",
-            borderRadius: "50px",
-            width: 52,
-            height: 52,
-            padding: "8px",
-            backgroundColor: (theme) => theme.palette.primary.main,
-            color: (theme) => theme.palette.secondary.main,
-          }}
-        >
-          <ArticleIcon sx={{ fontSize: 30 }} />
-          <ArrowUpwardIcon
-            sx={{
-              position: "absolute",
-             top: 24,
-              right: 10,
-              fontSize: 6,
-              backgroundColor: "white",
-              color: "black",
-              transform: "rotate(60deg)",
-              borderRadius: "50%",
-              padding: "2px",
-            }}
-          />
-        </IconButton>
-      </TableCell>
-    </TableRow>
-  ))
-  ))}
-</TableBody>
-
-
-
-  </Table>
-</TableContainer>
-
-
-
-      </Box>
-
-     { <Modal
- open={openModal}
-  onClose={() => setOpenModal(false)}
+    <Modal
+ open={open}
+  onClose={onclose}
   
   aria-labelledby="add-employee-modal"
   sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -314,7 +39,7 @@ useEffect(() => {
     }}
   >
     <HighlightOffIcon
-      onClick={() => setOpenModal(false)}
+      onClick={onclose}
       sx={{ mr: 70, position: 'absolute' ,cursor:"pointer" }}
     />
     <Typography
@@ -883,9 +608,7 @@ useEffect(() => {
     </Grid>
   </Paper>
   
-</Modal>}
-    </Box>
+</Modal>
+    </>
   );
-};
-
-export default Outer_EDeywan;
+}

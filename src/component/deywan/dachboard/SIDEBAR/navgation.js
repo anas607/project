@@ -1,7 +1,7 @@
 // material-ui
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
-
+import OutgoingMailIcon from '@mui/icons-material/OutgoingMail';
 import MailIcon from "@mui/icons-material/Mail";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import Box from "@mui/material/Box";
@@ -10,8 +10,9 @@ import Avatar from "@mui/material/Avatar";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import GroupIcon from "@mui/icons-material/Group";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-import store from "../../../../store/store";
-import CloudIcon from "@mui/icons-material/Cloud";
+import ThirteenMpIcon from '@mui/icons-material/ThirteenMp';
+import EditIcon from '@mui/icons-material/Edit';
+import AssignmentIcon from '@mui/icons-material/Assignment';import CloudIcon from "@mui/icons-material/Cloud";
 // react-router
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -19,6 +20,10 @@ import { useSelector } from "react-redux";
 export default function Navgation() {
   const currentPath = window.location.pathname;
   const state = useSelector((state) => state.user);
+const isdeywan=state.roles[0].includes("رئيس الديوان")
+const isSub_Admin=state.roles[0].includes("نائب المدير")
+const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
+
 
   return (
     <>
@@ -78,51 +83,11 @@ export default function Navgation() {
             },
           }}
         >
-          <div className="relative w-fit inline-block">
-            {/* أيقونة الرسالة */}
-            <MailIcon sx={{ fontSize: 32, marginRight: 7 }} />
+         
 
             {/* الدائرة على يمين الأيقونة مباشرة */}
-            <Box
-              sx={{
-                position: "absolute",
-                top: "30%",
-                right: 45,
-                width: 22,
-                height: 22,
-                borderRadius: "50%",
-                bgcolor: currentPath === "/outer" ? "rgb(14, 74, 35)" : "white",
-                border:
-                  currentPath === "/outer"
-                    ? "2px solid rgb(14, 74, 35)"
-                    : "2px solid white",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 10,
-                transition: "all 0.2s ease-in-out",
-
-                "&:hover": {
-                  bgcolor: "rgb(14, 74, 35)", // الأخضر عند الهوفر
-                  border: "2px solid rgb(14, 74, 35)",
-
-                  "& svg": {
-                    color: "white", // يخلي السهم أبيض وقت الهوفر
-                  },
-                },
-              }}
-            >
-              {/* السهم داخل الدائرة */}
-              <KeyboardBackspaceIcon
-                sx={{
-                  fontSize: 14,
-                  color: currentPath === "/outer" ? "white" : "black",
-                  opacity: currentPath === "/outer" ? 1 : 0.9,
-                  transform: "rotate(180deg)", // إذا بدك يوجه يمين
-                }}
-              />
-            </Box>
-          </div>
+           <OutgoingMailIcon sx={{ marginRight: 7, fontSize: 35 }}/>
+         
 
           <h2
             style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
@@ -162,9 +127,9 @@ export default function Navgation() {
                 width: 22,
                 height: 22,
                 borderRadius: "50%",
-                bgcolor: currentPath === "/outer" ? "rgb(14, 74, 35)" : "white",
+                bgcolor: currentPath === "/enter" ? "rgb(14, 74, 35)" : "white",
                 border:
-                  currentPath === "/outer"
+                  currentPath === "/enter"
                     ? "2px solid rgb(14, 74, 35)"
                     : "2px solid white",
                 display: "flex",
@@ -204,8 +169,7 @@ export default function Navgation() {
           </h2>
         </Button>
       </NavLink>
-
-      <NavLink to="/files" style={{ textDecoration: "none", width: "100%" }}>
+{isdeywan ? (<><NavLink to="/files" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
             justifyContent: "flex-start",
@@ -233,8 +197,35 @@ export default function Navgation() {
             المعاملات{" "}
           </h2>
         </Button>
-      </NavLink>
-      <NavLink to="/employee" style={{ textDecoration: "none", width: "100%" }}>
+      </NavLink></>): ""}
+      {isSub_Admin ? (<><NavLink to="/employees" style={{ textDecoration: "none", width: "100%" }}>
+        <Button
+          sx={{
+            justifyContent: "flex-start",
+            backgroundColor:
+              currentPath === "/employees" ? "rgb(14, 74, 35)" : "transparent",
+            color: currentPath === "/employees" ? "white" : "black",
+            fontWeight: "600",
+            fontSize: "16px",
+            width: "381px",
+            height: "78px",
+            transition: "1%",
+            "&:hover": {
+              backgroundColor: "rgb(14, 74, 35)",
+              color: "white",
+              width: "140%",
+            },
+          }}
+        >
+          <GroupIcon sx={{ marginRight: 7, fontSize: 32 }} />
+          <h2
+            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
+          >
+            {" "}
+            الموظفين 
+          </h2>
+        </Button>
+      </NavLink></>) : (<><NavLink to="/employee" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
             justifyContent: "flex-start",
@@ -258,10 +249,11 @@ export default function Navgation() {
             style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
           >
             {" "}
-            موظفي الديوان
+            الموظفين 
           </h2>
         </Button>
-      </NavLink>
+      </NavLink></>)}
+     
       <NavLink to="/archiv" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
@@ -323,12 +315,125 @@ export default function Navgation() {
           </h2>
         </Button>
       </NavLink>
+      {isSub_exam? (<> <NavLink to="/exam_bank" style={{ textDecoration: "none", width: "100%" }}>
+        <Button
+          sx={{
+            justifyContent: "flex-start",
+            backgroundColor:
+              currentPath === "/exam_bank" ? "rgb(14, 74, 35)" : "transparent",
+            color: currentPath === "/exam_bank" ? "white" : "black",
+            fontWeight: "600",
+            fontSize: "16px",
+            marginBottom: "2%",
+            transition: "1%",
+            width: "381px",
+            height: "78px",
+            "&:hover": {
+              backgroundColor: "rgb(14, 74, 35)",
+              color: "white",
+              width: "140%",
+            },
+          }}
+        >
+                 <AssignmentIcon sx={{ marginRight: 7, fontSize: 32 }} />
+          <h2
+            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}>
+            {" "}
+            بنك الاسئلة{" "}
+          </h2>
+        </Button>
+      </NavLink>
+      
+      
+      <NavLink to="/exams" style={{ textDecoration: "none", width: "100%" }}>
+        <Button
+          sx={{
+            justifyContent: "flex-start",
+            backgroundColor:
+              currentPath === "/exams" ? "rgb(14, 74, 35)" : "transparent",
+            color: currentPath === "/exams" ? "white" : "black",
+            fontWeight: "600",
+            fontSize: "16px",
+            marginBottom: "2%",
+            transition: "1%",
+            width: "381px",
+            height: "78px",
+            "&:hover": {
+              backgroundColor: "rgb(14, 74, 35)",
+              color: "white",
+              width: "140%",
+            },
+          }}
+        >
+         
+<Box
+  sx={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: -1,
+    marginRight: "13%" // مسافة بين الأيقونتين
+  }}
+>
+  {/* <EditIcon sx={{ fontSize: 28, cursor: 'pointer' }} /> */}
+  <ThirteenMpIcon sx={{ fontSize: 28,marginRight: "3%" }} />
+</Box>          <h2
+            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}>
+          
+            {" "}
+            الامتحانات{" "}
+          </h2>
+        </Button>
+      </NavLink>
+      <NavLink to="/Requests" style={{ textDecoration: "none", width: "100%" }}>
+        <Button
+          sx={{
+            justifyContent: "flex-start",
+            backgroundColor:
+              currentPath === "/Requests" ? "rgb(14, 74, 35)" : "transparent",
+            color: currentPath === "/Requests" ? "white" : "black",
+            fontWeight: "600",
+            fontSize: "16px",
+            marginBottom: "2%",
+            transition: "1%",
+            width: "381px",
+            height: "78px",
+            "&:hover": {
+              backgroundColor: "rgb(14, 74, 35)",
+              color: "white",
+              width: "140%",
+            },
+          }}
+        >
+         
+<AssignmentIcon sx={{ marginRight: 7, fontSize: 32 }} />
+          <h2
+            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}>
+            {" "}
+            طلبات الامتحان{" "}
+          </h2>
+        </Button>
+      </NavLink>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      </>):""}
+      
+        
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: "35%",
+          marginTop: isSub_exam ? "3%" :isdeywan? "35%":"55%",
           mr: -10,
         }}
       >

@@ -40,9 +40,9 @@ export default function ShowDetials({showdetials, setShowDetials, setShowProgram
            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         {/* زر الرجوع */}
         <IconButton onClick={() => {
-    setShowDetials(false);
-    setShowProgram(true);
-  }}
+  setShowDetials(false);
+  setShowProgram(true); // أو فقط setShowDetials(false) حسب التصميم
+}}
  sx={{ backgroundColor: "rgb(71, 59, 68)", color: "rgb(233,232,232)" }}>
           <ArrowBackIcon sx={{fontSize:'50px',                  transform: "rotate(180deg)", // إذا بدك يوجه يمين
 }} />
@@ -202,7 +202,7 @@ export default function ShowDetials({showdetials, setShowDetials, setShowProgram
                <TableCell align="center">
                 
                   <IconButton
-                  onclick={()=>{setShowDetials(true)}}
+  onClick={() => setShowDetials(true)}
                     sx={{
                       border: "1px solid rgba(212, 208, 212, 0.31)",
                       borderRadius: "50px",ml:-3,

@@ -25,7 +25,11 @@ import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCi
 
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMark } from "../../../reducer/managerexam/mark";
+import Loading from "../../../wrong/mails/loading";
+import NoData from "../../../wrong/mails/noData";
 const outboxRows = [
   {
     id: "#789541",
@@ -40,6 +44,11 @@ const outboxRows = [
 ];
 
 export default function Mark({addprogram, setAddProgram }){
+  const statemark=useSelector((state)=>state.fetchmark)
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(fetchMark())
+  },[dispatch])
     return(
         <>
           
@@ -122,10 +131,18 @@ export default function Mark({addprogram, setAddProgram }){
           
           
           <TableBody>
-            {outboxRows.map((row, index) => (
+             {statemark.error ? (<h2 sx={{color:"red"}}>خدث خطا في جلب المعلومات</h2>): 
+                         statemark.isloading ?  (<>
+                                        <TableRow>
+                                          <TableCell sx={{color:"green"}}>
+                                            <Loading />
+                                          </TableCell>
+                                        </TableRow></>) :
+                                        !statemark.isloading && statemark.data.length===0 ? <NoData/> :
+            statemark.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
-                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.mailTitle}</TableCell>
+                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.exam_number }</TableCell>
                 <TableCell align="center">
                   <Avatar  sx={{margin:'auto'}} src={row.receiverImg} />
                 </TableCell>
@@ -136,12 +153,12 @@ export default function Mark({addprogram, setAddProgram }){
                  {  row.receiverPhone}
                 </TableCell>
                  <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.type}
+                 { row.status}
                 </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                  {row.receiverName}
+                  {row.degree}
                 </TableCell>
-                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">{row.dateSubmitted}</TableCell>
+                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">{row.rating}</TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
                   { row.dateSent}
                 </TableCell>

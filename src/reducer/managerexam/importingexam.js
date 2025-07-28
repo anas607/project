@@ -1,13 +1,13 @@
 import { createSlice ,createAsyncThunk  } from '@reduxjs/toolkit'
-import { BaseUrl, PROGRAM, Show_All } from '../../API/api';
+import { ALL, BaseUrl, PRESENT, CANDIDATES, SHOW_ALL_END_REQUSET_EXAM, SHOW_ALL_IMPORT_REQUSET_EXAM } from '../../API/api';
 import { getData } from '../../API/apiService';
 
 
-export const fetchmark = createAsyncThunk(
-  'program/fetchprogram',
+export const fetchImportExam = createAsyncThunk(
+  'program/importexam',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getData(`${BaseUrl}${PROGRAM}${Show_All}`) 
+      const response = await getData(`${BaseUrl}${SHOW_ALL_IMPORT_REQUSET_EXAM}`) 
       return response.data;
     } catch (error) {
       return rejectWithValue(error?.message);
@@ -16,7 +16,7 @@ export const fetchmark = createAsyncThunk(
 );
 
 export const counterSlice = createSlice({
-    name: 'fetchmark',
+    name: 'importexam',
     initialState: {
        isloading:false,
        data:[],
@@ -26,15 +26,15 @@ export const counterSlice = createSlice({
     
     }, extraReducers: builder => {
         builder
-          .addCase(fetchmark.pending, (state, action) => {
+          .addCase(fetchImportExam.pending, (state, action) => {
             state.isloading = true
           })
-          .addCase(fetchmark.fulfilled, (state, action) => {
+          .addCase(fetchImportExam.fulfilled, (state, action) => {
             state.isloading = false
             state.data = action.payload
             
           })
-       .addCase(fetchmark.rejected, (state, action) => {
+       .addCase(fetchImportExam.rejected, (state, action) => {
             state.isloading = false;
             state.error = action.payload; 
           })

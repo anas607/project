@@ -18,22 +18,12 @@ import { getData } from "../../../../API/apiService";
 import { BaseUrl, PROGRAM } from "../../../../API/api";
 import Loading from "../../../../wrong/mails/loading";
 import { useSelector } from "react-redux";
+import ShowDetials from './showdetials'
 
 
-
-const outboxRows = [
-  {
-    id: "#789541",
-    mailTitle: "  98989",
-    officeName: "قسم الإحصاء",
-    receiverName: "د. سامي حسن",
-    receiverPhone: "+963993222111",
-    type:"شهادة ",
-    dateSubmitted: "1/5/2025",
-    dateSent: "2/5/2025",
-  }
-];
 export default function ShowProgram({showdetials,setShowDetials, setShowProgram ,id }) {
+  const [showNotificationPage, setShowNotificationPage] = useState(false);
+
   const stateprogram=useSelector((state)=>state.fetchprogram)
 const programInfo = stateprogram?.data?.find((item) => item.id === id);
 const year = programInfo?.السنة || "";
@@ -55,15 +45,16 @@ const fetchMail = async () => {
     console.log("⏳ Fetching data...");
 const res = await getData(`${BaseUrl}${PROGRAM}${id}`);
 setDeteilas(res.data);
-    console.log("✅ Response:", res);
+    // console.log( res);
   setisloading(false)
 
   } catch (err) {
-    console.error("❌ Error in fetchMail:", err.response?.data || err.message);
+    console.error( err.response?.data || err.message);
   }
 };
 
   return (
+ 
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
          
          <SidBar />
@@ -77,7 +68,6 @@ setDeteilas(res.data);
 }} />
         </IconButton>
 
-        {/* إشعارات وخروج */}
           {/* الزرين */}
           <Box sx={{ display: "flex", gap: 3 }}>
             <IconButton
@@ -221,7 +211,14 @@ setDeteilas(res.data);
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
                  {  row.الساعة}
                 </TableCell>
-                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
+                 <TableCell sx={{  color:
+      row["الحالة"] === "مقبول"
+        ? "green"
+        : row["الحالة"] === "انتهى"
+        ? "red"
+        : row["الحالة"] === "انتظار "
+        ? "orange"
+        : "inherit", fontWeight: "700" ,fontSize:'16px'  }} align="center">
                  { row["الحالة"] ?? "—" }
                 </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
@@ -241,8 +238,8 @@ setDeteilas(res.data);
                <TableCell align="center">
                 
                   <IconButton
-                 onClick={() =>{ setShowDetials(true)}} 
-                    sx={{
+                 
+                      sx={{
                       border: "1px solid rgba(212, 208, 212, 0.31)",
                       borderRadius: "50px",ml:-3,
                       width: 52,
@@ -279,9 +276,8 @@ setDeteilas(res.data);
           
             </Table>
           </TableContainer>
-    
+   
 
-        {/* يمكنك وضع جدول MUI هنا */}
       </Box>
     </Box></Box>
   );

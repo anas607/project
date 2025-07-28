@@ -26,7 +26,11 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEndExam } from "../../../reducer/managerexam/endingexam";
+import Loading from "../../../wrong/mails/loading";
+import NoData from "../../../wrong/mails/noData";
 const outboxRows = [
   {
     id: "#789541",
@@ -41,7 +45,11 @@ const outboxRows = [
 ];
 
 export default function Finished(){
-  
+  const stateend=useSelector((state)=>state.endexam)
+  const dispatch = useDispatch();
+  useEffect(()=>{dispatch(fetchEndExam())
+},[dispatch
+  ])
     return(
         <>
           
@@ -127,7 +135,15 @@ export default function Finished(){
           
           
           <TableBody>
-            {outboxRows.map((row, index) => (
+             {stateend.error ? (<h2 sx={{color:"red"}}>خدث خطا في جلب المعلومات</h2>): 
+                                     stateend.isloading ?  (<>
+                                                    <TableRow>
+                                                      <TableCell sx={{color:"green"}}>
+                                                        <Loading />
+                                                      </TableCell>
+                                                    </TableRow></>) :
+                                                    !stateend.isloading && stateend.data.length===0 ? <NoData/> :
+            stateend.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.mailTitle}</TableCell>

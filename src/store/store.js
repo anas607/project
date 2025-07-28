@@ -15,7 +15,9 @@ import enterimportReducer from "../reducer/deywan/managerenter/imort"
 import enterexportReducer from "../reducer/deywan/managerenter/export"
 import fetchallReducer from "../reducer/managerexam/showspeclice"
 import fetchprogramReducer from "../reducer/managerexam/showallprograms"
-import fetchmarkReducer from "../reducer/managerexam/showmark"
+import fetchmarkReducer from "../reducer/managerexam/mark"
+import endexamReducer from "../reducer/managerexam/endingexam"
+import importexamReducer from "../reducer/managerexam/importingexam"
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -35,6 +37,9 @@ export default configureStore({
     fetchall:fetchallReducer,
     fetchprogram:fetchprogramReducer
     ,fetchmark:fetchmarkReducer,
+    endexam:endexamReducer,
+    importexam:importexamReducer,
+    
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

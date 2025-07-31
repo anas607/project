@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box,
-  Typography,
-  Avatar,
+  
+ 
+  
   Table,
-  TableBody,
+
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  IconButton,
- Button
-} from "@mui/material";
 
+
+} from "@mui/material";
+import FlashlightOnIcon from '@mui/icons-material/FlashlightOn';
+import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
+// import Finished from "./finished";
+import { Box, Button, Select, MenuItem, Typography, IconButton,Avatar,
+  FormControl,
+  TableBody,
+  InputLabel,
+   } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
@@ -67,7 +74,7 @@ const Employyes = () => {
           
             display="flex"
             alignItems="center"
-            sx={{ cursor: "pointer", gap: 1  ,}}
+            sx={{ cursor: "pointer", gap: 23  ,}}
            
           style={{marginTop:'3%'}}
           >
@@ -79,7 +86,75 @@ const Employyes = () => {
     );
   }}
 /> */}
+
+  <FormControl sx={{ minWidth: 300 ,border:'2px solid rgb(14, 75, 35) ',borderRadius:'5%'}}>
+ <InputLabel
+  id="filter-label"
+  sx={{
+    color: "rgb(14, 75, 35)",
+    fontSize: '18px',
+    fontWeight: '700',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 5, // مسافة بين النص والأيقونة
+    '&.Mui-focused': {
+      color: "rgb(14, 75, 35)",
+    },
+  }}
+>
+  {/* النص والأيقونة جنب بعض */}
+  <Box sx={{ display: 'flex',gap: 3  }}>
+    تصفية حسب الاختصاص
+
+    {/* الكاشف مع الخط */}
+    <Box sx={{ position: 'relative', display: 'inline-block', ml: 1 }}>
+      <FlashlightOnIcon sx={{ fontSize: 32, color: 'rgb(14, 75, 35)' }} />
+      <FormatAlignRightIcon
+        sx={{
+          position: 'absolute',
+          bottom: 7,
+          right: -6,
+          fontSize: 24,
+          color: 'rgb(14, 75, 35)'
+        }}
+      />
+    </Box>
+  </Box>
+</InputLabel>
+
+  <Select
+    labelId="filter-label"
+    defaultValue=""
+    fullWidth
+    // startAdornment={
+    //   <TravelExploreIcon sx={{ color: "rgb(14, 75, 35)", mr: 1 }} />
+    // }
+    sx={{
+      color: "rgb(14, 75, 35)",
+      borderColor: "rgb(14, 75, 35)",
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: "rgb(14, 75, 35)",
+      },
+      '&:hover .MuiOutlinedInput-notchedOutline': {
+        borderColor: "rgb(14, 75, 35)",
+      },
+      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+        borderColor: "rgb(14, 75, 35)",
+      }
+    }}
+  >
+    <MenuItem value="2024">2024</MenuItem>
+    <MenuItem value="2025">2025</MenuItem>
+    <MenuItem value="2026">2026</MenuItem>
+  </Select>
+</FormControl>
  
+
+<Button sx={{borderRadius:"10%" ,cursor:'pointer',backgroundColor:"rgb(14,74,35)" ,width:"30%" ,height:"88px"}}>اضافة</Button>
+
+
+
+
           </Box>
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none",mt:6 }}>

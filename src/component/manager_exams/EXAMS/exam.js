@@ -73,7 +73,9 @@ const [selectedUuid, setSelectedUuid] = useState(null);
   if (showdetials) {
     return < ShowDetials   showdetials={showdetials}
   setShowDetials={setShowDetials}
-  setShowProgram={setShowProgram}/>;
+  setShowProgram={setShowProgram}
+   id={selectedUuid}
+  />;
   }
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>

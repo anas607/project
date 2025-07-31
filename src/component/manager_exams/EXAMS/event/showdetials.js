@@ -1,34 +1,62 @@
-import { Box, Button, Select, MenuItem, Typography, IconButton,Avatar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow, } from "@mui/material";
+import { Box, TextField, IconButton,
+ } from "@mui/material";
+  import SearchIcon from "@mui/icons-material/Search";
+  
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SidBar from "../../../deywan/dachboard/SIDEBAR/sidbar";
-
-import ArticleIcon from '@mui/icons-material/Article';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import AddIcon from '@mui/icons-material/Add';
+import PropTypes from "prop-types";
 
 
+import { useState } from "react";
+import TabsProgram from "../../bank/tabs/programtabs";
+import Candidates from "../student/Candidates";
+import Advancing from "../student/advancing";
 
-const outboxRows = [
-  {
-    id: "#789541",
-    mailTitle: "  98989",
-    officeName: "قسم الإحصاء",
-    receiverName: "د. سامي حسن",
-    receiverPhone: "+963993222111",
-    type:"شهادة ",
-    dateSubmitted: "1/5/2025",
-    dateSent: "2/5/2025",
-  }
-];
-export default function ShowDetials({showdetials, setShowDetials, setShowProgram  }) {
+
+
+
+
+
+
+
+
+function Bank(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+Bank.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+export default function ShowDetials({showdetials, setShowDetials, setShowProgram ,id }) {
+const [value, setValue] = useState(0);
+  
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
@@ -39,15 +67,55 @@ export default function ShowDetials({showdetials, setShowDetials, setShowProgram
            
            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         {/* زر الرجوع */}
-        <IconButton onClick={() => {
+        <IconButton 
+    onClick={() => {
   setShowDetials(false);
-  setShowProgram(true); // أو فقط setShowDetials(false) حسب التصميم
+  setShowProgram(true);
 }}
  sx={{ backgroundColor: "rgb(71, 59, 68)", color: "rgb(233,232,232)" }}>
           <ArrowBackIcon sx={{fontSize:'50px',                  transform: "rotate(180deg)", // إذا بدك يوجه يمين
 }} />
         </IconButton>
+    {value===1 ?(
 
+
+
+
+
+
+ <TextField
+          placeholder="ابحث"
+          variant="outlined"
+          sx={{
+            fontSize: "24px",
+            fontWeight: "700",
+           
+            mr: 0.3,
+            width: "400px",
+            direction: "rtl",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "7px",
+              fontSize: "24px",
+              fontWeight: "700",
+              backgroundColor: "white",
+              "& fieldset": { borderColor: "rgb(250,250,250)" },
+              "&:hover fieldset": { borderColor: "rgb(250,250,250)" },
+              "&.Mui-focused fieldset": { borderColor: "rgb(250,250,250)" },
+            },
+            "& input": {
+              paddingRight: "5px",
+              color: "rgb(105, 105, 102)",
+              fontSize: "100%",
+              height: "34px",
+            },
+          }}
+          InputProps={{
+            startAdornment: (
+              <SearchIcon sx={{ color: "rgb(44, 44, 44)", fontSize: "45px" }} />
+            ),
+          }}
+        />
+):""}
         {/* إشعارات وخروج */}
           {/* الزرين */}
           <Box sx={{ display: "flex", gap: 3 }}>
@@ -95,155 +163,46 @@ export default function ShowDetials({showdetials, setShowDetials, setShowProgram
               <PowerSettingsNewIcon sx={{ fontSize: "30px" }} />
             </IconButton>
           </Box>
-      </Box>
-
-      {/* select للدورة والسنة */}
-       <Typography
-                         variant="h6"
-                         sx={{
-                           fontSize: "24px",
-                           fontWeight: "700",
-                           color: "rgb(14,74,35)",
-      marginLeft: "90%",
-                           display: "inline-block",whiteSpace:'nowrap'
-                         }}
-                       >
-تفاصيل                       </Typography>{" "}
-                       <hr
-                         style={{
-                           height: "4px" /* سمك الخط */,
-                           width: "40%" /* عرض كامل */,
-                           background:
-                             "linear-gradient(to left, rgb(14,74,35)20%, gray 80%)",
-                           border: "none",
-     
-                           borderRadius: "2px",
-                           marginLeft: "90%",
-                           marginTop: "0",
-                         }}
-                       />
-
-      {/* جدول أو محتوى آخر */}
-      <Box>
       
-               <TableContainer sx={{ backgroundColor: "transparent", boxShadow: "none" , width: "1690px",mt:2,mr:1}}>
-            <Table  sx={{Width: '100%'}}>
-             <TableHead sx={{ width: "1690px", height:'88px'}}>
-            <TableRow sx={{ backgroundColor: (theme) => theme.palette.primary.main }}>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-                الاختصاص 
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px' }}>
-                 اليوم
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-                 التاريخ
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-                 الساعة
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-                 الحالة
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-                عدد المرشحين
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-                عدد المتقدمين
-              </TableCell>
-             <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-                نسبة النجاح
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-بسيط              </TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-متوسط              </TableCell>
-<TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-صعب              </TableCell>
-             <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'16px'  }}>
-                {/* أيقونة */}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          
-          
-          
-          <TableBody>
-            {outboxRows.map((row, index) => (
-              <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
-          
-                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.الاختصاص}</TableCell>
-               <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.اليوم}
-                </TableCell>
-                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.التاريخ}
-                </TableCell>
-                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 {  row.الساعة}
-                </TableCell>
-                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row["الحالة"] ?? "—" }
-                </TableCell>
-                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                 { row["عدد المرشحين"] ?? "—"}
-                </TableCell>
-                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                 { row["عدد المتقدمين"] ?? "—"}
-                </TableCell> <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                 { row["نسبة النجاح"] ?? "—" }
-                </TableCell> <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                  {row.بسيط}
-                </TableCell> <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                  {row.متوسط}
-                </TableCell>
-                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">{row.صعب}</TableCell>
-               
-               <TableCell align="center">
-                
-                  <IconButton
-  onClick={() => setShowDetials(true)}
-                    sx={{
-                      border: "1px solid rgba(212, 208, 212, 0.31)",
-                      borderRadius: "50px",ml:-3,
-                      width: 52,
-                      height: 52,
-                      padding: "8px",
-                      backgroundColor: (theme) => theme.palette.primary.main,
-                      color: (theme) => theme.palette.secondary.main,
-                    }}
-                  >
-                    <ArticleIcon sx={{ fontSize: 30 }} />
-                    <ArrowUpwardIcon
-                      sx={{
-                        position: "absolute",
-                       top: 24,
-              right: 10,
-                        fontSize: 6,
-                        backgroundColor: "white",
-                        color: "black",
-                        transform: "rotate(60deg)",
-                        borderRadius: "50%",
-                        padding: "2px",border: "3px solid rgb(14, 74, 35)",
-                      }}
-                    />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-         
-
-
-          </TableBody>
-          
-          
-          
-            </Table>
-          </TableContainer>
-    
-
-        {/* يمكنك وضع جدول MUI هنا */}
       </Box>
+
+     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
+      
+     
+
+      <Box sx={{ flex: 1, p: 2 }}>
+        
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center",  }}>
+         
+          {/* التابات */}
+<Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 72 }}>
+  <TabsProgram value={value} handleChange={handleChange} />
+
+
+
+
+ </Box>
+
+          
+
+          {/* الزرين */}
+         
+        </Box>
+
+        {/* محتوى التابات */}
+        <Bank value={value} index={0}>
+          <Candidates  id={id}
+       />
+      </Bank>
+        <Bank value={value} index={1}>
+         <Advancing  id={id}/>
+       </Bank>
+        
+      </Box>
+    </Box>
+
+      
+     
     </Box></Box>
   );
 }

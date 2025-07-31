@@ -39,7 +39,6 @@ export default configureStore({
     ,fetchmark:fetchmarkReducer,
     endexam:endexamReducer,
     importexam:importexamReducer,
-    
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

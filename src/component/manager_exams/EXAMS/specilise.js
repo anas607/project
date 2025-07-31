@@ -19,17 +19,29 @@ import { useEffect, useState } from "react";
 import AddSpeclist from "./event/ADDspeclist";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchspeclise } from "../../../reducer/managerexam/showspeclice";
+import EDITSpeclist from "./event/editspeclist";
 
 
 
 export default function Speclist(){
     const[addspeclist,setAddspeclist]=useState(false)
+        const[editspeclist,setEditspeclist]=useState(false)
+const [selectedid, setSelectedid] = useState(null);
+
       const state = useSelector((state) => state.fetchall);
+      const selectedSpec = state.data.find(item => item.id === selectedid);
+
       const dispatch=useDispatch()
       console.log(state.data)
 useEffect((()=>{
 dispatch(fetchspeclise())
 }),[])
+function handleedit(id) {
+  setSelectedid(id); // تخزين ID
+  setEditspeclist(true);
+}
+
+
     return(
         <>
         <Box
@@ -122,9 +134,7 @@ dispatch(fetchspeclise())
              {state.data && state.data.length > 0 && state.data.map((item) => (
                 <Grid item xs={12} sm={6} md={3} key={item.id}>
                   <Paper
-                    // onClick={() => {
-                    //   setShowFile(true);
-                    // }}
+                  onClick={() => handleedit(item.id)}
                     variant="outlined"
                     elevation={3}
                     sx={{
@@ -243,6 +253,13 @@ dispatch(fetchspeclise())
      {<AddSpeclist
       open={addspeclist}
       onClose={()=>{setAddspeclist(false)}}
+     onSuccess={() => dispatch(fetchspeclise())}
+      />
+    }
+      {<EDITSpeclist
+      open={editspeclist}
+      onClose={()=>{setEditspeclist(false)}}
+spec={state.data.find(item => item.id === selectedid)}
      onSuccess={() => dispatch(fetchspeclise())}
       />
     }

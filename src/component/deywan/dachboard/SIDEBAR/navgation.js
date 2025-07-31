@@ -344,8 +344,7 @@ const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
         </Button>
       </NavLink>
       
-      
-      <NavLink to="/exams" style={{ textDecoration: "none", width: "100%" }}>
+      {isSub_Admin ||isSub_exam ?<> <NavLink to="/exams" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
             justifyContent: "flex-start",
@@ -383,7 +382,10 @@ const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
             الامتحانات{" "}
           </h2>
         </Button>
-      </NavLink>
+
+
+      </NavLink></> :"" }
+     
       <NavLink to="/Requests" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{

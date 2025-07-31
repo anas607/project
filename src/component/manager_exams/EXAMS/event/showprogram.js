@@ -12,13 +12,11 @@ import SidBar from "../../../deywan/dachboard/SIDEBAR/sidbar";
 
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from "react";
 import { getData } from "../../../../API/apiService";
 import { BaseUrl, PROGRAM } from "../../../../API/api";
 import Loading from "../../../../wrong/mails/loading";
 import { useSelector } from "react-redux";
-import ShowDetials from './showdetials'
 
 
 export default function ShowProgram({showdetials,setShowDetials, setShowProgram ,id }) {
@@ -42,7 +40,6 @@ useEffect(() => {
 const fetchMail = async () => {
   setisloading(true)
   try {
-    console.log("⏳ Fetching data...");
 const res = await getData(`${BaseUrl}${PROGRAM}${id}`);
 setDeteilas(res.data);
     // console.log( res);
@@ -52,7 +49,32 @@ setDeteilas(res.data);
     console.error( err.response?.data || err.message);
   }
 };
+ if (showdetials) {
+    return (
+      <Box sx={{ p: 3 }}>
+        {/* زر رجوع */}
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => setShowDetials(true)}
+          sx={{
+            backgroundColor: "rgb(14,74,35)",
+            color: "white",
+            mb: 3,
+            fontWeight: "bold",
+          }}
+        >
+          الرجوع إلى الجدول
+        </Button>
 
+        {/* محتوى النموذج */}
+        <Typography variant="h5" fontWeight="bold">
+          نموذج إضافة برنامج الامتحان
+        </Typography>
+
+        {/* هنا تضيف النموذج أو الحقول التي تريدها */}
+      </Box>
+    );
+  }
   return (
  
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
@@ -238,7 +260,8 @@ setDeteilas(res.data);
                <TableCell align="center">
                 
                   <IconButton
-                 
+                 onClick={()=>{  setShowDetials(true);
+  setShowProgram(false);}}
                       sx={{
                       border: "1px solid rgba(212, 208, 212, 0.31)",
                       borderRadius: "50px",ml:-3,

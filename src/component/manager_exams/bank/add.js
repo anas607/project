@@ -53,9 +53,9 @@ async function handleADDManual() {
   alert(response.data)
 
 }catch(err){
-      console.error( err.response?.data || err.message);
+      alert( err.response?.data || err.message);
 seterrorMessage(errorMessage)
-
+// alert(errorMessage)
 }finally {
     setLoading(false); 
   }
@@ -167,13 +167,13 @@ seterrorMessage(errorMessage)
 </Select>
 
       </Box>
-       <Alert
+      {errorMessage ? <><Alert
                 variant="outlined"
                 severity="error"
                 sx={{ fontSize: "1.5rem", fontWeight: "700" }}
               >
                 {errorMessage}
-              </Alert>
+              </Alert></> : ""} 
                <Button onClick={handleADDManual}   variant="contained" color="rgb(14,74,35)"  sx={{borderRadius:"30px" ,width:"50%",height:"50px",backgroundColor:"rgb(14,74,35)",color:"white",fontSize:'24px',fontWeight:'700',mr:175, mt:5}}>
                
                               {loading ? (

@@ -31,5 +31,4 @@ export const PRESENT="present/"
 export const ALL="all"
 export const SHOW_ALL_IMPORT_REQUSET_EXAM="show_all_import_request_exam"
 export const SHOW_ALL_END_REQUSET_EXAM="show_all_end_request_exam"
-
-
+export const EXAM="exam/"

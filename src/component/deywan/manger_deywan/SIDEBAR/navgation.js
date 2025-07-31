@@ -11,7 +11,9 @@ import Avatar from '@mui/material/Avatar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
-
+import ThirteenMpIcon from '@mui/icons-material/ThirteenMp';
+import EditIcon from '@mui/icons-material/Edit';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import CloudIcon from '@mui/icons-material/Cloud';
 // react-router
 import { NavLink } from 'react-router-dom';
@@ -20,6 +22,8 @@ import { useSelector } from 'react-redux';
 export default function Navgation() {
   const currentPath = window.location.pathname;
 const state = useSelector((state) => state.user);
+const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
+
   return (
     <>
       
@@ -175,7 +179,75 @@ const state = useSelector((state) => state.user);
          </Button>
        </NavLink>
 
-     
+     {ismanger_exam ? <><NavLink to="/exams" style={{ textDecoration: "none", width: "100%" }}>
+        <Button
+          sx={{
+            justifyContent: "flex-start",
+            backgroundColor:
+              currentPath === "/exams" ? "rgb(14, 74, 35)" : "transparent",
+            color: currentPath === "/exams" ? "white" : "black",
+            fontWeight: "600",
+            fontSize: "16px",
+            marginBottom: "2%",
+            transition: "1%",
+            width: "381px",
+            height: "78px",
+            "&:hover": {
+              backgroundColor: "rgb(14, 74, 35)",
+              color: "white",
+              width: "140%",
+            },
+          }}
+        >
+         
+<Box
+  sx={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: -1,
+    marginRight: "13%" // مسافة بين الأيقونتين
+  }}
+>
+  {/* <EditIcon sx={{ fontSize: 28, cursor: 'pointer' }} /> */}
+  <ThirteenMpIcon sx={{ fontSize: 28,marginRight: "3%" }} />
+</Box>          <h2
+            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}>
+          
+            {" "}
+            الامتحانات{" "}
+          </h2>
+        </Button>
+
+
+      </NavLink> <NavLink to="/Requests" style={{ textDecoration: "none", width: "100%" }}>
+        <Button
+          sx={{
+            justifyContent: "flex-start",
+            backgroundColor:
+              currentPath === "/Requests" ? "rgb(14, 74, 35)" : "transparent",
+            color: currentPath === "/Requests" ? "white" : "black",
+            fontWeight: "600",
+            fontSize: "16px",
+            marginBottom: "2%",
+            transition: "1%",
+            width: "381px",
+            height: "78px",
+            "&:hover": {
+              backgroundColor: "rgb(14, 74, 35)",
+              color: "white",
+              width: "140%",
+            },
+          }}
+        >
+         
+<AssignmentIcon sx={{ marginRight: 7, fontSize: 32 }} />
+          <h2
+            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}>
+            {" "}
+            طلبات الامتحان{" "}
+          </h2>
+        </Button>
+      </NavLink></>:""}
 
  
       <Box
@@ -183,7 +255,7 @@ const state = useSelector((state) => state.user);
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: "119%",
+          marginTop:ismanger_exam ?"70%" :"119%",
           mr: -10,
         }}
       >

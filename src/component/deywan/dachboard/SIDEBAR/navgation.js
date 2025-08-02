@@ -23,6 +23,7 @@ export default function Navgation() {
 const isdeywan=state.roles[0].includes("رئيس الديوان")
 const isSub_Admin=state.roles[0].includes("نائب المدير")
 const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
+const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
 
 
   return (
@@ -343,8 +344,8 @@ const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
           </h2>
         </Button>
       </NavLink>
-      
-      {isSub_Admin ||isSub_exam ?<> <NavLink to="/exams" style={{ textDecoration: "none", width: "100%" }}>
+        </>):""}
+      { isSub_exam ||ismanger_exam || isSub_Admin? (<> <NavLink to="/exams" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
             justifyContent: "flex-start",
@@ -384,9 +385,11 @@ const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
         </Button>
 
 
-      </NavLink></> :"" }
-     
-      <NavLink to="/Requests" style={{ textDecoration: "none", width: "100%" }}>
+      </NavLink>
+      </>) :"" }
+    
+      
+      {isSub_exam ||ismanger_exam ? (<> <NavLink to="/Requests" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
             justifyContent: "flex-start",
@@ -414,7 +417,9 @@ const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
             طلبات الامتحان{" "}
           </h2>
         </Button>
-      </NavLink>
+      </NavLink></>):""}
+     
+     
       
       
       
@@ -427,7 +432,8 @@ const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
       
       
       
-      </>):""}
+      
+    
       
         
       <Box
@@ -435,7 +441,7 @@ const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: isSub_exam ? "3%" :isdeywan? "35%":"55%",
+          marginTop: isSub_exam ? "3%" :isdeywan? "35%":isSub_Admin? "40%" :"65%",
           mr: -10,
         }}
       >

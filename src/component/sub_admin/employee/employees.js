@@ -28,6 +28,9 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 import SidBar from "../../deywan/dachboard/SIDEBAR/sidbar";
 import Appar from "../../deywan/dachboard/SIDEBAR/appar";
+import { getData } from "../../../API/apiService";
+import { BaseUrl, BY, EMPLOYEES, FETCHOFFICE, Show } from "../../../API/api";
+import Loading from "../../../wrong/mails/loading";
 
 
 const inboxRows = [
@@ -48,8 +51,40 @@ const headStyle = {
   py: 1.5,
 };
 const Employyes = () => {
-  
+const [selectedOffice, setSelectedOffice] = useState(null);
+  const [offices, setOffices] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [loading, setloading] = useState(false);
 
+useEffect(() => {
+
+    fetchOffices();
+ 
+}, []); 
+const fetchOffices = async () => {
+  try {
+    const res = await getData(`${BaseUrl}${FETCHOFFICE}`);
+    setOffices(res.data[0]);
+// console.log(res.data[0])
+    // console.log(setOffices) 
+  } catch (err) {
+    console.error("فشل في جلب المكاتب:", err);
+  }
+};
+
+async function fetchEmployeesByOfficeName(officeName) {
+  setloading(true);
+  try {
+    const response = await getData(`${BaseUrl}${Show}${EMPLOYEES}${BY}${officeName}`);
+    setEmployees(response.data[0]);
+        console.log(response.data);
+
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+  } finally {
+    setloading(false);
+  }
+}
 
 
   return (
@@ -102,9 +137,8 @@ const Employyes = () => {
     },
   }}
 >
-  {/* النص والأيقونة جنب بعض */}
   <Box sx={{ display: 'flex',gap: 3  }}>
-    تصفية حسب الاختصاص
+    تصفية حسب الدائرة
 
     {/* الكاشف مع الخط */}
     <Box sx={{ position: 'relative', display: 'inline-block', ml: 1 }}>
@@ -123,6 +157,16 @@ const Employyes = () => {
 </InputLabel>
 
   <Select
+  value={selectedOffice}
+     onChange={(e) => {
+  const officeId = e.target.value;
+  const office = offices.find((o) => o.id === officeId);
+  setSelectedOffice(office);
+  if (office) {
+    fetchEmployeesByOfficeName(office.name);
+  }
+}}
+      
     labelId="filter-label"
     defaultValue=""
     fullWidth
@@ -143,14 +187,15 @@ const Employyes = () => {
       }
     }}
   >
-    <MenuItem value="2024">2024</MenuItem>
-    <MenuItem value="2025">2025</MenuItem>
-    <MenuItem value="2026">2026</MenuItem>
+    {offices.map((office) => (
+  <MenuItem key={office.id} value={office.id}>
+    {office.name}
+  </MenuItem>
+))}
   </Select>
 </FormControl>
  
 
-<Button sx={{borderRadius:"10%" ,cursor:'pointer',backgroundColor:"rgb(14,74,35)" ,width:"30%" ,height:"88px"}}>اضافة</Button>
 
 
 
@@ -179,63 +224,82 @@ const Employyes = () => {
   </TableRow>
 </TableHead>
 
-   <TableBody>
-{inboxRows.map((row, index) => (
-    <TableRow
-      key={index}
-      sx={{
-        backgroundColor: "transparent",
-        borderBottom: "3px solid rgb(14, 74, 35)",
-      }}
-    >
-      <TableCell align="center" sx={{ py: 1.5 ,fontWeight: "700" ,fontSize:'16px'}}>{row.uuid}</TableCell>
-
-     
-          <TableCell align="center">
-            <Avatar src={row.from_avatar} sx={{ width: 56, height: 56, margin: "auto" }} />
-          </TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_name}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_phone}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_office}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.subject}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.received_at}</TableCell>
-       
-       
-      <TableCell align="center">
-        <IconButton
-        //   onClick={() => handleOpenModal(row.uuid)
-            
-        //   }
-          
-          sx={{
-            border: '1px solid rgba(212, 208, 212, 0.31)',
-            borderRadius: '50px',ml:-4,
-            width: 52,
-            height: 52,
-            padding: '8px',
-            backgroundColor: (theme) => theme.palette.primary.main,
-            color: (theme) => theme.palette.secondary.main,
-          }}
-        >
-          <ArticleIcon sx={{ fontSize: 30}} />
-          <ArrowUpwardIcon
-            sx={{
-              position: 'absolute',
-               top: 24,
-              right: 10,
-              fontSize: 6,
-              backgroundColor: 'white',
-              color: 'black',
-              transform: 'rotate(60deg)',
-              borderRadius: '50%',
-              padding: '2px',border: "3px solid rgb(14, 74, 35)",
-            }}
+  <TableBody>
+  {loading ? (
+    <TableCell sx={{ color: "green" }} align="center">
+      <Loading />
+    </TableCell>
+  ) : (
+    employees.map((row, index) => (
+      <TableRow
+        key={index}
+        sx={{
+          backgroundColor: "transparent",
+          borderBottom: "3px solid rgb(14, 74, 35)",
+        }}
+      >
+        <TableCell align="center">
+          <Avatar
+            src={row.avatar.replace("\\", "/")}
+            sx={{ width: 56, height: 56, margin: "auto" }}
           />
-        </IconButton>
-      </TableCell>
-    </TableRow>
-))}
+        </TableCell>
+        <TableCell align="center" sx={{ fontWeight: 700, fontSize: "16px" }}>
+          {row.name}
+        </TableCell>
+        <TableCell align="center" sx={{ fontWeight: 700, fontSize: "16px" }}>
+          {row.phone}
+        </TableCell>
+        <TableCell align="center" sx={{ fontWeight: 700, fontSize: "16px" }}>
+          {row.office}
+        </TableCell>
+        <TableCell align="center" sx={{ fontWeight: 700, fontSize: "16px" }}>
+          {row.role}
+        </TableCell>
+        <TableCell align="center" sx={{ fontWeight: 700, fontSize: "16px" }}>
+          {row.handled_transactions}
+        </TableCell>
+        <TableCell align="center" sx={{color:row.status === 1?"green" :"red" ,fontWeight: 700, fontSize: "16px" }}>
+          {row.status === 1 ? "فعال" : "غير فعال"}
+        </TableCell>
+        <TableCell align="center" sx={{ fontWeight: 700, fontSize: "16px" }}>
+          {new Date(row["date join"]).toLocaleDateString("ar-EG")}
+        </TableCell>
+        <TableCell align="center">
+          <IconButton
+            sx={{
+              border: "1px solid rgba(212, 208, 212, 0.31)",
+              borderRadius: "50px",
+              ml: -4,
+              width: 52,
+              height: 52,
+              padding: "8px",
+              backgroundColor: (theme) => theme.palette.primary.main,
+              color: (theme) => theme.palette.secondary.main,
+            }}
+          >
+            <ArticleIcon sx={{ fontSize: 30 }} />
+            <ArrowUpwardIcon
+              sx={{
+                position: "absolute",
+                top: 24,
+                right: 10,
+                fontSize: 6,
+                backgroundColor: "white",
+                color: "black",
+                transform: "rotate(60deg)",
+                borderRadius: "50%",
+                padding: "2px",
+                border: "3px solid rgb(14, 74, 35)",
+              }}
+            />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+    ))
+  )}
 </TableBody>
+
 
   </Table>
 </TableContainer>

@@ -49,7 +49,7 @@ export default function Login() {
     formData.append("password", form.password);
 
     try {
-      const response = await postData(`${BaseUrl}${LOGIN}`, formData );
+      const response = await postData(`${BaseUrl}${LOGIN}`, formData ,true,true );
 
       const token = response.data?.access_token;
 
@@ -68,7 +68,7 @@ export default function Login() {
         });
 const userRoles = response.data.roles || [];
 
-const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات"];
+const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات","موظف الامتحانات"];
 const managerRoles = ["رئيس الديوان", "رئيس الإقامة", "رئيس المجالس", "رئيس المالية", "رئيس المفاضلة", "رئيس الشهادات","رئيس الامتحانات","المدير" ,"نائب المدير"];
 
 if (userRoles.some(role => managerRoles.includes(role))) {

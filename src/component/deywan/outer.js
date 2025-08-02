@@ -170,7 +170,7 @@ useEffect(() => {
  <TableBody>
               {(isInbox ? stateimport.isloading : stateexport.isloading) ? (
                 <TableRow>
-                  <TableCell colSpan={8} align="center">
+                  <TableCell sx={{color:"green"}} colSpan={8} align="center">
                     <Loading />
                   </TableCell>
                 </TableRow>

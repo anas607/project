@@ -3,7 +3,7 @@ import Navgation from './navgation';
 
 
 
-export default function SidBar(){
+ function SidBar(){
     return(
 
         <>
@@ -36,3 +36,4 @@ export default function SidBar(){
         </>
     )
 }
+export { SidBar as SidBarComponent };

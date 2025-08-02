@@ -170,7 +170,6 @@ const handleOpenModal = (uuid) => {
       </>
     )  : isSub_Admin ? (
   <>
-    <TableCell align="center" sx={headStyle}>رقم البريد</TableCell>
     <TableCell align="center" sx={headStyle}>اسم المكتب</TableCell>
         <TableCell align="center" sx={headStyle}>رقم المكتب</TableCell>
 
@@ -196,7 +195,13 @@ const handleOpenModal = (uuid) => {
     ⚠️ {error}
   </Typography>
 )}
-{loading ? <Loading/> : ""}
+{loading ? (
+                <TableRow>
+                  <TableCell sx={{color:"green"}}  align="center">
+                    <Loading />
+                  </TableCell>
+                </TableRow>
+              ) : ""}
 {rows.length === 0 && !loading && (
  <NoData/>
 )}
@@ -210,7 +215,6 @@ const handleOpenModal = (uuid) => {
       }}
     >
       <TableCell align="center" sx={{ py: 1.5 ,fontWeight: "700" ,fontSize:'16px'}}>{row.uuid}</TableCell>
-
       {isInbox ? (
         <>
           <TableCell align="center">
@@ -220,7 +224,8 @@ const handleOpenModal = (uuid) => {
           <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_phone}</TableCell>
           <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.subject}</TableCell>
           <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_office}</TableCell>
-          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.received_at}</TableCell>
+          <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center"> {new Date(row.received_at).toLocaleDateString()}
+</TableCell>
         </>
       ) : isSub_Admin?(<> <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
             {row.to.join(", ")}

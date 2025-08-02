@@ -29,7 +29,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import EmailIcon from "@mui/icons-material/MarkEmailUnread";
 import CloseIcon from "@mui/icons-material/Close";
-import SidBar from './SIDEBAR/sidbar'
+import { SidBarComponent } from './SIDEBAR/sidbar';
 import Appar from './SIDEBAR/appar'
 import ArticleIcon from '@mui/icons-material/Article';
 import EnternalMails from "../../mails/form/enternalimportmodal";
@@ -41,37 +41,19 @@ import Loading from "../../../wrong/mails/loading";
 import CreatMails from "../../mails/form/creatform";
 import { getData } from "../../../API/apiService";
 import { BaseUrl, show_import_internal_mails, show_internal_mails_export } from "../../../API/api";
-const inboxRows = [
-  {
-    id: "#896643",
-    mailTitle: "استلام شهادة",
-    officeName: "مكتب المدير العام",
-    senderName: "محمد الأسد",
-    senderPhone: "+963987432196",
-    senderImg: "https://randomuser.me/api/portraits/men/75.jpg",
-    dateReceived: "2/5/2025",
-  },
-];
+
 const headStyle = {
   color: "white",
  fontWeight: "700" ,fontSize:'20px',
   py: 1.5,
 };
-const outboxRows = [
-  {
-    id: "#789541",
-    mailTitle: "إرسال تقرير",
-    officeName: "قسم الإحصاء",
-    officePhone: "+963998765432",
-    status: "مرسلة",
-    dateReceived: "2/5/2025",
-    dateSent: "2/5/2025",
-  },
-];
+
 
 
 
 const Enter_EDeywan = () => {
+  const state = useSelector((state) => state.user);
+  const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
 const [inboxRows, setInboxRows] = useState([]);
 const [outboxRows, setOutboxRows] = useState([]);
 const [loading, setLoading] = useState(false);
@@ -129,7 +111,7 @@ useEffect(() => {
 }, [selectedType]);
   return (
      <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
-          <SidBar />
+          <SidBarComponent />
           <Box flex={1} p={2}>
             <Box
               display="flex"
@@ -139,10 +121,6 @@ useEffect(() => {
               
             >
             
-    
-            
-    
-              
             </Box>
      <Appar/>
       
@@ -199,6 +177,9 @@ useEffect(() => {
             <TableCell align="center" sx={headStyle}>رقم المكتب</TableCell>
             <TableCell align="center" sx={headStyle}>عنوان البريد</TableCell>
             <TableCell align="center" sx={headStyle}>حالة البريد</TableCell>
+                        <TableCell align="center" sx={headStyle}>  {ismanger_exam ? "تاريخ الاستلام" : " "}</TableCell>
+
+           
             <TableCell align="center" sx={headStyle}>تاريخ الإرسال</TableCell>
           </>
         )}
@@ -250,6 +231,8 @@ useEffect(() => {
         ? "green"
         : "black" }} align="center">{row.status}</TableCell>
               <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.sender_at}</TableCell>
+                            <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.sender_at}</TableCell>
+
             </>
           )}
          

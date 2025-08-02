@@ -17,6 +17,8 @@ import { Box, Button, Select, MenuItem, Typography, IconButton,Avatar,
   TableContainer,
   TableHead,
   TableRow, } from "@mui/material";
+import { useSelector } from "react-redux";
+import { SidBarComponent } from "../../deywan/manger_deywan/SIDEBAR/sidbar";
 
 
 function Bank(props) {
@@ -52,7 +54,10 @@ export default function Request() {
   
   const [value, setValue] = React.useState(0);
   
-
+ const state = useSelector((state) => state.user);
+const isSub_Admin=state.roles[0].includes("نائب المدير")
+const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
+const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -62,7 +67,8 @@ export default function Request() {
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
       
-      <SidBar />
+       {isSub_exam?<SidBar /> :<SidBarComponent /> } 
+      
 
       <Box sx={{ flex: 1, p: 2 }}>
          <Appar/>

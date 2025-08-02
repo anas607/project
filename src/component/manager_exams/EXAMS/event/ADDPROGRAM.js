@@ -9,6 +9,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SidBar from "../../../deywan/dachboard/SIDEBAR/sidbar";
+import LogeOut from "../../../deywan/logout"
 
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -149,21 +150,7 @@ useEffect(() => {
                 })}
               />
             </IconButton>
-
-            <IconButton
-            //   onClick={() => setShowLogOut(true)}
-              sx={{
-                border: "1px solid rgba(212, 208, 212, 0.31)",
-                borderRadius: "50px",
-                padding: "8px",
-                width: "64px",
-                height: "64px",
-                backgroundColor: "rgb(71, 59, 68)",
-                color: (theme) => theme.palette.secondary.main,
-              }}
-            >
-              <PowerSettingsNewIcon sx={{ fontSize: "30px" }} />
-            </IconButton>
+<LogeOut/>
           </Box>
       </Box>
 
@@ -203,7 +190,7 @@ useEffect(() => {
 </Select>
 
         </Box>
-         <Button  onClick={handleSubmitProgram}  variant="contained" color="rgb(14,74,35)"  sx={{borderRadius:"30px" ,width:"11%",height:"60px",backgroundColor:"rgb(14,74,35)",color:"white",fontSize:'24px',fontWeight:'700'}}>
+         <Button  onClick={handleSubmitProgram}  variant="contained" color="rgb(14,74,35)"  sx={{borderRadius:"30px" ,width:"11%",height:"60px",backgroundColor:"rgb(14,74,35)",color:"white",fontSize:'24px',fontWeight:'700',mr:90}}>
                                 اضافة 
                                 </Button>
       </Box>
@@ -211,7 +198,7 @@ useEffect(() => {
       {/* جدول أو محتوى آخر */}
       <Box>
       
-               <TableContainer sx={{ mr: -1, backgroundColor: "transparent", boxShadow: "none" , width: "1583px",mt:2}}>
+               <TableContainer sx={{ mr: -1, backgroundColor: "transparent", boxShadow: "none" , width: "1593px",mt:2}}>
             <Table  sx={{Width: '100%'}}>
              <TableHead sx={{width:"1503px", height:'88px'}}>
             <TableRow sx={{ backgroundColor: (theme) => theme.palette.primary.main }}>

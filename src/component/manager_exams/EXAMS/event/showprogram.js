@@ -9,7 +9,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SidBar from "../../../deywan/dachboard/SIDEBAR/sidbar";
-
+import LogeOut from "../../../deywan/logout"
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useEffect, useState } from "react";
@@ -121,20 +121,7 @@ setDeteilas(res.data);
               />
             </IconButton>
 
-            <IconButton
-            //   onClick={() => setShowLogOut(true)}
-              sx={{
-                border: "1px solid rgba(212, 208, 212, 0.31)",
-                borderRadius: "50px",
-                padding: "8px",
-                width: "64px",
-                height: "64px",
-                backgroundColor: "rgb(71, 59, 68)",
-                color: (theme) => theme.palette.secondary.main,
-              }}
-            >
-              <PowerSettingsNewIcon sx={{ fontSize: "30px" }} />
-            </IconButton>
+           <LogeOut/>
           </Box>
       </Box>
 

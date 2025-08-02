@@ -26,6 +26,8 @@ import Employyes from "./component/sub_admin/employee/employees";
 import Bank from "./component/manager_exams/bank/exambank";
 import Exam from "./component/manager_exams/EXAMS/exam";
 import Request from "./component/manager_exams/RQUST/request";
+import ExamRequestForm from "./component/manager_exams/RQUST/talab/ExamRequestForm";
+import EXPORTMAILS from "./component/mails/form/exportmails";
 
 const theme = createTheme({
   palette: {
@@ -56,6 +58,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
+        {/* <ExamRequestForm/> */}
+       
         <Routes>
           {/* <Login /> */}
           <Route path="/" element={<Login />} />
@@ -70,7 +74,7 @@ function App() {
             <Route path="/dachbord" element={<Leader />} />
             <Route path="/enter" element={<Enter />} />
             <Route path="/outer" element={<Outer />} />
-                         <Route element={<ProtectedRoute allowedRole={" نائب المدير"} />}>
+                         <Route element={<ProtectedRoute allowedRole={"نائب المدير"} />}>
 
                         <Route path="/employees" element={<Employyes />} />
                         </Route>
@@ -84,11 +88,17 @@ function App() {
                          <Route element={<ProtectedRoute allowedRole={"رئيس الامتحانات"} />}>
                         
             <Route path="/exam_bank" element={<Bank />} />
-            <Route path="/exams" element={<Exam />} />
-            <Route path="/Requests" element={<Request />} /> 
-          </Route>   
+                                       </Route> 
+                                        <Route element={<ProtectedRoute allowedRole={["رئيس الامتحانات" ,"موظف الامتحانات","نائب المدير"]} />}>
 
-                        <Route element={<ProtectedRoute allowedRole={["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات"]} />}>
+            <Route path="/exams" element={<Exam />} />
+               </Route> 
+                                                    <Route element={<ProtectedRoute allowedRole={["رئيس الامتحانات" ,"موظف الامتحانات"]} />}>
+
+            <Route path="/Requests" element={<Request />} /> 
+          </Route> 
+
+                        <Route element={<ProtectedRoute allowedRole={["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات","موظف الامتحانات"]} />}>
 
  <Route path='/enter_emdewan' element={<Enter_EDeywan/>}/>
 <Route path='/outer_emdewan' element={<Outer_EDeywan/>}/>

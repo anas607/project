@@ -17,7 +17,27 @@ import {
 } from "@mui/material";
 import NoteIcon from '@mui/icons-material/Note';import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-
+const mockDoctorData = {
+  fullName: "محمد ملهم",
+  fatherName: "خالد",
+  lastName: "الزقيمي",
+  phone: "+963987653402",
+  landline: "0112217566",
+  nationalId: "1234567890",
+  birthPlace: "دمشق",
+  birthDate: "2000-09-17",
+  university: "دمشق",
+  graduationDate: "2013-09-17",
+  registrationNumber: "1809",
+  specialization: "جراحة عامة",
+  degree: "طبيب بشري",
+  address: "دمشق - القنوات",
+  mainSpecialization: true,
+  licenseStatus: "مؤقت",
+  registrationType: "رئيسي",
+  sessionMonth: "تشرين الأول",
+  sessionYear: "2025",
+};
 
 export default function EXPORTMAILS({open,onClose}){
     return(
@@ -125,55 +145,17 @@ export default function EXPORTMAILS({open,onClose}){
            <Grid item xs={6}>
              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                <Typography sx={{ minWidth: '120px',fontSize:"12px" }}>الاسم الأب:</Typography>
-                <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
+               <Typography sx={{ fontSize: "13px", px: 1 }}>
+  {mockDoctorData.fullName}
+</Typography>
              </Box>
            </Grid>
            <Grid item xs={6}>
              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                <Typography sx={{ minWidth: '120px',fontSize:"12px" }}>الهاتف الأرضي :</Typography>
-                <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
+                 <Typography sx={{ fontSize: "13px", px: 1 }}>
+  {mockDoctorData.fullName}
+</Typography>
              </Box>
            </Grid>
          </Grid>
@@ -183,28 +165,9 @@ export default function EXPORTMAILS({open,onClose}){
            <Grid item xs={6}>
              <Box sx={{ display: 'flex', alignItems: 'center', mb: -1 }}>
                <Typography sx={{ minWidth: '120px' ,fontSize:"12px"}}>الاسم العائلة:</Typography>
-               <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
+                <Typography sx={{ fontSize: "13px", px: 1 }}>
+  {mockDoctorData.fullName}
+</Typography>
              </Box>
            </Grid>
            <Grid item xs={6}>
@@ -212,28 +175,9 @@ export default function EXPORTMAILS({open,onClose}){
                <Typography sx={{ minWidth: '120px',fontSize:"12px" }}>
                  عنوان السكن المعتمد :
                </Typography>
-                <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -1,
-                 }
-               }}
-             />
+                 <Typography sx={{ fontSize: "13px", px: 1 }}>
+  {mockDoctorData.fullName}
+</Typography>
              </Box>
            </Grid>
          </Grid>
@@ -242,28 +186,9 @@ export default function EXPORTMAILS({open,onClose}){
          <Grid item xs={12} sm={6}>
            <Box sx={{ display: 'flex', alignItems: 'center', mb: -1 }}>
              <Typography sx={{ minWidth: '120px' ,fontSize:"12px"}}>الرقم الوطني :</Typography>
-             <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
+              <Typography sx={{ fontSize: "13px", px: 1 }}>
+  {mockDoctorData.fullName}
+</Typography>
            </Box>
          </Grid>
    
@@ -271,65 +196,27 @@ export default function EXPORTMAILS({open,onClose}){
         <Grid item xs={12}>
            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -3 }}>
              <Typography  sx={{fontSize:"12px"}}>  الاختصاص:</Typography>
-              <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -1,
-                 }
-               }}
-             />
+             <Typography sx={{ fontSize: "13px", px: 1 }}>
+  {mockDoctorData.fullName}
+</Typography>
            <Box sx={{ display: 'flex'}}>
     
    <Typography sx={{mt:1, mr:2 ,fontSize:"12px"}}> رئيسي </Typography>
-   <Checkbox size="small"  sx={{mr:-1 ,color: " rgb(14,74,35)"}}/>
+   <Checkbox checked={mockDoctorData.mainSpecialization} size="small"  sx={{mr:-1 ,color: " rgb(14,74,35)"}}/>
            </Box>
          
          
           <Box sx={{ display: 'flex'}}>
     
    <Typography sx={{mt:1,fontSize:"12px"}}> فرعي </Typography>
-   <Checkbox size="small"  sx={{mr:-1,color: " rgb(14,74,35)"}}/>
+   <Checkbox   checked={mockDoctorData.mainSpecialization} size="small"  sx={{mr:-1,color: " rgb(14,74,35)"}}/>
            </Box>
        
             
                 <Typography sx={{fontSize:"12px"}} >مديرية الصحة:</Typography>
-             <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -1,
-                 }
-               }}
-             />
+             <Typography sx={{ fontSize: "13px", px: 1 }}>
+  {mockDoctorData.fullName}
+</Typography>
            </Box>
          </Grid>
    
@@ -340,14 +227,14 @@ export default function EXPORTMAILS({open,onClose}){
            <Box sx={{ display: 'flex'}}>
     
    <Typography sx={{mt:1, whiteSpace: 'nowrap' ,fontSize:"12px"}}> مفاضلة ترميمية</Typography>
-   <Checkbox size="small"  sx={{mr:-1 ,color: " rgb(14,74,35)"}}/>
+   <Checkbox  checked={mockDoctorData.mainSpecialization} size="small"  sx={{mr:-1 ,color: " rgb(14,74,35)"}}/>
            </Box>
          
          
           <Box sx={{ display: 'flex'}}>
     
    <Typography sx={{mt:1,whiteSpace: 'nowrap' ,fontSize:"12px"}}>  مفاضلة عامة</Typography>
-   <Checkbox size="small"  sx={{mr:-1,color: " rgb(14,74,35)"}}/>
+   <Checkbox checked={mockDoctorData.mainSpecialization} size="small"  sx={{mr:-1,color: " rgb(14,74,35)"}}/>
            </Box>
        
              <Typography sx={{mr:2,fontSize:"12px"}}>المحافظة:</Typography>

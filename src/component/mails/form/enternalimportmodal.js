@@ -12,7 +12,7 @@ import {
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useEffect, useState } from "react";
 import { getData } from "../../../API/apiService";
-import { BaseUrl, SHOW_INTERNAL_MAIL } from "../../../API/api";
+import { BaseUrl, FETCHOFFICE, SHOW_INTERNAL_MAIL } from "../../../API/api";
 import { useSelector } from "react-redux";
 
 
@@ -22,6 +22,9 @@ const stateMalea=useSelector((state)=>state.user.roles[0])
 const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات"];
 const isManager = employeeRoles.some(role => stateMalea.includes(role));
     const [mailData, setMailData] = useState({subject:"",body:"",updated_at:"",from:""});
+    
+    
+   
 useEffect(()=>{
 if (open && uuid) {
       fetchMail();
@@ -108,7 +111,7 @@ const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
     {/* التوقيع */}
     <Typography fontWeight="700" fontSize="20px" sx={{mr:54}}>
       <Box component="span" sx={{color:"black"}}>الاسم:</Box>{''}
-            <Box component="span" sx={{color:"gray" ,whiteSpace:'-moz-pre-wrap'}}>          {mailData.from}
+            <Box component="span" sx={{color:"gray" ,whiteSpace:'-moz-pre-wrap'}}>          {mailData.from?.name ?? "غير معروف"}
 </Box>
 
     </Typography>

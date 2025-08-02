@@ -37,7 +37,6 @@ useEffect(()=>{
   const handleIconClick = () => {
     fileInputRef.current.click();
   };
-  const [major, setMajor] = useState("");
   async function handleADDEXEL() {
      if (!excelFile || !add.specialization_id) {
     alert("يرجى اختيار التخصص وملف Excel");

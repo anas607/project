@@ -6,8 +6,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
-import SidBar from "../../deywan/dachboard/SIDEBAR/sidbar";
 import TabsExam from "../bank/tabs/tabsexam";
+
 import Mark from "./mark";
 import Program from "./program,";
 import Speclist from "./specilise";
@@ -16,6 +16,9 @@ import { useState } from "react";
 import AddProgramForm from "./event/ADDPROGRAM";
 import ShowProgram from "./event/showprogram";
 import ShowDetials from "./event/showdetials";
+import { useSelector } from "react-redux";
+import SidBar from "../../deywan/dachboard/SIDEBAR/sidbar";
+import { SidBarComponent } from "../../deywan/manger_deywan/SIDEBAR/sidbar";
 
 
 
@@ -55,7 +58,10 @@ const [selectedUuid, setSelectedUuid] = useState(null);
 
   const[showprogram,setShowProgram]=useState(false)
   const [value, setValue] = React.useState(0);
-  
+   const state = useSelector((state) => state.user);
+const isSub_Admin=state.roles[0].includes("نائب المدير")
+const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
+const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,7 +86,7 @@ const [selectedUuid, setSelectedUuid] = useState(null);
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
       
-      <SidBar />
+     {isSub_exam || isSub_Admin ?<SidBar /> :<SidBarComponent /> } 
 
       <Box sx={{ flex: 1, p: 2 }}>
          <Appar/>

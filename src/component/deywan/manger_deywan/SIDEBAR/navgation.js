@@ -5,7 +5,7 @@ import { Typography} from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import Box from '@mui/material/Box';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import OutgoingMailIcon from '@mui/icons-material/OutgoingMail';
 import GroupRemoveOutlinedIcon from '@mui/icons-material/GroupRemoveOutlined';
 import Avatar from '@mui/material/Avatar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -52,58 +52,17 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
              },
            }}
          >
-           <div className="relative w-fit inline-block">
-             {/* أيقونة الرسالة */}
-             <MailIcon sx={{ fontSize: 32, marginRight: 7 }} />
+          
  
-             {/* الدائرة على يمين الأيقونة مباشرة */}
-             <Box
-               sx={{
-                 position: "absolute",
-                 top: "30%",
-                 right: 45,
-                 width: 22,
-                 height: 22,
-                 borderRadius: "50%",
-                 bgcolor: currentPath === "/outer_emdewan" ? "rgb(14, 74, 35)" : "white",
-                 border:
-                   currentPath === "/outer_emdewan"
-                     ? "2px solid rgb(14, 74, 35)"
-                     : "2px solid white",
-                 display: "flex",
-                 alignItems: "center",
-                 justifyContent: "center",
-                 zIndex: 10,
-                 transition: "all 0.2s ease-in-out",
- 
-                 "&:hover": {
-                   bgcolor: "rgb(14, 74, 35)", // الأخضر عند الهوفر
-                   border: "2px solid rgb(14, 74, 35)",
- 
-                   "& svg": {
-                     color: "white", // يخلي السهم أبيض وقت الهوفر
-                   },
-                 },
-               }}
-             >
-               {/* السهم داخل الدائرة */}
-               <KeyboardBackspaceIcon
-                 sx={{
-                   fontSize: 14,
-                   color: currentPath === "/outer_emdewan" ? "white" : "black",
-                   opacity: currentPath === "/outer_emdewan" ? 1 : 0.9,
-                   transform: "rotate(180deg)", // إذا بدك يوجه يمين
-                 }}
-               />
-             </Box>
-           </div>
- 
-           <h2
-             style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
-           >
-             {" "}
-             البريد الخارجي
-           </h2>
+           <OutgoingMailIcon sx={{ marginRight: 7, fontSize: 35 }}/>
+                   
+          
+                    <h2
+                      style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
+                    >
+                      {" "}
+                      البريد الخارجي
+                    </h2>
          </Button>
        </NavLink>
        <NavLink to="/enter_emdewan" style={{ textDecoration: "none", width: "100%" }}>
@@ -147,12 +106,12 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
                  zIndex: 10,
                  transition: "all 0.2s ease-in-out",
  
-                 "&:hover": {
-                   bgcolor: "rgb(14, 74, 35)", // الأخضر عند الهوفر
-                   border: "2px solid rgb(14, 74, 35)",
- 
-                   "& svg": {
-                     color: "white", // يخلي السهم أبيض وقت الهوفر
+                  "&:hover": {
+                  bgcolor: "rgb(14, 74, 35)", // الأخضر عند الهوفر
+                  border: "2px solid rgb(14, 74, 35)",
+
+                  "& svg": {
+                    color: "white", // يخلي السهم أبيض وقت الهوفر
                    },
                  },
                }}

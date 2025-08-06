@@ -69,11 +69,13 @@ const handleAttachmentClick = (url) => {
   async function fetchRequest(){
     try{
 const response = await getData(`${BaseUrl}${SHOW_FORM_CONTENT}?uuid=${uuid}`)
+console.log(response.data.Doctor_image); // ✔️ هذا يعمل
+
 setData(response.data)
   const elementsArray = response.data.elements;
     const transformedData = Object.fromEntries(elementsArray.map(({ label, value }) => [label, value]));
     setFormData(transformedData);
-
+ console.log(Data.Doctor_image)
     }catch(err){
     console.error( err.response?.data || err.message);
 
@@ -455,7 +457,8 @@ onClick={() => handleAttachmentClick(attachment.url)}
                           justifyContent: 'center'
                         }}
                       >
-                        <Avatar sx={{ width: 80, height: 80 }} />
+                       
+<Avatar src={Data.Doctor_image?.replace(/\\/g, '/')} sx={{ width: 80, height: 80 }} />
                       </Box>
                     </Box>
                   </Grid>

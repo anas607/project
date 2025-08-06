@@ -11,17 +11,21 @@ import {
 } from "@mui/material";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useEffect, useState } from "react";
-import { getData } from "../../../API/apiService";
-import { BaseUrl, FETCHOFFICE, SHOW_INTERNAL_MAIL } from "../../../API/api";
+import { getData, postData } from "../../../API/apiService";
+import { BaseUrl, EDIT_STATUS_MAIL, FETCHOFFICE, SHOW_INTERNAL_MAIL } from "../../../API/api";
 import { useSelector } from "react-redux";
+import { CircularProgress } from "@mui/material";
 
 
 
-export default function EnternalMails({open,onClose,uuid}){
+export default function EnternalMails({open,onClose,uuid,status}){
 const stateMalea=useSelector((state)=>state.user.roles[0])
 const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات"];
 const isManager = employeeRoles.some(role => stateMalea.includes(role));
+  const shouldShow = !isManager || !["مرسلة", "مرفوضة"].includes(status);
+
     const [mailData, setMailData] = useState({subject:"",body:"",updated_at:"",from:""});
+        const [isLoading, setIsLoading] = useState(false);
     
     
    
@@ -41,7 +45,21 @@ const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
 
     }
   };
+ async function EditMailStatus(status){
+   setIsLoading(true);
+    try{
+const response = await postData(`${BaseUrl}${EDIT_STATUS_MAIL}`,{
+  uuid,status
+})
+return response.data
 
+    }catch(err){
+    console.error( err.response?.data || err.message);
+
+    }finally{
+       setIsLoading(false);
+    }
+  }
   if (!open) return null;
     return(
 <>
@@ -86,8 +104,9 @@ const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
     />
 
    {!mailData ? (
-        <Typography textAlign="center" mt={10}>جاري تحميل البيانات...</Typography>
-      ) : (
+<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+    <CircularProgress color="success" size={60} />
+  </Box>      ) : (
         <>
           <Typography fontWeight="700" fontSize="24px" color="black">الجمهورية العربية السورية</Typography>
           <Typography fontWeight="700" fontSize="24px" color="black">وزارة الصحة</Typography>
@@ -111,7 +130,8 @@ const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
     {/* التوقيع */}
     <Typography fontWeight="700" fontSize="20px" sx={{mr:54}}>
       <Box component="span" sx={{color:"black"}}>الاسم:</Box>{''}
-            <Box component="span" sx={{color:"gray" ,whiteSpace:'-moz-pre-wrap'}}>          {mailData.from?.name ?? "غير معروف"}
+            <Box component="span" sx={{color:"gray" ,whiteSpace:'-moz-pre-wrap'}}> 
+    {typeof mailData.from === "object" ? mailData.from?.name : mailData.from ?? "غير معروف"}
 </Box>
 
     </Typography>
@@ -122,23 +142,54 @@ const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
 
     </Typography>
     {/* زر الإرسال */}
-    {!isManager && (
-  <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-    <Button
-      variant="contained"
-      sx={{
-        borderRadius: "20px",
-        width: "36%",
-        backgroundColor: "rgb(14,74,35)",
-        color: "white",
-        ml: 56,
-        fontWeight: "700",
-        fontSize: "20px"
-      }}
-    >
-      ارسال
-    </Button>
-  </Box>
+    {!shouldShow && (
+  <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start', mt: 55 ,ml:'-50' }}>
+  <Button
+  onClick={async () => {
+    try {
+      await EditMailStatus( "مرسلة");
+      alert("تم قبول البريد بنجاح");
+      onClose(); 
+    } catch {
+      alert("حدث خطأ أثناء قبول الطلب");
+    }
+  }}
+    variant="contained"
+    sx={{
+      borderRadius: "20px",
+      minWidth: "120px",
+      backgroundColor: "rgb(14,74,35)",
+      color: "white",
+      fontWeight: "700",
+      fontSize: "20px"
+    }}
+  >
+           {isLoading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "قبول"} 
+  </Button>
+  <Button
+   onClick={async () => {
+    try {
+      await EditMailStatus( "مرفوضة");
+      alert("تم رفض البريد بنجاح");
+      onClose();
+    } catch {
+      alert("حدث خطأ أثناء رفض الطلب");
+    }
+  }}
+    variant="contained"
+    sx={{
+      borderRadius: "20px",
+      minWidth: "120px",
+      backgroundColor: "rgba(119, 30, 7, 1)",
+      color: "white",
+      fontWeight: "700",
+      fontSize: "20px"
+    }}
+  >
+           {isLoading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "رفض"} 
+  </Button>
+</Box>
+
 )}
 </>
       )}

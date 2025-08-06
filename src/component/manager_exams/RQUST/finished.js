@@ -124,7 +124,7 @@ export default function Finished(){
                 </TableCell>
                 <TableCell  sx={{color: row["حالة الطلب"]==='مقبول'? 'green' :"red", fontWeight: "700" ,fontSize:'16px'  }}align="center"> { row["حالة الطلب"]}</TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                  { row.dateSent}
+                   { row["تاريخ الامتحان"].toLocaleDateString('EG')??"-"}
                 </TableCell>
                  <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
                   {new Date(row["تاريخ التقديم"]).toLocaleDateString('EG') }

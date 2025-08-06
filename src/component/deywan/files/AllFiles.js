@@ -136,7 +136,7 @@ export default function AllFILES(){
         </TableCell>
 
         <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
-          {row.created_at ?? "ـ"}
+          {row.received_at ?? "ـ"}
         </TableCell>
 
         <TableCell align="center">

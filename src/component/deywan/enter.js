@@ -40,6 +40,8 @@ const Enter = () => {
     const [creat, setCreat] = useState(false);
   
    const stateRole=useSelector((state)=>state.user.roles[0])
+   const [selectedStatus, setSelectedStatus] = useState(null);
+
   const isSub_Admin=stateRole.includes("نائب المدير")
       const isAdmin=stateRole.includes(" المدير")
 
@@ -100,8 +102,10 @@ useEffect(() => {
 //   setOpenModal(true);
 // };
 
-const handleOpenModal = (uuid) => {
+const handleOpenModal = (uuid,status) => {
   setSelectedUuid(uuid);
+    setSelectedStatus(status);
+
   setTimeout(() => setOpenModal(true), 0); 
 };
 
@@ -273,7 +277,7 @@ const handleOpenModal = (uuid) => {
 
       <TableCell align="center">
         <IconButton
-          onClick={() => handleOpenModal(row.uuid)
+          onClick={() => handleOpenModal(row.uuid ,row.status)
             
           }
           
@@ -320,6 +324,7 @@ const handleOpenModal = (uuid) => {
   open={openModal}
   onClose={()=>{setOpenModal(false)}}
   uuid={selectedUuid}
+  status={selectedStatus}
   />
 }
     </Box>

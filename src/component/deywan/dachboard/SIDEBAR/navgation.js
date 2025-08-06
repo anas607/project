@@ -470,7 +470,7 @@ const isAdmin=state.roles[0].includes("المدير")
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: isSub_exam ? "3%" :isdeywan? "35%":isSub_Admin? "40%" :"5%",
+          marginTop: isSub_exam ? "3%" :isdeywan? "35%":isSub_Admin? "40%" :isAdmin? "5%":"65%",
           mr: -10,
         }}
       >

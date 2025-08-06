@@ -85,6 +85,7 @@ useEffect(() => {
 
       if (selectedType === "البريد الوارد") {
         response = await getData(`${BaseUrl}${show_import_internal_mails}`);
+        console.log(response)
       } else {
         response = await getData(`${BaseUrl}${show_internal_mails_export}`);
       }
@@ -212,13 +213,13 @@ useEffect(() => {
           {isInbox ? (
             <>
               <TableCell align="center">
-                <Avatar src={row.senderImg} sx={{ width: 56, height: 56, margin: "auto" }} />
+                <Avatar src={row.from_avatar} sx={{ width: 56, height: 56, margin: "auto" }} />
               </TableCell>
-              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }}align="center">{row.senderName}</TableCell>
-              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.senderPhone}</TableCell>
-              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.mailTitle}</TableCell>
-              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.officeName}</TableCell>
-              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.dateReceived}</TableCell>
+              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }}align="center">{row.from_name}</TableCell>
+              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_phone}</TableCell>
+              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.subject}</TableCell>
+              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.from_office}</TableCell>
+              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{new Date(row.received_at).toLocaleDateString()}</TableCell>
             </>
           ) : (
             <>
@@ -230,8 +231,11 @@ useEffect(() => {
         : row.status === "مرسلة"
         ? "green"
         : "black" }} align="center">{row.status}</TableCell>
-              <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.sender_at}</TableCell>
-                            <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.sender_at}</TableCell>
+        <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
+  {ismanger_exam ? new Date(row.dateReceived).toLocaleDateString() : ""}
+</TableCell>
+                            <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
+ {new Date(row.sender_at).toLocaleDateString()}                              </TableCell>
 
             </>
           )}

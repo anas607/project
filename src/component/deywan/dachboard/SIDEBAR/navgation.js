@@ -460,8 +460,8 @@ const isAdmin=state.roles[0].includes("المدير")
           sx={{
             justifyContent: "flex-start",
             backgroundColor:
-              currentPath === "/AllFiles" ? "rgb(14, 74, 35)" : "transparent",
-            color: currentPath === "/AllFiles" ? "white" : "black",
+              currentPath === "/Advertisements" ? "rgb(14, 74, 35)" : "transparent",
+            color: currentPath === "/Advertisements" ? "white" : "black",
             fontWeight: "600",
             fontSize: "16px",
             transition: "1%",

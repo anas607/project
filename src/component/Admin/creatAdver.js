@@ -26,7 +26,7 @@ import { postData } from "../../API/apiService";
 import { BaseUrl, ANNOUNCEMENT,ADD } from "../../API/api";
 
 
-export default function CreatADversments({ open, onClose  }) {
+export default function CreatADversments({ open, onClose ,onSuccess }) {
 
   const [form,setform]= useState({title:"",body:""})
     const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +45,8 @@ async function handleCreat(){
      console.log("Response:", response);
 
         alert(response?.message || "تم إنشاء الاعلان بنجاح");
- 
+ if (typeof onSuccess === "function") onSuccess();
+
 
   setform("");
     onClose(); // ✅ هذا هو الصحيح
@@ -115,7 +116,13 @@ async function handleCreat(){
           <Typography variant="subtitle1" sx={{ mb: 1 ,color: "black",fontSize:"20px",fontWeight: '700',}}>
              العنوان
           </Typography>
-          <input  value={form.title} onChange={(e)=>{setform(e.target.value)}} style={{ width: '60%', padding: '8px' }}  />
+<input
+  value={form.title}
+  onChange={(e) => {
+    setform({ ...form, title: e.target.value });
+  }}
+  style={{ width: '60%', padding: '8px' }}
+/>
         </Box>
 
        
@@ -131,22 +138,9 @@ async function handleCreat(){
 
           </Typography>
           
-         <TextField
+       <TextField
   value={form.body}
-  onChange={(e) => setform(e.target.value)}
-  variant="outlined"
-  fullWidth
-  multiline
-  rows={6} 
-  sx={{
-    mt: 2,
-    '& .MuiInputBase-root': {
-      fontSize: "14px",
-      border: '1px solid #ccc',
-      borderRadius: '4px',
-      padding: '8px'
-    }
-  }}
+  onChange={(e) => setform({ ...form, body: e.target.value })}
 />
 
         {/* زر الإرسال */}

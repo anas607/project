@@ -39,19 +39,17 @@ export default function Advertisments() {
   const [create, setCreate] = useState(false);
   const [selectedAd, setSelectedAd] = useState(null); // للإعلان الذي سيتم عرض تفاصيله
   const [selectedid, setSelectedid] = useState(null); // للإعلان الذي سيتم عرض تفاصيله
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAdverstment());
   }, [dispatch]);
 
-  const handleShowDetails = (ad) => {
+  const handleOpenModal = (id) => {
+  setSelectedid(id);
 
-    setSelectedAd(ad);
-  };
-
-  const handleBackToTable = () => {
-    setSelectedAd(null);
-  };
+  setTimeout(() => setOpenModal(true), 0); 
+};
 
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
@@ -59,13 +57,8 @@ export default function Advertisments() {
       <Box flex={1} p={2}>
         <Appar />
 
-        {selectedAd ? (
-          // ================= تفاصيل الإعلان ====================
-            <ShowDeatiels ad={selectedAd} onBack={handleBackToTable} />
-
-        ) : (
-          // =================== جدول الإعلانات ====================
-          <>
+       
+          
             <Button
               onClick={() => setCreate(true)}
               variant="contained"
@@ -83,7 +76,8 @@ export default function Advertisments() {
               اضافة اعلان
             </Button>
 
-            {<CreatADversments open={create} onClose={() => setCreate(false)} />}
+            {<CreatADversments open={create} onClose={() => setCreate(false)}              onSuccess={() => dispatch(fetchAdverstment())}
+ />}
 
             <TableContainer sx={{ backgroundColor: "transparent", boxShadow: "none", mt: 1, width: "1003px" }}>
               <Table sx={{ Width: '100%' }}>
@@ -134,7 +128,7 @@ export default function Advertisments() {
 
                         <TableCell align="center">
                           <IconButton
-                            onClick={() => handleShowDetails(row)}
+          onClick={() => handleOpenModal(row.id )}
                             sx={{
                               border: "1px solid rgba(212, 208, 212, 0.31)",
                               borderRadius: "50px",
@@ -174,8 +168,13 @@ export default function Advertisments() {
                 </TableBody>
               </Table>
             </TableContainer>
-          </>
-        )}
+          {<ShowDeatiels
+           open={openModal}
+           onClose={()=>{setOpenModal(false)}}
+           id={selectedid}
+
+           />
+         }
       </Box>
     </Box>
   );

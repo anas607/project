@@ -31,69 +31,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchImportExam } from "../../../reducer/managerexam/importingexam";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
-const outboxRows = [
-  {
-    id: "#789541",
-    mailTitle: "  98989",
-    officeName: "قسم الإحصاء",
-    receiverName: "د. سامي حسن",
-    receiverPhone: "+963993222111",
-    type:"شهادة ",
-    dateSubmitted: "1/5/2025",
-    dateSent: "2/5/2025",
-  }
-];
+import EditRequest from "../EXAMS/event/edieRequest"
 
-export default function Incoming(){
+export default function Incoming({setShowRequest,setSelectedUuid}){
   const stateimport=useSelector((state)=>state.importexam)
+  const [open,setOpen]=useState(false)
+
+  // console.log(stateimport)
     const dispatch = useDispatch();
     useEffect(()=>{dispatch(fetchImportExam())
   },[dispatch
     ])
+//     function handleEditRequst(){
+// setOpen(true)
+//     }
+   function handleEditRequst(uuid){
+  
+
+  setSelectedUuid(uuid);
+  setShowRequest(true);
+}
+
     return(
         <>
-          
-  
- 
-
-  
-
-    {/*  صف العنوان + البحث + الإشعار */}
-  
-
-  
-
-    
-  {/* ///////////////////////////////// */}
-   
-  
-   
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
+      
           
                <TableContainer sx={{ mr: -3, backgroundColor: "transparent", boxShadow: "none" , width: "1583px",mt:2}}>
             <Table  sx={{Width: '100%'}}>
@@ -130,37 +91,42 @@ export default function Incoming(){
           
           
           <TableBody>
-             {stateimport.error ? (<h2 sx={{color:"red"}}>خدث خطا في جلب المعلومات</h2>): 
+             {stateimport.data.error ? (<h2 sx={{color:"red"}}>خدث خطا في جلب المعلومات</h2>): 
                                                  stateimport.isloading ?  (<>
                                                                 <TableRow>
                                                                   <TableCell sx={{color:"green"}}>
                                                                     <Loading />
                                                                   </TableCell>
-                                                                </TableRow></>) :
-                                                                !stateimport.isloading && stateimport.data.length===0 ? <NoData/> :
-            stateimport.map((row, index) => (
+                                                                </TableRow></>) : Array.isArray(stateimport.data?.[0]) && stateimport.data[0].length === 0 ? (
+                                                                    <NoData />):
+            stateimport.data.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
-                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.mailTitle}</TableCell>
+                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">                 {row["رقم الطلب"]}
+</TableCell>
                 <TableCell align="center">
-                  <Avatar  sx={{margin:'auto'}} src={row.receiverImg} />
+                  <Avatar  sx={{margin:'auto'}} src={row[" صورة الطبيب"]} />
                 </TableCell>
                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.receiverName}
+                 {row["اسم الطبيب"]}
                 </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 {  row.receiverPhone}
+                 {row["رقم الطبيب"]}
                 </TableCell>
                  <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.type}
+                 { row["الاختصاص"]}
                 </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                  {row.receiverName}
+                 { row["اسم الطلب"]}
                 </TableCell>
-                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">{row.dateSubmitted}</TableCell>
-                
+                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">                  {new Date(row["تاريخ التقديم"]).toLocaleDateString('EG') }
+</TableCell>
+
                 <TableCell align="center">
                   <IconButton
+       onClick={() => { handleEditRequst(row["رقم الطلب"]); }}
+
+                  
                     sx={{
                       border: "1px solid rgba(212, 208, 212, 0.31)",
                       borderRadius: "50px",ml:-3,
@@ -196,7 +162,11 @@ export default function Incoming(){
             </Table>
           </TableContainer>
          
+{<EditRequest open={open}
+onClose={()=>{setOpen(false)}}
 
+/>
+}
 
 
     </>)}

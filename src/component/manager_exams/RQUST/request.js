@@ -19,6 +19,7 @@ import { Box, Button, Select, MenuItem, Typography, IconButton,Avatar,
   TableRow, } from "@mui/material";
 import { useSelector } from "react-redux";
 import { SidBarComponent } from "../../deywan/manger_deywan/SIDEBAR/sidbar";
+import DoctorRequestDetails from "./DoctorRequestDetails";
 
 
 function Bank(props) {
@@ -51,8 +52,10 @@ function a11yProps(index) {
 }
 
 export default function Request() {
+  const [selectedUuid, setSelectedUuid] = useState(null);
   
   const [value, setValue] = React.useState(0);
+    const[showRequest,setShowRequest]=useState(false)
   
  const state = useSelector((state) => state.user);
 const isSub_Admin=state.roles[0].includes("نائب المدير")
@@ -61,8 +64,11 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  if (showRequest) {
   
+
+      return < DoctorRequestDetails  setShowRequest={setShowRequest} uuid={selectedUuid}  />;
+    }
 
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
@@ -161,7 +167,13 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
 
         {/* محتوى التابات */}
         <Bank value={value} index={0}>
-            <Incoming/>
+            <Incoming    
+             showRequest={showRequest}
+    setShowRequest={setShowRequest}
+       setSelectedUuid={setSelectedUuid}
+       selectedUuid={selectedUuid}
+            
+            />
       </Bank>
         <Bank value={value} index={1}>
           <Finished/>  

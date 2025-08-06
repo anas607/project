@@ -46,6 +46,7 @@ const Outer = () => {
   const stateRole=useSelector((state)=>state.user.roles[0])
 const isMaleaManager=stateRole.includes("رئيس المالية")
 const isSub_Admin=stateRole.includes("نائب المدير")
+const isAdmin=stateRole.includes("المدير")
 
 const allowedRoles = ["رئيس الإقامة", "رئيس الشهادات","رئيس المجالس","رئيس المفاضلة"];
 const isManager = allowedRoles.some(role => stateRole.includes(role));
@@ -130,7 +131,7 @@ useEffect(() => {
     <TableCell align="center" sx={headerStyle}>{isInbox ? "المرسل" : "المستقبل"}</TableCell>
     <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
     <TableCell align="center" sx={headerStyle}>{isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}</TableCell>
-  </> ): isSub_Admin?(<>
+  </> ): isSub_Admin || isAdmin?(<>
   
   
   <TableCell align="center" sx={headerStyle}>رقم المعاملة</TableCell>

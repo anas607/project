@@ -33,17 +33,6 @@ import { BaseUrl, BY, EMPLOYEES, FETCHOFFICE, Show } from "../../../API/api";
 import Loading from "../../../wrong/mails/loading";
 
 
-const inboxRows = [
-  {
-    id: "#896643",
-    mailTitle: "استلام شهادة",
-    officeName: "مكتب المدير العام",
-    senderName: "محمد الأسد",
-    senderPhone: "+963987432196",
-    senderImg: "https://randomuser.me/api/portraits/men/75.jpg",
-    dateReceived: "2/5/2025",
-  },
-];
 
 const headStyle = {
   color: "white",
@@ -257,8 +246,10 @@ async function fetchEmployeesByOfficeName(officeName) {
           {row.role}
         </TableCell>
         <TableCell align="center" sx={{ fontWeight: 700, fontSize: "16px" }}>
-          {row.handled_transactions}
-        </TableCell>
+  {row.handled_transactions !== null && row.handled_transactions !== undefined
+    ? row.handled_transactions
+    : "ـ"}
+</TableCell>
         <TableCell align="center" sx={{color:row.status === 1?"green" :"red" ,fontWeight: 700, fontSize: "16px" }}>
           {row.status === 1 ? "فعال" : "غير فعال"}
         </TableCell>

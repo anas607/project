@@ -46,6 +46,9 @@ export default function Archiv(){
   const [selectedOfficeId, setSelectedOfficeId] = useState("");
    const state = useSelector((state) => state.user);
   const isSub_Admin=state.roles[0].includes("نائب المدير")
+    const isAdmin=state.roles[0].includes("المدير")
+
+
   
   const [loading, setLoading] = useState(false);
   const[setenter,setOpenEnter]=useState(false)
@@ -68,7 +71,7 @@ const fetchOffices = async () => {
   try {
     const res = await getData(`${BaseUrl}${FETCHOFFICE}`);
     setOffices(res.data[0]);
-// console.log(res.data[0])
+ console.log(res.data[0])
     // console.log(setOffices) 
   } catch (err) {
     console.error("فشل في جلب المكاتب:", err);
@@ -195,7 +198,8 @@ useEffect(() => {
   </Box>
 
  
-  {isSub_Admin && (
+  {(isSub_Admin ||isAdmin )
+  && (
     <FormControl
       sx={{
         minWidth: 300,

@@ -28,6 +28,7 @@ import Exam from "./component/manager_exams/EXAMS/exam";
 import Request from "./component/manager_exams/RQUST/request";
 import ExamRequestForm from "./component/manager_exams/RQUST/talab/ExamRequestForm";
 import EXPORTMAILS from "./component/mails/form/exportmails";
+import AllFILES from "./component/deywan/files/AllFiles";
 
 const theme = createTheme({
   palette: {
@@ -74,7 +75,7 @@ function App() {
             <Route path="/dachbord" element={<Leader />} />
             <Route path="/enter" element={<Enter />} />
             <Route path="/outer" element={<Outer />} />
-                         <Route element={<ProtectedRoute allowedRole={"نائب المدير"} />}>
+                         <Route element={<ProtectedRoute allowedRole={["نائب المدير","المدير"]} />}>
 
                         <Route path="/employees" element={<Employyes />} />
                         </Route>
@@ -89,7 +90,11 @@ function App() {
                         
             <Route path="/exam_bank" element={<Bank />} />
                                        </Route> 
-                                        <Route element={<ProtectedRoute allowedRole={["رئيس الامتحانات" ,"موظف الامتحانات","نائب المدير"]} />}>
+                                       <Route element={<ProtectedRoute allowedRole={"المدير"} />}>
+                        
+            <Route path="/AllFiles" element={<AllFILES />} />
+                                       </Route> 
+                                        <Route element={<ProtectedRoute allowedRole={["رئيس الامتحانات" ,"موظف الامتحانات","نائب المدير","المدير"]} />}>
 
             <Route path="/exams" element={<Exam />} />
                </Route> 

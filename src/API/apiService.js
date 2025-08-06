@@ -72,3 +72,23 @@ export const postData = async (
     throw error.response ? error.response.data : error;
   }
 };
+export const putData = async (url, body = {}, customHeaders = {}, isFormData = false) => {
+  const token = getToken();
+
+  const headers = {
+    "X-Use-Cookie": "false",
+    Authorization: token ? `Bearer ${token}` : "",
+    ...customHeaders,
+  };
+
+  if (isFormData) {
+    delete headers["Content-Type"];
+  }
+
+  try {
+    const response = await axios.put(url, body, { headers });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};

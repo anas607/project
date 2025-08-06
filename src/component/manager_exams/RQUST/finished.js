@@ -54,47 +54,6 @@ export default function Finished(){
         <>
           
   
- 
-
-  
-
-    {/*  صف العنوان + البحث + الإشعار */}
-  
-
-  
-
-    
-  {/* ///////////////////////////////// */}
-   
-  
-   
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-          
                <TableContainer sx={{ mr: -3, backgroundColor: "transparent", boxShadow: "none" , width: "1583px",mt:2}}>
             <Table  sx={{Width: '100%'}}>
              <TableHead sx={{width:"1503px", height:'88px'}}>
@@ -143,31 +102,32 @@ export default function Finished(){
                                                       </TableCell>
                                                     </TableRow></>) :
                                                     !stateend.isloading && stateend.data.length===0 ? <NoData/> :
-            stateend.map((row, index) => (
+            stateend.data.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
-                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.mailTitle}</TableCell>
+                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center"> {row["رقم الطلب"]}</TableCell>
                 <TableCell align="center">
-                  <Avatar  sx={{margin:'auto'}} src={row.receiverImg} />
+                  <Avatar  sx={{margin:'auto'}} src={row[" صورة الطبيب"]} />
                 </TableCell>
                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.receiverName}
+                  {row["اسم الطبيب"]}
                 </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 {  row.receiverPhone}
+                                 {row["رقم الطبيب"]}
+
                 </TableCell>
                  <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.type}
+                 { row["الاختصاص"]}
                 </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                  {row.receiverName}
+                   { row["اسم الطلب"]}
                 </TableCell>
-                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">{row.dateSubmitted}</TableCell>
+                <TableCell  sx={{color: row["حالة الطلب"]==='مقبول'? 'green' :"red", fontWeight: "700" ,fontSize:'16px'  }}align="center"> { row["حالة الطلب"]}</TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
                   { row.dateSent}
                 </TableCell>
                  <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                  { row.dateSent}
+                  {new Date(row["تاريخ التقديم"]).toLocaleDateString('EG') }
                 </TableCell>
                 <TableCell align="center">
                   <IconButton

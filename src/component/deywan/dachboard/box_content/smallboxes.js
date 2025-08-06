@@ -28,14 +28,7 @@ export default function SmallBoxes() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        // const token = cookies.get("access_token");
-
-        // const config = {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // };
-
+        
         const response = await getData(`${BaseUrl}${showEmployees}`);
 
         dispatch(setEmployees(response.data));
@@ -47,12 +40,7 @@ export default function SmallBoxes() {
     fetchEmployees();
   }, [dispatch]);
 
-  // const employees = [
-  //   { id: 9, name: 'سعاد حسن', phone: '+963975302812', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
-  //   { id: 41, name: 'سعاد حسن', phone: '+963975302812', avatar: 'https://randomuser.me/api/portraits/women/2.jpg' },
-  //   { id: 65, name: 'سعاد حسن', phone: '+963975302812', avatar: 'https://randomuser.me/api/portraits/women/3.jpg' },
-  //   { id: 8, name: 'سعاد حسن', phone: '+963975302812', avatar: 'https://randomuser.me/api/portraits/women/4.jpg' },
-  // ];
+ 
   return (
     <>
       <Box

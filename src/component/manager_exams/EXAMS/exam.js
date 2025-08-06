@@ -61,7 +61,7 @@ const [selectedUuid, setSelectedUuid] = useState(null);
    const state = useSelector((state) => state.user);
 const isSub_Admin=state.roles[0].includes("نائب المدير")
 const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
-const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
+const isAdmin=state.roles[0].includes("المدير")
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -86,7 +86,7 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
       
-     {isSub_exam || isSub_Admin ?<SidBar /> :<SidBarComponent /> } 
+     {isSub_exam || isSub_Admin ||isAdmin?<SidBar /> :<SidBarComponent /> } 
 
       <Box sx={{ flex: 1, p: 2 }}>
          <Appar/>

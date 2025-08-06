@@ -24,6 +24,7 @@ const isdeywan=state.roles[0].includes("رئيس الديوان")
 const isSub_Admin=state.roles[0].includes("نائب المدير")
 const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
 const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
+const isAdmin=state.roles[0].includes("المدير")
 
 
   return (
@@ -199,7 +200,7 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
           </h2>
         </Button>
       </NavLink></>): ""}
-      {isSub_Admin ? (<><NavLink to="/employees" style={{ textDecoration: "none", width: "100%" }}>
+      {isSub_Admin || isAdmin? (<><NavLink to="/employees" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
             justifyContent: "flex-start",
@@ -345,7 +346,7 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
         </Button>
       </NavLink>
         </>):""}
-      { isSub_exam ||ismanger_exam || isSub_Admin? (<> <NavLink to="/exams" style={{ textDecoration: "none", width: "100%" }}>
+      { isSub_exam ||ismanger_exam || isSub_Admin ||isAdmin? (<> <NavLink to="/exams" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
             justifyContent: "flex-start",
@@ -388,7 +389,35 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
       </NavLink>
       </>) :"" }
     
-      
+      {isAdmin?<><NavLink to="/AllFiles" style={{ textDecoration: "none", width: "100%" }}>
+        <Button
+          sx={{
+            justifyContent: "flex-start",
+            backgroundColor:
+              currentPath === "/AllFiles" ? "rgb(14, 74, 35)" : "transparent",
+            color: currentPath === "/AllFiles" ? "white" : "black",
+            fontWeight: "600",
+            fontSize: "16px",
+            transition: "1%",
+            marginBottom: "2%",
+            width: "381px",
+            height: "78px",
+            "&:hover": {
+              backgroundColor: "rgb(14, 74, 35)",
+              color: "white",
+              width: "140%",
+            },
+          }}
+        >
+          <InsertDriveFileIcon sx={{ marginRight: 7, fontSize: 32 }} />
+          <h2
+            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
+          >
+            {" "}
+            المعاملات{" "}
+          </h2>
+        </Button>
+      </NavLink></>:""}
       {isSub_exam ||ismanger_exam ? (<> <NavLink to="/Requests" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
@@ -441,7 +470,7 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: isSub_exam ? "3%" :isdeywan? "35%":isSub_Admin? "40%" :"65%",
+          marginTop: isSub_exam ? "3%" :isdeywan? "35%":isSub_Admin? "40%" :"5%",
           mr: -10,
         }}
       >

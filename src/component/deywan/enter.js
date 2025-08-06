@@ -41,6 +41,8 @@ const Enter = () => {
   
    const stateRole=useSelector((state)=>state.user.roles[0])
   const isSub_Admin=stateRole.includes("نائب المدير")
+      const isAdmin=stateRole.includes(" المدير")
+
 const [selectedUuid, setSelectedUuid] = useState(null);
 
   const [inboxRows, setInboxRows] = useState([]);
@@ -100,7 +102,7 @@ useEffect(() => {
 
 const handleOpenModal = (uuid) => {
   setSelectedUuid(uuid);
-  setTimeout(() => setOpenModal(true), 0); // أو 100ms لو بدك تتأكد
+  setTimeout(() => setOpenModal(true), 0); 
 };
 
   return (
@@ -137,7 +139,7 @@ const handleOpenModal = (uuid) => {
     );
   }}
 />
-  {!isInbox && <>
+  {!isInbox &&  (isAdmin||isSub_Admin)&& <>
      <Button onClick={()=>{
       setCreat(true)
      }} variant="contained" color="rgb(14,74,35)" sx={{borderRadius:"30px" ,width:"11%",height:"50px",backgroundColor:"rgb(14,74,35)",color:"white",mr:149 ,fontSize:'20px',fontWeight:'700'}}>
@@ -168,7 +170,7 @@ const handleOpenModal = (uuid) => {
         <TableCell align="center" sx={headStyle}>اسم المكتب</TableCell>
         <TableCell align="center" sx={headStyle}>تاريخ الاستلام</TableCell>
       </>
-    )  : isSub_Admin ? (
+    )  : isSub_Admin ||isAdmin ? (
   <>
     <TableCell align="center" sx={headStyle}>اسم المكتب</TableCell>
         <TableCell align="center" sx={headStyle}>رقم المكتب</TableCell>

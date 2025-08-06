@@ -19,6 +19,7 @@ import fetchmarkReducer from "../reducer/managerexam/mark"
 import endexamReducer from "../reducer/managerexam/endingexam"
 import importexamReducer from "../reducer/managerexam/importingexam"
 import fetchformReducer from "../reducer/admin/forms"
+import fetchadversmentReducer from "../reducer/admin/adverstment"
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -41,6 +42,7 @@ export default configureStore({
     endexam:endexamReducer,
     importexam:importexamReducer,
     fetchform:fetchformReducer,
+    fetchadversment:fetchadversmentReducer
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

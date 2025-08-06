@@ -29,6 +29,7 @@ import Request from "./component/manager_exams/RQUST/request";
 import ExamRequestForm from "./component/manager_exams/RQUST/talab/ExamRequestForm";
 import EXPORTMAILS from "./component/mails/form/exportmails";
 import AllFILES from "./component/deywan/files/AllFiles";
+import Advertisments from "./component/Admin/Advertisments";
 
 const theme = createTheme({
   palette: {
@@ -93,6 +94,9 @@ function App() {
                                        <Route element={<ProtectedRoute allowedRole={"المدير"} />}>
                         
             <Route path="/AllFiles" element={<AllFILES />} />
+            
+                        <Route path="/Advertisements" element={<Advertisments />} />
+
                                        </Route> 
                                         <Route element={<ProtectedRoute allowedRole={["رئيس الامتحانات" ,"موظف الامتحانات","نائب المدير","المدير"]} />}>
 

@@ -1,6 +1,6 @@
 import { Box  ,Typography,
   Avatar,
-  Stack,
+  TextField,
   Grid,
   Paper, FormControl,
   InputLabel,
@@ -10,7 +10,7 @@ import { Box  ,Typography,
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ColumChart from "../chart/columchart";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { putData,getData } from "../../../../API/apiService";
 import ColumnChart from "../chart/columchart";
@@ -28,6 +28,9 @@ const weekDays = [
 
 
 export default function Colum() {
+  const isFirstRun = useRef(true);
+const [originalData, setOriginalData] = useState(null);
+
 const [dayOff, setDayOff] = useState([]); // مصفوفة فارغة في البداية
    
 const [startPeriod, setStartPeriod] = useState("");
@@ -56,6 +59,11 @@ const convertTo24Hour = (hour, minute, period) => {
 const data = response.data;
 
       setDayOff(data.day_off);
+setOriginalData({
+  start_time: data.start_time,
+  end_time: data.end_time,
+  day_off: data.day_off,
+});
 
       // تحويل 24 ساعة إلى 12 ساعة مع تحديد الفترة
       const parseTime = (timeStr) => {
@@ -95,7 +103,56 @@ const data = response.data;
   fetchWorkingHours();
 }, []);
  
- 
+ useEffect(() => {
+  if (isFirstRun.current) {
+    isFirstRun.current = false;
+    return;
+  }
+
+  const saveSettings = async () => {
+    if (
+      startHour && startMinute && startPeriod &&
+      endHour && endMinute && endPeriod &&
+      originalData // تأكد من تحميل البيانات الأصلية
+    ) {
+      const start_time = convertTo24Hour(startHour, startMinute, startPeriod);
+      const end_time = convertTo24Hour(endHour, endMinute, endPeriod);
+      const validArabicDays = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+      const cleanDayOff = dayOff.filter((day) => validArabicDays.includes(day));
+
+      // ✨ تحقق إذا تغير شيء فعليًا
+      const isChanged =
+        start_time !== originalData.start_time ||
+        end_time !== originalData.end_time ||
+        JSON.stringify(cleanDayOff.sort()) !== JSON.stringify([...originalData.day_off].sort());
+
+      if (!isChanged) return; // لا تفعل شيء إذا لا يوجد تغيير
+
+      try {
+        await putData("http://127.0.0.1:8000/api/working-hours", {
+          start_time,
+          end_time,
+          day_off: cleanDayOff,
+        });
+
+        alert("تم تغيير بيانات الدوام بنجاح");
+
+        // ✨ حدّث النسخة الأصلية بعد الحفظ
+        setOriginalData({
+          start_time,
+          end_time,
+          day_off: cleanDayOff,
+        });
+
+      } catch (err) {
+        console.error("❌ خطأ أثناء الحفظ التلقائي:", err);
+      }
+    }
+  };
+
+  saveSettings();
+}, [startHour, startMinute, startPeriod, endHour, endMinute, endPeriod, dayOff, originalData]);
+
  
   return (
     <Box
@@ -135,7 +192,7 @@ const data = response.data;
         </Box>
 
         {/* دوائر الأيام */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 1 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 1,cursor:'pointer' }}>
           {weekDays.map((item, index) => (
           <Box
               key={index}
@@ -183,203 +240,96 @@ setDayOff([...dayOff, item.day])
        <Grid container spacing={1} mt={1}>
   {/* بدء العمل */}
   <Grid item xs={6}>
-    <Box display="flex" justifyContent="space-between" mb={0.5}>
-      <Typography fontSize={12} fontWeight="bold" color="black">
-        بدء العمل:
-      </Typography>
-      <Typography fontSize={12} fontWeight="bold" color="rgb(14, 75, 35)">
-        {startHour && startMinute && startPeriod
-          ? `${startHour}:${startMinute} ${startPeriod}`
-          : "--:--"}
-      </Typography>
-    </Box>
+    <TextField
+  type="time"
+  fullWidth
+  value={`${startHour && startMinute ? `${convertTo24Hour(startHour, startMinute, startPeriod)}` : ''}`}
+  onChange={(e) => {
+    const [h, m] = e.target.value.split(":");
+    let hour = parseInt(h);
+    let period = "ص";
 
-    <Paper
-      elevation={1}
-      sx={{
-        padding: 1, width: "185%",
-        borderRadius: "10px",
-        backgroundColor: "rgb(232,232,232)",
-      }}
-    >
-      <Box display="flex" gap={1}>
-        {/* الساعات */}
-        <FormControl fullWidth>
-          <InputLabel>ساعة</InputLabel>
-          <Select
-            value={startHour}
-            label="ساعة"
-            onChange={(e) => setStartHour(e.target.value)}
-            MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
-          >
-            {Array.from({ length: 12 }, (_, i) =>
-              (i + 1).toString().padStart(2, "0")
-            ).map((h) => (
-              <MenuItem key={h} value={h}>
-                {h}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+    if (hour >= 12) {
+      period = "م";
+      if (hour > 12) hour -= 12;
+    } else if (hour === 0) {
+      hour = 12;
+    }
 
-        {/* الدقائق */}
-        <FormControl fullWidth>
-          <InputLabel>دقيقة</InputLabel>
-          <Select
-            value={startMinute}
-            label="دقيقة"
-            onChange={(e) => setStartMinute(e.target.value)}
-            MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
-          >
-            {Array.from({ length: 60 }, (_, i) =>
-              i.toString().padStart(2, "0")
-            ).map((m) => (
-              <MenuItem key={m} value={m}>
-                {m}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+    setStartHour(hour.toString().padStart(2, "0"));
+    setStartMinute(m);
+    setStartPeriod(period);
+  }}
+  label="بدء العمل"
+   sx={{
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgb(14, 75, 35)',
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgb(14, 75, 35)',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'rgb(14, 75, 35)',
+      },
+    },
+    '& .MuiInputLabel-root.Mui-focused': {
+      color: 'rgb(14, 75, 35)',
+    },
+  }}
+/>
 
-        {/* الفترة */}
-        <FormControl fullWidth>
-          <InputLabel>الفترة</InputLabel>
-          <Select
-            value={startPeriod}
-            label="الفترة"
-            onChange={(e) => setStartPeriod(e.target.value)}
-          >
-            {["ص", "م"].map((p) => (
-              <MenuItem key={p} value={p}>
-                {p}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-    </Paper>
+
   </Grid>
 
   {/* انتهاء العمل */}
   <Grid item xs={6}>
     <Box display="flex" justifyContent="space-between" mb={0.5}>
-      <Typography fontSize={12} fontWeight="bold" color="black">
-        انتهاء العمل:
-      </Typography>
-      <Typography fontSize={12} fontWeight="bold" color="rgb(14, 75, 35)">
-        {endHour && endMinute && endPeriod
-          ? `${endHour}:${endMinute} ${endPeriod}`
-          : "--:--"}
-      </Typography>
+     <TextField
+  type="time"
+  fullWidth
+  value={`${endHour && endMinute ? `${convertTo24Hour(endHour, endMinute, endPeriod)}` : ''}`}
+  onChange={(e) => {
+    const [h, m] = e.target.value.split(":");
+    let hour = parseInt(h);
+    let period = "ص";
+
+    if (hour >= 12) {
+      period = "م";
+      if (hour > 12) hour -= 12;
+    } else if (hour === 0) {
+      hour = 12;
+    }
+
+    setEndHour(hour.toString().padStart(2, "0"));
+    setEndMinute(m);
+    setEndPeriod(period);
+  }}
+  label="انتهاء العمل"
+   sx={{
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgb(14, 75, 35)',
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgb(14, 75, 35)',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'rgb(14, 75, 35)',
+      },
+    },
+    '& .MuiInputLabel-root.Mui-focused': {
+      color: 'rgb(14, 75, 35)',
+    },
+  }}
+/>
+
     </Box>
 
-    <Paper
-      elevation={1}
-      sx={{
-        padding: 1,width: "185%",
-        borderRadius: "10px",
-        backgroundColor: "rgb(232,232,232)",
-      }}
-    >
-      <Box display="flex" gap={1}>
-        {/* الساعات */}
-        <FormControl fullWidth>
-<InputLabel shrink sx={{ fontSize: "14px", fontWeight: "bold" }}>
-  ساعة
-</InputLabel>
-          <Select
-            value={endHour}
-            label="ساعة"
-            onChange={(e) => setEndHour(e.target.value)}
-            MenuProps={{ PaperProps: { style: { maxHeight: 300 } } }}
-          >
-            {Array.from({ length: 12 }, (_, i) =>
-              (i + 1).toString().padStart(2, "0")
-            ).map((h) => (
-              <MenuItem key={h} value={h}>
-                {h}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        {/* الدقائق */}
-        <FormControl fullWidth>
-          <InputLabel>دقيقة</InputLabel>
-          <Select
-            value={endMinute}
-            label="دقيقة"
-            onChange={(e) => setEndMinute(e.target.value)}
-            MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
-          >
-            {Array.from({ length: 60 }, (_, i) =>
-              i.toString().padStart(2, "0")
-            ).map((m) => (
-              <MenuItem key={m} value={m}>
-                {m}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        {/* الفترة */}
-        <FormControl fullWidth>
-          <InputLabel>الفترة</InputLabel>
-          <Select
-            value={endPeriod}
-            label="الفترة"
-            onChange={(e) => setEndPeriod(e.target.value)}
-          >
-            {["ص", "م"].map((p) => (
-              <MenuItem key={p} value={p}>
-                {p}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-    </Paper>
+   
   </Grid>
 </Grid>
 
-<Box mt={2} textAlign="center">
-  <button
-    onClick={async () => {
-      const start_time = convertTo24Hour(startHour, startMinute, startPeriod);
-      const end_time = convertTo24Hour(endHour, endMinute, endPeriod);
-
-const validArabicDays = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-  const cleanDayOff = dayOff.filter((day) => validArabicDays.includes(day));
-      try {
-        console.log({
-  start_time,
-  end_time,
-  day_off: dayOff,
-});
-
-        const res = await putData("http://127.0.0.1:8000/api/working-hours", {
-          start_time,
-          end_time,
-day_off: cleanDayOff,         });
-        console.log(res)
-        alert("تم حفظ الإعدادات بنجاح ✅");
-      } catch (err) {
-  console.error("Error response:", err);
-        alert("حدث خطأ أثناء الإرسال ❌");
-      }
-    }}
-    style={{
-      backgroundColor: "rgb(14, 75, 35)",
-      color: "#fff",
-      padding: "8px 16px",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-    }}
-  >
-    حفظ الإعدادات
-  </button>
-</Box>
 
 
       </Box>
@@ -411,4 +361,5 @@ day_off: cleanDayOff,         });
     
     </Box>
   );
+  
 }

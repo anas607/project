@@ -18,7 +18,8 @@ import Colum from './SIDEBAR/Colum';
 
 export default function Leader(){
     const state = useSelector((state) => state.user);
-const isAdmin=state.roles[0].includes("المدير")
+const isAdmin=state.roles?.some(role => role === "المدير")
+
 
     return(
         <>

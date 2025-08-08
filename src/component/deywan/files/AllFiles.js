@@ -21,10 +21,8 @@ import {
 
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
-import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import EmailIcon from "@mui/icons-material/MarkEmailUnread";
-import CloseIcon from "@mui/icons-material/Close";
+import ArticleIcon from '@mui/icons-material/Article';
+
 import SidBar from "../dachboard/SIDEBAR/sidbar";
 import Appar from "../dachboard/SIDEBAR/appar";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +30,6 @@ import { fetchForm } from "../../../reducer/admin/forms";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 
-const rows=[{name:"asad"}]
 const headStyle = {
   color: "white",
  fontWeight: "700" ,fontSize:'20px',
@@ -151,19 +148,20 @@ export default function AllFILES(){
               color: (theme) => theme.palette.secondary.main,
             }}
           >
-            <ArrowUpwardIcon
-              sx={{
-                position: "absolute",
-                top: 24,
-                right: 10,
-                fontSize: 6,
-                backgroundColor: "white",
-                color: "black",
-                transform: "rotate(60deg)",
-                borderRadius: "50%",
-                padding: "2px",
-              }}
-            />
+             <ArticleIcon sx={{ fontSize: 30 }} />
+                            <ArrowUpwardIcon
+                              sx={{
+                                position: "absolute",
+                                top: 15,
+                                right: 5,
+                                fontSize: 10,
+                                backgroundColor: "white",
+                                color: "black",
+                                transform: "rotate(60deg)",
+                                borderRadius: "50%",
+                                padding: "2px",
+                              }}
+                            />
           </IconButton>
         </TableCell>
       </TableRow>

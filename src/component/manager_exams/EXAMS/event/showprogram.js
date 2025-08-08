@@ -7,20 +7,23 @@ import { Box, Button, Select, MenuItem, Typography, IconButton,Avatar,
   TableRow, } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import { CircularProgress } from "@mui/material";
 import SidBar from "../../../deywan/dachboard/SIDEBAR/sidbar";
 import LogeOut from "../../../deywan/logout"
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useEffect, useState } from "react";
-import { getData } from "../../../../API/apiService";
-import { BaseUrl, PROGRAM } from "../../../../API/api";
+import { getData, postData } from "../../../../API/apiService";
+import { BaseUrl, EDIT_STATUS_MAIL, PROGRAM, UPDATE_STATUS } from "../../../../API/api";
 import Loading from "../../../../wrong/mails/loading";
 import { useSelector } from "react-redux";
 
 
 export default function ShowProgram({showdetials,setShowDetials, setShowProgram ,id }) {
   const [showNotificationPage, setShowNotificationPage] = useState(false);
+    const state = useSelector((state) => state.user);
+  
+const isAdmin=state.roles[0].includes("المدير")
 
   const stateprogram=useSelector((state)=>state.fetchprogram)
 const programInfo = stateprogram?.data?.find((item) => item.id === id);
@@ -28,6 +31,7 @@ const year = programInfo?.السنة || "";
 const month = programInfo?.الشهر || "";   const [isloading, setisloading] = useState(false);
 
  const [deteilas, setDeteilas] = useState([]);
+        const [isLoading, setIsLoading] = useState(false);
 
 useEffect(() => {
   console.log("ID:", id);
@@ -49,10 +53,28 @@ setDeteilas(res.data);
     console.error( err.response?.data || err.message);
   }
 };
+async function EditPROGRAMStatus(approved){
+   setIsLoading(true);
+    try{
+const response = await postData(`${BaseUrl}${PROGRAM}${UPDATE_STATUS}${id}`,{
+  approved
+})
+console.log(response.data)
+return response.data
+
+    }catch(err){
+    console.error( err.response?.data || err.message);
+    alert( err.response?.data || err.message);
+
+    }finally{
+       setIsLoading(false);
+    }
+  }
  if (showdetials) {
     return (
       <Box sx={{ p: 3 }}>
         {/* زر رجوع */}
+       
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={() => setShowDetials(true)}
@@ -65,7 +87,7 @@ setDeteilas(res.data);
         >
           الرجوع إلى الجدول
         </Button>
-
+      
         {/* محتوى النموذج */}
         <Typography variant="h5" fontWeight="bold">
           نموذج إضافة برنامج الامتحان
@@ -85,10 +107,14 @@ setDeteilas(res.data);
            
            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         {/* زر الرجوع */}
+        
         <IconButton onClick={() => setShowProgram(false)} sx={{ backgroundColor: "rgb(71, 59, 68)", color: "rgb(233,232,232)" }}>
           <ArrowBackIcon sx={{fontSize:'50px',                  transform: "rotate(180deg)", // إذا بدك يوجه يمين
 }} />
         </IconButton>
+
+  
+
 
           {/* الزرين */}
           <Box sx={{ display: "flex", gap: 3 }}>
@@ -124,21 +150,95 @@ setDeteilas(res.data);
            <LogeOut/>
           </Box>
       </Box>
-
-       <Typography
-  variant="h6"
+{/* add event */}
+{/* الجملة + الأزرار على نفس السطر */}
+<Box
   sx={{
-    fontSize: "24px",
-    fontWeight: "700",
-    color: "rgb(14,74,35)",
-    marginLeft: "90%",
-    display: "inline-block",
-    whiteSpace: 'nowrap',
-    gap:'4'
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    direction: "rtl",
+    mb: 2,
   }}
 >
-  {month && year ? `برنامج امتحان سنة : ${year}  دورة : ${month}` : "تفاصيل"}
-</Typography>
+  {/* الجملة على اليمين */}
+  <Typography
+    variant="h6"
+    sx={{
+      fontSize: "24px",
+      fontWeight: "700",
+      color: "rgb(14,74,35)",
+      whiteSpace: "nowrap",
+    }}
+  >
+    {month && year ? `برنامج امتحان سنة : ${year}  دورة : ${month}` : "تفاصيل"}
+  </Typography>
+
+  {/* أزرار القبول والرفض على اليسار */}
+  {isAdmin && (
+    <Box sx={{ display: "flex", gap: 2 }}>
+      <Button
+       onClick={async () => {
+    try {
+      await EditPROGRAMStatus( "مقبول");
+      alert("تم قبول البرنامج بنجاح");
+     
+    } catch {
+      alert("حدث خطأ أثناء قبول الطلب");
+    }
+  }}
+    variant="contained"
+    sx={{
+      borderRadius: "20px",
+      minWidth: "120px",
+      backgroundColor: "rgb(14,74,35)",
+      color: "white",
+      fontWeight: "700",
+      fontSize: "20px"
+    }}
+       
+      >
+                   {isLoading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "قبول"} 
+        
+      </Button>
+      <Button
+       onClick={async () => {
+    try {
+      await EditPROGRAMStatus( "مرفوض");
+      alert("تم رفض البرنامج بنجاح");
+     
+    } catch {
+      alert("حدث خطأ أثناء قبول الطلب");
+    }
+  }}
+        variant="contained"
+        sx={{
+          borderRadius: "20px",
+          minWidth: "120px",
+          backgroundColor: "rgba(119, 30, 7, 1)",
+          color: "white",
+          fontWeight: "700",
+          fontSize: "20px",
+        }}
+      >
+                           {isLoading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "رفض"} 
+
+      </Button>
+    </Box>
+  )}
+</Box>
+
+{/* الخط الفاصل */}
+<hr
+  style={{
+    height: "4px",
+    width: "40%",
+    background: "linear-gradient(to left, rgb(14,74,35)20%, gray 80%)",
+    border: "none",
+    borderRadius: "2px",
+    margin: 0,
+  }}
+/>
 
 
                        <hr
@@ -150,10 +250,11 @@ setDeteilas(res.data);
                            border: "none",
      
                            borderRadius: "2px",
-                           marginLeft: "90%",
+    marginRight: 0, // بدلاً من marginLeft
                            marginTop: "0",
                          }}
                        />
+       
 
       {/* جدول أو محتوى آخر */}
       <Box>

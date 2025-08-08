@@ -17,7 +17,8 @@ import { useSelector } from 'react-redux';
 
 export default function TableBox() {
   const state = useSelector((state) => state.user);
-  const isAdmin = state.roles[0].includes("المدير");
+  const isAdmin = state.roles?.some(role => role === "المدير")
+
 
   const [selectchartData, setselectChartData] = useState([]);
   const [selectedOffice, setSelectedOffice] = useState(null);
@@ -41,6 +42,8 @@ export default function TableBox() {
     try {
       const res = await getData(`${BaseUrl}${FETCHOFFICE}`);
       const allOffices = res.data[0];
+      console.log(      res.data[0])
+
       setOffices(allOffices);
 
       if (isAdmin && allOffices.length > 0) {

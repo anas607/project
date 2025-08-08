@@ -76,10 +76,7 @@ function App() {
             <Route path="/dachbord" element={<Leader />} />
             <Route path="/enter" element={<Enter />} />
             <Route path="/outer" element={<Outer />} />
-                         <Route element={<ProtectedRoute allowedRole={["نائب المدير","المدير"]} />}>
-
-                        <Route path="/employees" element={<Employyes />} />
-                        </Route>
+                         
 
             <Route path="/employee" element={<Employee />} />
             <Route element={<ProtectedRoute allowedRole={"رئيس الديوان"} />}>
@@ -106,21 +103,15 @@ function App() {
 
             <Route path="/Requests" element={<Request />} /> 
           </Route> 
+<Route element={<ProtectedRoute allowedRole={["نائب المدير","المدير"]} />}>
 
+                        <Route path="/employees" element={<Employyes />} />
+                        </Route>
                         <Route element={<ProtectedRoute allowedRole={["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات","موظف الامتحانات"]} />}>
 
  <Route path='/enter_emdewan' element={<Enter_EDeywan/>}/>
 <Route path='/outer_emdewan' element={<Outer_EDeywan/>}/>
           </Route>   
-
-      
-
-         
-        
-         
-         
-          
-         
 
         </Routes>
       </div>

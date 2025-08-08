@@ -35,6 +35,8 @@ if (open && uuid) {
     }
   }, [open, uuid]);
 const fetchMail = async () => {
+    setIsLoading(true); // يبدأ التحميل
+
     try {
 const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
       setMailData(res);
@@ -43,6 +45,8 @@ const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
       // console.error(  err.response.data.message)  
 
 
+    }finally{
+       setIsLoading(false);
     }
   };
  async function EditMailStatus(status){
@@ -103,10 +107,26 @@ return response.data
       sx={{ position: 'absolute', top: 16, left: 16, cursor: 'pointer', fontSize:'30px'}}
     />
 
-   {!mailData ? (
-<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-    <CircularProgress color="success" size={60} />
-  </Box>      ) : (
+  {isLoading ? (
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      zIndex: 10,
+      backgroundColor: 'rgba(255,255,255,0.8)',
+      borderRadius: 3,
+    }}
+  >
+    <CircularProgress sx={{ color: 'green' }} size={60} />
+  </Box>
+) : (
+
         <>
           <Typography fontWeight="700" fontSize="24px" color="black">الجمهورية العربية السورية</Typography>
           <Typography fontWeight="700" fontSize="24px" color="black">وزارة الصحة</Typography>

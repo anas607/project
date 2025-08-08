@@ -12,11 +12,10 @@ import {
   IconButton,
  Button
 } from "@mui/material";
-
+import AssignmentAddIcon from '@mui/icons-material/AssignmentAdd';
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import SidBar from "./dachboard/SIDEBAR/sidbar";
 import Appar from "./dachboard/SIDEBAR/appar";
@@ -291,20 +290,7 @@ const handleOpenModal = (uuid,status) => {
             color: (theme) => theme.palette.secondary.main,
           }}
         >
-          <ArticleIcon sx={{ fontSize: 30}} />
-          <ArrowUpwardIcon
-            sx={{
-              position: 'absolute',
-               top: 24,
-              right: 10,
-              fontSize: 6,
-              backgroundColor: 'white',
-              color: 'black',
-              transform: 'rotate(60deg)',
-              borderRadius: '50%',
-              padding: '2px',border: "3px solid rgb(14, 74, 35)",
-            }}
-          />
+         <AssignmentAddIcon/>
         </IconButton>
       </TableCell>
     </TableRow>

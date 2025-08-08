@@ -1,10 +1,9 @@
 import SidBar from "../../deywan/dachboard/SIDEBAR/sidbar";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import TextSnippetIcon from "@mui/icons-material/TextSnippet";
-import AddIcon from "@mui/icons-material/Add";
-import {
+import SvgIcon from "@mui/material/SvgIcon";
+import { CircularProgress } from "@mui/material";
+import AddToQueueIcon from '@mui/icons-material/AddToQueue';import {
   Typography,
   Grid,
   Paper,
@@ -13,21 +12,21 @@ import {
   StepLabel,
   TextField,
 } from "@mui/material";
-import NoteIcon from "@mui/icons-material/Note";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+        import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import { useEffect, useState } from "react";
 import AddSpeclist from "./event/ADDspeclist";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchspeclise } from "../../../reducer/managerexam/showspeclice";
 import EDITSpeclist from "./event/editspeclist";
-
-
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 
 export default function Speclist(){
+   const stateRoll = useSelector((state) => state.user);
+  const isSub_exam=stateRoll.roles[0].includes("رئيس الامتحانات")
     const[addspeclist,setAddspeclist]=useState(false)
         const[editspeclist,setEditspeclist]=useState(false)
 const [selectedid, setSelectedid] = useState(null);
-
       const state = useSelector((state) => state.fetchall);
       const selectedSpec = state.data.find(item => item.id === selectedid);
 
@@ -81,8 +80,7 @@ function handleedit(id) {
             }}
           >
             <Grid container spacing={2}>
-              {/* زر رفع ملف */}
-              <Grid item xs={12} sm={6} md={3}>
+              {isSub_exam && (  <Grid item xs={12} sm={6} md={3}>
                 <Button
                  onClick={()=>{setAddspeclist(true)}}
                   variant="outlined"
@@ -98,24 +96,7 @@ function handleedit(id) {
                     borderRadius: "5%",
                   }}
                 >
-                  <Box
-                    position="relative"
-                    display="inline-flex"
-                    width={40}
-                    height={40}
-                  >
-                    <TextSnippetIcon sx={{ fontSize: 50 }} />
-                    <AddIcon
-                      sx={{
-                        position: "absolute",
-                        top: 2,
-                        right: 2,
-                        fontSize: 16,
-                        backgroundColor: "rgb(233, 218, 218)",
-                        borderRadius: "50%",
-                      }}
-                    />
-                  </Box>
+                 <LocalHospitalIcon  sx={{ fontSize: "56px" }}/>
                   <Typography
                     sx={{ mt: 2 }}
                     style={{ fontSize: "20px", fontWeight: "700", mt: -2 }}
@@ -124,17 +105,73 @@ function handleedit(id) {
                   </Typography>
                  
                 </Button>
-              </Grid>
+              </Grid>)}
+            
               {/* add file */}
             
               {/* add ============================file============================================= */}
             
                     
               {/* أوراق المعاملات */}
-             {state.data && state.data.length > 0 && state.data.map((item) => (
-                <Grid item xs={12} sm={6} md={3} key={item.id}>
+             {state.isloading ?(<> 
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: 300, 
+        width: "100%",
+      }}
+    >
+      <CircularProgress sx={{ color: "green" }} size={60} />
+    </Box>
+  </>):
+             !state.loading && state.data.length === 0 ? (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: isSub_exam?"150px":"750px",
+        width: "100%",
+        color: "gray",
+        textAlign: "center",
+        position: "relative", // لضمان التوسيط العمودي
+      }}
+    >
+      <ContentPasteSearchIcon sx={{ fontSize: 140, mb: 2 }} />
+      <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: "22px" }}>
+        لا يوجد اختصاصات لعرضها في الوقت الحالي
+      </Typography>
+
+      <Typography
+        variant="body1"
+        sx={{ fontWeight: "bold", fontSize: "22px", mb: 3 }}
+      >
+        لم يتم إضافة أي اختصاص بعد.
+      </Typography>
+
+      {isSub_exam && (
+        <Typography
+          variant="body1"
+          sx={{
+            fontWeight: "bold",
+            fontSize: "22px",
+            mb: 3,
+            color: "rgb(14,75,35)",
+          }}
+        >
+          يمكنك اضافة المزيد من الاختصاصات في الزر أعلاه
+        </Typography>
+      )}
+    </Box>
+) : ( state.data &&
+  state.data.length > 0 &&
+  state.data.map((item) => (  <Grid item xs={12} sm={6} md={3} key={item.id}>
                   <Paper
-                  onClick={() => handleedit(item.id)}
+  onClick={isSub_exam ? () => handleedit(item.id) : undefined}
+                 
                     variant="outlined"
                     elevation={3}
                     sx={{
@@ -162,7 +199,7 @@ function handleedit(id) {
                     }}
                   >
                     {/* الأيقونة - في الأعلى اليسار */}
-                    <NoteIcon
+                    <AddBoxIcon
                       sx={{
                         position: "absolute",
                         top: 8,
@@ -246,7 +283,11 @@ function handleedit(id) {
                     
                   </Paper>
                 </Grid>
-              ))}
+             
+             
+             
+             
+        )))}
             </Grid>
           </Box>
         </Box>

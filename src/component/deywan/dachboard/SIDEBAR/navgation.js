@@ -11,7 +11,8 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import GroupIcon from "@mui/icons-material/Group";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import ThirteenMpIcon from '@mui/icons-material/ThirteenMp';
-import EditIcon from '@mui/icons-material/Edit';
+          import InventoryIcon from '@mui/icons-material/Inventory';
+          import FiveKIcon from '@mui/icons-material/FiveK';
 import AssignmentIcon from '@mui/icons-material/Assignment';import CloudIcon from "@mui/icons-material/Cloud";
 // react-router
 import { NavLink } from "react-router-dom";
@@ -22,9 +23,9 @@ export default function Navgation() {
   const state = useSelector((state) => state.user);
 const isdeywan=state.roles[0].includes("رئيس الديوان")
 const isSub_Admin=state.roles[0].includes("نائب المدير")
-const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
-const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
-const isAdmin=state.roles[0].includes("المدير")
+const isSub_exam=state.roles?.some(role => role ==="رئيس الامتحانات")
+const ismanger_exam=state.roles?.some(role => role ==="موظف الامتحانات")
+  const isAdmin = state.roles?.some(role => role === "المدير")
 
 
   return (
@@ -102,7 +103,7 @@ const isAdmin=state.roles[0].includes("المدير")
       <NavLink to="/enter" style={{ textDecoration: "none", width: "100%" }}>
         <Button
           sx={{
-            justifyContent: "flex-start",
+            justifyContent: "flex-start", 
             backgroundColor:
               currentPath === "/enter" ? "rgb(14, 74, 35)" : "transparent",
             color: currentPath === "/enter" ? "white" : "black",
@@ -337,7 +338,7 @@ const isAdmin=state.roles[0].includes("المدير")
             },
           }}
         >
-                 <AssignmentIcon sx={{ marginRight: 7, fontSize: 32 }} />
+                 <InventoryIcon sx={{ marginRight: 7, fontSize: 32 }} />
           <h2
             style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}>
             {" "}
@@ -475,7 +476,7 @@ const isAdmin=state.roles[0].includes("المدير")
             },
           }}
         >
-          <InsertDriveFileIcon sx={{ marginRight: 7, fontSize: 32 }} />
+          <FiveKIcon sx={{ marginRight: 7, fontSize: 32 }} />
           <h2
             style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
           >

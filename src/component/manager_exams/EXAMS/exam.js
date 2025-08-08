@@ -86,7 +86,7 @@ const isAdmin=state.roles[0].includes("المدير")
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl", backgroundColor: "rgb(233,232,232)" }}>
       
-     {isSub_exam || isSub_Admin ||isAdmin?<SidBar /> :<SidBarComponent /> } 
+     {isSub_exam || isSub_Admin ||isAdmin ?<SidBar /> :<SidBarComponent /> } 
 
       <Box sx={{ flex: 1, p: 2 }}>
          <Appar/>
@@ -95,7 +95,7 @@ const isAdmin=state.roles[0].includes("المدير")
           {/* التابات */}
       <TabsExam value={value} handleChange={handleChange} />
 
-{value===2 ?(<Button  onClick={()=>{setAddProgram(true)}}  variant="contained" color="rgb(14,74,35)"  sx={{borderRadius:"30px" ,width:"11%",height:"55px",backgroundColor:"rgb(14,74,35)",color:"white",fontSize:'24px',fontWeight:'700',mr:60, }}>
+{(value===2&&isSub_exam)  ?(<Button  onClick={()=>{setAddProgram(true)}}  variant="contained" color="rgb(14,74,35)"  sx={{borderRadius:"30px" ,width:"11%",height:"55px",backgroundColor:"rgb(14,74,35)",color:"white",fontSize:'24px',fontWeight:'700',mr:60, }}>
                       اضافة برنامج 
                       </Button>):""}
           

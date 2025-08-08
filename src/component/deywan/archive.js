@@ -266,7 +266,15 @@ useEffect(() => {
         }}
       >
          
-      {offices.map((office) => (
+      {offices
+  .filter((office) => {
+    // لانو نائب
+    if (isSub_Admin) {
+      return office.id !== 10;
+    }
+    return true; // لكل الأدوار غير  النائب عرض الكل
+  }).map((office) => (
+        
         <MenuItem key={office.id} value={office.id}>
           {office.name}
         </MenuItem>

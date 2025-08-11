@@ -1,519 +1,352 @@
-
-
-
-
 import {
   Box,
   Typography,
- 
   Paper,
-   Modal,
+  Modal,
   Grid,
-  Button,
+  CircularProgress,
+  IconButton,
+  Dialog,
+  DialogContent,
   Checkbox,
-  
-  TextField,
- 
+  Button,
 } from "@mui/material";
-import NoteIcon from '@mui/icons-material/Note';import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { useEffect } from "react";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import ImageIcon from "@mui/icons-material/Image";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import CloseIcon from "@mui/icons-material/Close";
+import NoteIcon from "@mui/icons-material/Note";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { useEffect, useState } from "react";
+import { getData } from "../../../API/apiService";
+import { BaseUrl, Show, TRANSACTION } from "../../../API/api";
 
-const mockDoctorData = {
-  fullName: "محمد ملهم",
-  fatherName: "خالد",
-  lastName: "الزقيمي",
-  phone: "+963987653402",
-  landline: "0112217566",
-  nationalId: "1234567890",
-  birthPlace: "دمشق",
-  birthDate: "2000-09-17",
-  university: "دمشق",
-  graduationDate: "2013-09-17",
-  registrationNumber: "1809",
-  specialization: "جراحة عامة",
-  degree: "طبيب بشري",
-  address: "دمشق - القنوات",
-  mainSpecialization: true,
-  licenseStatus: "مؤقت",
-  registrationType: "رئيسي",
-  sessionMonth: "تشرين الأول",
-  sessionYear: "2025",
-};
+export default function EXPORTMAILS({ open, onClose, uuid }) {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState(null);
+  const [showImage, setShowImage] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [editLoading, setEditLoading] = useState(false);
 
-export default function EXPORTMAILS({open,onClose,uuid}){
   useEffect(() => {
-      if (open && uuid) {
-        console.log(uuid)
+    if (open && uuid) {
+      showTransaction();
+    }
+  }, [open, uuid]);
+
+  async function showTransaction() {
+    setLoading(true);
+    try {
+      const response = await getData(`${BaseUrl}${TRANSACTION}${Show}${uuid}`);
+      if (response.success) {
+        setFormData(response.data);
       }
-    }, [open, uuid]);
-    return(
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-<>
+  function openImageDialog(url) {
+    setImageUrl(url);
+    setShowImage(true);
+  }
 
-<Modal
- open={open}
-  onClose={onClose}
-  
-  aria-labelledby="add-employee-modal"
-  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
->
-  
-  <Paper
-    elevation={4}
-    sx={{
-      width: 600,
-      maxHeight: '90vh',
-      p: 2,
-      borderRadius: 3,
-      direction: 'rtl',
-      outline: 'none',
-      
-    }}
-  >
-    <HighlightOffIcon
-      onClick={onClose}
-      sx={{ mr: 70, position: 'absolute' ,cursor:"pointer" }}
-    />
-    <Typography
-         variant="h6"
-         sx={{
-           mb: 3,
-           fontWeight: 'bold',
-           color: 'black',
-           mr: 30,
-           pb: 1,
-         }}
-       >
-         بيان برنامج تدريبي
-       </Typography>
-   
-       <Grid container spacing={2}>
-         {/* الاسم الأول + رقم الجوال */}
-         <Grid container spacing={2}>
-           <Grid item xs={6}>
-             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
-               <Typography sx={{ minWidth: '120px' ,fontSize:"12px"}}>الاسم الأول:</Typography>
-                <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
-             </Box>
-           </Grid>
-           <Grid item xs={6}>
-             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-               <Typography sx={{ minWidth: '120px',fontSize:"12px" }}>رقم الجوال :</Typography>
-                <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
-             </Box>
-           </Grid>
-         </Grid>
-   
-         {/* اسم الأب + الهاتف الأرضي */}
-         <Grid container spacing={2}>
-           <Grid item xs={6}>
-             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-               <Typography sx={{ minWidth: '120px',fontSize:"12px" }}>الاسم الأب:</Typography>
-               <Typography sx={{ fontSize: "13px", px: 1 }}>
-  {mockDoctorData.fullName}
-</Typography>
-             </Box>
-           </Grid>
-           <Grid item xs={6}>
-             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-               <Typography sx={{ minWidth: '120px',fontSize:"12px" }}>الهاتف الأرضي :</Typography>
-                 <Typography sx={{ fontSize: "13px", px: 1 }}>
-  {mockDoctorData.fullName}
-</Typography>
-             </Box>
-           </Grid>
-         </Grid>
-   
-         {/* اسم العائلة + السكن */}
-         <Grid container spacing={2}>
-           <Grid item xs={6}>
-             <Box sx={{ display: 'flex', alignItems: 'center', mb: -1 }}>
-               <Typography sx={{ minWidth: '120px' ,fontSize:"12px"}}>الاسم العائلة:</Typography>
-                <Typography sx={{ fontSize: "13px", px: 1 }}>
-  {mockDoctorData.fullName}
-</Typography>
-             </Box>
-           </Grid>
-           <Grid item xs={6}>
-             <Box sx={{ display: 'flex', alignItems: 'center', mb: -3 }}>
-               <Typography sx={{ minWidth: '120px',fontSize:"12px" }}>
-                 عنوان السكن المعتمد :
-               </Typography>
-                 <Typography sx={{ fontSize: "13px", px: 1 }}>
-  {mockDoctorData.fullName}
-</Typography>
-             </Box>
-           </Grid>
-         </Grid>
-   
-         {/* الرقم الوطني */}
-         <Grid item xs={12} sm={6}>
-           <Box sx={{ display: 'flex', alignItems: 'center', mb: -1 }}>
-             <Typography sx={{ minWidth: '120px' ,fontSize:"12px"}}>الرقم الوطني :</Typography>
-              <Typography sx={{ fontSize: "13px", px: 1 }}>
-  {mockDoctorData.fullName}
-</Typography>
-           </Box>
-         </Grid>
-   
-         {/* باقي النموذج كما هو */}
-        <Grid item xs={12}>
-           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -3 }}>
-             <Typography  sx={{fontSize:"12px"}}>  الاختصاص:</Typography>
-             <Typography sx={{ fontSize: "13px", px: 1 }}>
-  {mockDoctorData.fullName}
-</Typography>
-           <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1, mr:2 ,fontSize:"12px"}}> رئيسي </Typography>
-   <Checkbox checked={mockDoctorData.mainSpecialization} size="small"  sx={{mr:-1 ,color: " rgb(14,74,35)"}}/>
-           </Box>
-         
-         
-          <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1,fontSize:"12px"}}> فرعي </Typography>
-   <Checkbox   checked={mockDoctorData.mainSpecialization} size="small"  sx={{mr:-1,color: " rgb(14,74,35)"}}/>
-           </Box>
-       
-            
-                <Typography sx={{fontSize:"12px"}} >مديرية الصحة:</Typography>
-             <Typography sx={{ fontSize: "13px", px: 1 }}>
-  {mockDoctorData.fullName}
-</Typography>
-           </Box>
-         </Grid>
-   
-         <Grid item xs={12}>
-           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -3 }}>
-             <Typography sx={{ whiteSpace: 'nowrap' ,fontSize:"12px"}}>مقبول في :</Typography>
-            
-           <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1, whiteSpace: 'nowrap' ,fontSize:"12px"}}> مفاضلة ترميمية</Typography>
-   <Checkbox  checked={mockDoctorData.mainSpecialization} size="small"  sx={{mr:-1 ,color: " rgb(14,74,35)"}}/>
-           </Box>
-         
-         
-          <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1,whiteSpace: 'nowrap' ,fontSize:"12px"}}>  مفاضلة عامة</Typography>
-   <Checkbox checked={mockDoctorData.mainSpecialization} size="small"  sx={{mr:-1,color: " rgb(14,74,35)"}}/>
-           </Box>
-       
-             <Typography sx={{mr:2,fontSize:"12px"}}>المحافظة:</Typography>
-              <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -1,
-                 }
-               }}
-             />
-                <Typography sx={{fontSize:"12px"}}>السنة:</Typography>
-              <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
-           </Box>
-         </Grid>
-   
-         <Grid item xs={12}>
-           <Box sx={{ mt: 2 ,display: 'flex', alignItems: 'center'}}>
-             <Typography sx={{whiteSpace: 'nowrap' ,fontSize:"12px"}} >عدد سنوات الاختصاص حسب نظام الاقامة  : </Typography>
-             <TextField
-                        variant="standard"
-                        fullWidth
+  function EDITRCIPITSTATUS(status) {
+    setEditLoading(true);
+    setTimeout(() => {
+      console.log("تم تغيير الحالة إلى:", status);
+      setEditLoading(false);
+      setShowImage(false);
+    }, 1000);
+  }
+
+  return (
+    <>
+      <Modal
+        open={open}
+        onClose={onClose}
+        aria-labelledby="export-mails-modal"
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Paper
+          elevation={4}
+          sx={{
+            width: 900,
+            maxHeight: "90vh",
+            p: 3,
+            borderRadius: 3,
+            direction: "rtl",
+            outline: "none",
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            position: "relative",
+          }}
+        >
+          <HighlightOffIcon
+            onClick={onClose}
+            sx={{
+              position: "absolute",
+              right: 16,
+              top: 16,
+              cursor: "pointer",
+              color: "red",
+              zIndex: 10,
+            }}
+          />
+
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 3,
+              fontWeight: "bold",
+              color: "black",
+              textAlign: "center",
+            }}
+          >
+            {formData?.form_name || "بدون اسم"}
+          </Typography>
+
+          {loading ? (
+            <Box sx={{ display: "flex", justifyContent: "center", my: 3 }}>
+              <CircularProgress />
+            </Box>
+          ) : formData ? (
+            <>
+              <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                {formData.elements.map((el, i) => (
+                  <Grid item xs={12} sm={6} key={i}>
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                      <Typography
                         sx={{
-                          width: '20%',
-                          input: {
-                            px: 1,
-                            fontSize: "13px",
-                            borderBottom: '1px dashed gray !important',
-                          },
+                          fontSize: "20px",
+                          fontWeight: "700",
+                          color: "rgb(98,91,113)",
+                          whiteSpace: "nowrap",
+                          mr: 1,
                         }}
-                        InputProps={{
-                          disableUnderline: true,
-                          sx: {
-                            
-                            px: 1,
-                            minHeight: '28px',
-                            mt: -2,
-                            mr: -1,
-                          }
-                        }}
-                      />
-                </Box>
-         </Grid>
-   
-         <Grid item xs={12}>
-           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -3 }}>
-             <Typography sx={{whiteSpace: 'nowrap' ,fontSize:"12px"}}>ناجح في الاختبار النهائي الكتابي دورة شهر :</Typography>
-            
-           <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1,fontSize:"12px"}}> نيسان</Typography>
-   <Checkbox size="small" sx={{color: " rgb(14,74,35)"}}/>
-           </Box>
-         
-         
-          <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1,fontSize:"12px"}}> تشرين الاول</Typography>
-   <Checkbox size="small" sx={{color: " rgb(14,74,35)"}} />
-           </Box>
-       
-             <Typography sx={{mr:2,fontSize:"12px"}}>السنة:</Typography>
-             <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
-           </Box>
-         </Grid>
-   
-         <Grid item xs={12}>
-           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -3 }}>
-             <Typography sx={{whiteSpace: 'nowrap' ,fontSize:"12px"}}>ناجح في الاختبار النهائي العملي دورة شهر :</Typography>
-            <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1,fontSize:"12px"}}> نيسان</Typography>
-   <Checkbox size="small"sx={{color: " rgb(14,74,35)"}}/>
-           </Box>
-             <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1,fontSize:"12px"}}> تشرين الاول</Typography>
-   <Checkbox size="small"sx={{color: " rgb(14,74,35)"}} />
-           </Box>
-             <Typography  sx={{mr:2,fontSize:"12px"}}>السنة:</Typography>
-             <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
-           </Box>
-         </Grid>
-   
-         <Grid item xs={12}>
-           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -3 }}>
-             <Typography sx={{whiteSpace: 'nowrap' ,fontSize:"12px"}}>ناجح في الاختبار السنة الاولى  دورة شهر :</Typography>
-            <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1 ,mr:1.2,fontSize:"12px"}}> نيسان</Typography>
-   <Checkbox size="small" sx={{color: " rgb(14,74,35)"}}/>
-           </Box>
-             <Box sx={{ display: 'flex'}}>
-    
-   <Typography sx={{mt:1,fontSize:"12px"}}> تشرين الاول</Typography>
-   <Checkbox size="small" sx={{color: " rgb(14,74,35)"}}/>
-           </Box>
-             <Typography  sx={{mr:2,fontSize:"12px"}}>السنة:</Typography>
-             <TextField
-               variant="standard"
-               fullWidth
-               sx={{
-                 width: '20%',
-                 input: {
-                   px: 1,
-                   fontSize: "13px",
-                   borderBottom: '1px dashed gray !important',
-                 },
-               }}
-               InputProps={{
-                 disableUnderline: true,
-                 sx: {
-                   
-                   px: 1,
-                   minHeight: '28px',
-                   mt: -2,
-                   mr: -6,
-                 }
-               }}
-             />
-           </Box>
-         </Grid>
+                      >
+                        {el.label} :
+                      </Typography>
+                      {el.type === 6 ? (
+                       <Checkbox
+  checked={el.label === el.value}
+  disabled
+  sx={{
+    color: el.label === el.value ? "green" : "rgba(0,0,0,0.4)",
+    '&.Mui-checked': {
+      color: "green",
+    },
+  }}
+/>
 
-      {/* المرفقات */}
-      <Grid item xs={12}>
-       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3, mt: 1 }}>
-  <Typography>
-    المرفقات:
-    <label htmlFor="upload-image-file">
-      <input
-        id="upload-image-file"
-        type="file"
-        accept="image/*"
-        style={{ display: 'none' }}
-      />
-      <Button
-        component="span"
-        variant="outlined"
-        fullWidth
-        sx={{
-          height: 100,
-          width: 100,
-          borderStyle: 'dashed',
-          border: '2px dotted rgba(83, 79, 79, 0.79)',
-          display: 'flex',
-          flexDirection: 'column',    
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: '5%',
-          textAlign: 'center',mr:9,mt:-1
-        }}
-      >
-        <NoteIcon sx={{ fontSize: 30, color: 'black', mb: 1 }} />
-        <Typography sx={{ fontSize: '10px' }}>
-          صورة مصدقة عن شهادة البورد
-        </Typography>
-      </Button>
-    </label>
-  </Typography>
+                      ) : (
+                        <Typography
+                          sx={{
+                            fontSize: "20px",
+                            fontWeight: "700",
+                            color: "black",
+                            userSelect: "text",
+                          }}
+                        >
+                          {el.value || ""}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
 
+              {/* المرفقات - كلمة المرفقات */}
+              {formData.media?.length > 0 && (
+                <>
+                  <Typography
+                    sx={{
+                      fontSize: "20px",
+                      fontWeight: "700",
+                      mt: 3,
+                      mb: 1,
+                      color: "black",
+                    }}
+                  >
+                    المرفقات
+                  </Typography>
 
-   <Button
-        component="span"
-        variant="outlined"
-        fullWidth
-        sx={{
-          height: 100,
-          width: 100,
-          borderStyle: 'dashed',
-          border: '2px dotted rgba(83, 79, 79, 0.79)',
-          display: 'flex',
-          flexDirection: 'column',    
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: '5%',
-          textAlign: 'center',mt:1.6
-        }}
-      >
-        <NoteIcon sx={{ fontSize: 30, color: 'black', mb: 1 }} />
-        <Typography sx={{ fontSize: '10px' }}>
-            جدول العمليات  
-        </Typography>
-      </Button>
-          
+                  <Grid container spacing={2}>
+                    {formData.media.map((m, i) => {
+                      // رابط صورة (receipt أو image)
+                      const imageUrl = m.receipt || m.image;
+                      if (imageUrl) {
+                        return (
+                          <Grid item xs={12} sm={6} key={i}>
+                            <Button
+                              variant="outlined"
+                              onClick={() => openImageDialog(imageUrl)}
+                              sx={{
+                                height: 130,
+                                width: "100%",
+                                borderStyle: "dashed",
+                                border: "2px dashed rgba(197, 193, 193, 0.79)",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderRadius: "10%",
+                                backgroundColor: "white",
+                              }}
+                            >
+                              <NoteIcon
+                                sx={{ fontSize: 30, color: "black", mb: 1 }}
+                              />
+                              <Typography
+                                sx={{
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                  color: "black",
+                                  textAlign: "center",
+                                }}
+                              >
+                                صورة
+                              </Typography>
+                            </Button>
+                          </Grid>
+                        );
+                      }
+
+                      // زر الملف يظهر إذا فيه ملف
+                      if (m.file) {
+                        return (
+                          <Grid item xs={12} sm={6} key={i}>
+                            <Button
+                              variant="outlined"
+                              component="a"
+                              href={m.file}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              sx={{
+                                height: 130,
+                                width: "100%",
+                                borderStyle: "dashed",
+                                border: "2px dashed rgba(197, 193, 193, 0.79)",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderRadius: "10%",
+                                backgroundColor: "white",
+                                textDecoration: "none",
+                              }}
+                            >
+                              <InsertDriveFileIcon
+                                sx={{ fontSize: 30, color: "black", mb: 1 }}
+                              />
+                              <Typography
+                                sx={{
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                  color: "black",
+                                  textAlign: "center",
+                                }}
+                              >
+                                ملف
+                              </Typography>
+                            </Button>
+                          </Grid>
+                        );
+                      }
+
+                      // إذا ما فيه صورة ولا ملف
+                      return null;
+                    })}
+                  </Grid>
+                </>
+              )}
+
+              {/* أزرار الرفض والتحويل في آخر المودال */}
+              <Box
+                sx={{
+                  mt: 3,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: 2,
+                }}
+              >
+                <Button
+                  onClick={() => EDITRCIPITSTATUS("مرسلة")}
+                  sx={{
+                    backgroundColor: "rgba(9, 83, 35, 1)",
+                    color: "white",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                    width: "48%",
+                    "&:hover": { backgroundColor: "rgba(9, 83, 35, 0.9)" },
+                  }}
+                >
+                  {editLoading ? (
+                    <CircularProgress size={24} sx={{ color: "white" }} />
+                  ) : (
+                    "تحويل"
+                  )}
+                </Button>
+                <Button
+                  onClick={() => EDITRCIPITSTATUS("مرفوضة")}
+                  sx={{
+                    backgroundColor: "red",
+                    color: "white",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                    width: "48%",
+                    "&:hover": { backgroundColor: "darkred" },
+                  }}
+                >
+                  {editLoading ? (
+                    <CircularProgress size={24} sx={{ color: "white" }} />
+                  ) : (
+                    "رفض"
+                  )}
+                </Button>
+              </Box>
+            </>
+          ) : (
+            <Typography>لا توجد بيانات</Typography>
+          )}
+        </Paper>
+      </Modal>
+
+      {/* Dialog عرض الصورة */}
+      <Dialog open={showImage} onClose={() => setShowImage(false)} maxWidth="md" fullWidth>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            backgroundColor: "#f5f5f5",
+            padding: "8px 16px",
+          }}
+        >
+          <IconButton sx={{ color: "#0e4a23" }}>
+            <VisibilityIcon />
+          </IconButton>
+          <IconButton onClick={() => setShowImage(false)} sx={{ color: "red" }}>
+            <CloseIcon />
+          </IconButton>
         </Box>
-      </Grid>
-    </Grid>
-  </Paper>
-  
-</Modal>
-
-
-</>
-
-
-
-
-    )
+        <DialogContent sx={{ textAlign: "center" }}>
+          {loading ? (
+            <CircularProgress />
+          ) : imageUrl ? (
+            <img
+              src={imageUrl}
+              alt="Receipt"
+              style={{ maxWidth: "100%", maxHeight: "80vh", borderRadius: "8px" }}
+            />
+          ) : (
+            "لا توجد صورة متاحة"
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  );
 }

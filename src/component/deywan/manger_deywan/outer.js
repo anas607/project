@@ -217,7 +217,7 @@ function handleEditeTransction(uuid){
                     <TableCell align="center">
                       <IconButton
                              onClick={()=>{
-                      console.log(row)
+                     
                               handleRecipit(row.uuid)}}        
                                       sx={{
                                         border: "1px solid rgba(212, 208, 212, 0.31)",
@@ -278,7 +278,7 @@ function handleEditeTransction(uuid){
       <TableCell align="center">
         <IconButton
 
-          onClick={handleEditeTransction(row.uuid)}
+          onClick={()=>{handleEditeTransction(row.uuid)}}
           sx={{
             border: "1px solid rgba(212, 208, 212, 0.31)",
             borderRadius: "50px",

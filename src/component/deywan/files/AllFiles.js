@@ -1,5 +1,5 @@
 
- import React, { useEffect, useState } from "react";
+ import React, { use, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchForm } from "../../../reducer/admin/forms";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
+import DeatilsForm from "../../mails/form/detealsform";
 
 const headStyle = {
   color: "white",
@@ -37,11 +38,23 @@ const headStyle = {
 };
 
 export default function AllFILES(){
+  const [selectedStatus, setSelectedStatus] = useState("");
+
+    const[selectedid,setselectedid]=useState("")
+
+  const[shoeDeatils,setShoeDeatils]=useState(false)
     const state=useSelector((state)=>state.fetchform)
     const dispatch=useDispatch()
     useEffect(()=>{
         dispatch(fetchForm())
     },[dispatch])
+     function handleShowDeatiels(id ,status){
+      setselectedid(id)
+      setSelectedStatus(status)
+setShoeDeatils(true)
+    }
+      
+    
     return(
         <>
   
@@ -138,7 +151,7 @@ export default function AllFILES(){
 
         <TableCell align="center">
           <IconButton
-            sx={{
+ onClick={() => handleShowDeatiels(row.id ,row.status)}            sx={{
               border: "1px solid rgba(212, 208, 212, 0.31)",
               borderRadius: "50px",
               width: 52,
@@ -178,7 +191,13 @@ export default function AllFILES(){
       </Table>
     </TableContainer>
     
-    
+    {<DeatilsForm  open={shoeDeatils}
+    onClose={()=>{setShoeDeatils(false)}}
+   id= {selectedid}
+        onSuccess={() => dispatch(fetchForm())}
+        status={selectedStatus}
+   
+   /> }
     
           </Box>
    

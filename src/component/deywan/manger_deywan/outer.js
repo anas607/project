@@ -33,6 +33,9 @@ import { fetchexportouter } from "../../../reducer/deywan/outer/outer";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import EXPORTMAILS from "../../mails/form/exportmails";
+import ShowReicipet from "../../mails/form/showRecipiet";
+
+
 // بيانات البريد الوارد (وارد)
 const headerStyle = {
   color: "white",
@@ -43,7 +46,11 @@ const headerStyle = {
 // بيانات البريد الصادر (صادر)
 
 
-
+const headofStyle = {
+  color: "black",
+ fontWeight: "700" ,fontSize:'20px',
+  py: 1.5,whiteSpace:'nowrap'
+};
 
 const headStyle = {
   color: "white",
@@ -52,6 +59,9 @@ const headStyle = {
 };
 
 const Outer_EDeywan = () => {
+  const [showrecipit,setShowRecipit]=  useState(false)
+     const [id, setid] = useState(null);
+
   const stateexport=useSelector((state)=>state.outerexport)
 
     const dispatch = useDispatch()
@@ -65,7 +75,6 @@ const Outer_EDeywan = () => {
    const [anchorEl, setAnchorEl] = useState(null);
   const [selectedType, setSelectedType] = useState("البريد الوارد");
   const [openModal, setOpenModal] = useState(false);
-const[close,setclose]=useState(false)
    const handleClick = (event) => setAnchorEl(event.currentTarget);
   const isInbox = selectedType === "البريد الوارد";
   const rows = isInbox ? stateimport.data : stateexport.data;
@@ -76,6 +85,11 @@ useEffect(() => {
     dispatch(fetchexportouter());
   }
 }, [selectedType, dispatch]);
+
+function handleRecipit(uuid){
+setid(uuid)
+setShowRecipit(true)
+}
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
       <SidBarComponent />
@@ -185,19 +199,21 @@ useEffect(() => {
               ) :( isMaleaManager ? (
                 rows.map((row, index) => (
                   <TableRow key={index}>
-                    <TableCell sx={headStyle} align="center">{row.uuid}</TableCell>
-                    <TableCell sx={headStyle} align="center">{row.doctor_name}</TableCell>
-                    <TableCell sx={headStyle}align="center">{row.receipt_number}</TableCell>
-                    <TableCell sx={headStyle}align="center">{row.form_name}</TableCell>
-                    <TableCell sx={headStyle} align="center">{row.form_cost} ل.س</TableCell>
-                    <TableCell sx={headStyle} align="center">{row.submitted_at}</TableCell>
-                    <TableCell sx={headStyle} align="center">
+                    <TableCell sx={headofStyle} align="center">{row.uuid}</TableCell>
+                    <TableCell sx={headofStyle} align="center">{row.doctor_name}</TableCell>
+                    <TableCell sx={headofStyle}align="center">{row.receipt_number}</TableCell>
+                    <TableCell sx={headofStyle}align="center">{row.form_name}</TableCell>
+                    <TableCell sx={headofStyle} align="center">{row.form_cost} ل.س</TableCell>
+                    <TableCell sx={headofStyle} align="center">{row.submitted_at}</TableCell>
+                    <TableCell sx={headofStyle} align="center">
                       {isInbox ? row.received_at
               : row.sent_at}
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
-                                     
+                             onClick={()=>{
+                      console.log(row)
+                              handleRecipit(row.uuid)}}        
                                       sx={{
                                         border: "1px solid rgba(212, 208, 212, 0.31)",
                                         borderRadius: "50px",
@@ -232,23 +248,23 @@ useEffect(() => {
   rows.map((row, index) => (
     <TableRow key={index} sx={{ borderBottom: "2px solid #1f4d38" }}>
 
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.id}</TableCell>
+      <TableCell sx={headofStyle} align="center">{row.id}</TableCell>
       <TableCell align="center">
         <Avatar  sx={{ width: 56, height: 56, margin: "auto" }}  src={row.senderImg || row.receiverImg} />
       </TableCell>
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
+      <TableCell sx={headofStyle} align="center">
         {isInbox ? row.senderName : row.receiverName}
       </TableCell>
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
+      <TableCell sx={headofStyle} align="center">
         {isInbox ? row.senderPhone : row.receiverPhone}
       </TableCell>
-            <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">{row.mailTitle}</TableCell>
+            <TableCell sx={headofStyle} align="center">{row.mailTitle}</TableCell>
 
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
+      <TableCell sx={headofStyle} align="center">
         {isInbox ? row.senderName : row.receiverName}
       </TableCell>
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }}  align="center">{row.dateSubmitted}</TableCell>
-      <TableCell sx={{  fontWeight: "700" ,fontSize:'16px' }} align="center">
+      <TableCell sx={headofStyle} align="center">{row.dateSubmitted}</TableCell>
+      <TableCell sx={headofStyle} align="center">
         {isInbox ? row.dateReceived : row.dateSent}
       </TableCell>
       <TableCell align="center">
@@ -290,7 +306,12 @@ useEffect(() => {
   </Table>
 </TableContainer>
 
+{<ShowReicipet   open={showrecipit}
+onClose={()=>{setShowRecipit(false)}}
+uuid={id}
 
+
+/>}
 
       </Box>
 

@@ -1,20 +1,12 @@
 import { Box, Paper, Typography } from "@mui/material";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import CreateIcon from "@mui/icons-material/Create";
-import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
-import GroupRemoveOutlinedIcon from "@mui/icons-material/GroupRemoveOutlined";
-import LogoutIcon from "@mui/icons-material/Logout";
-import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 import { BaseUrl, showInternalStatistics } from "../../../../API/api";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../../../API/apiService";
 
 import { useEffect } from "react";
-import internalStatistics, {
+import  {
   setInternalStatistics,
 } from "../../../../reducer/internalStatistics";
-import { VictoryPie } from "victory";
 import Polar from "../chart/polar";
 
 export default function Peaper() {
@@ -56,7 +48,7 @@ export default function Peaper() {
         sx={{ flex: 1, backgroundColor: "white", borderRadius: 2, padding: 2 }}
       >
         <Typography
-          sx={{ marginLeft: "79%", fontSize: "16px", mt: 1, fontWeight: "700" }}
+          sx={{ marginLeft: "79%", fontSize: "42px", mt: 1, fontWeight: "700",whiteSpace:'nowrap' }}
           variant="h5"
         >
           البريد الداخلي
@@ -83,7 +75,7 @@ export default function Peaper() {
 
             <Typography
               sx={{
-                fontSize: "10px",
+                fontSize: "18px",
                 fontWeight: "700",
                 marginTop: "1%",
               //  marginBottom: "5%",
@@ -107,7 +99,7 @@ export default function Peaper() {
               />
 
               <Typography
-                sx={{ fontSize: "10px", mr: 1, mt: 3, fontWeight: "700" }}
+                sx={{ fontSize: "18px", mr: 1, mt: 3, fontWeight: "700" }}
                 variant="h5"
               >
                 <Box
@@ -138,7 +130,7 @@ export default function Peaper() {
               />
 
               <Typography
-                sx={{ fontSize: "10px", mr: 1, fontWeight: "700" }}
+                sx={{ fontSize: "18px", mr: 1, fontWeight: "700" }}
                 variant="h5"
               >
                 <Box
@@ -169,7 +161,7 @@ export default function Peaper() {
               />
 
               <Typography
-                sx={{ fontSize: "10px", mr: 1, fontWeight: "700" }}
+                sx={{ fontSize: "18px", mr: 1, fontWeight: "700" }}
                 variant="h5"
               >
                 <Box

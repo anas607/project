@@ -103,7 +103,7 @@ export default function Advertisments() {
                         <Loading />
                       </TableCell>
                     </TableRow>
-                  ) : Array.isArray(state.data?.[0]) && state.data[0].length === 0 ? (
+                  ) : !state.isloading && Array.isArray(state.data?.[0]) && state.data[0].length === 0 ? (
                     <NoData />
                   ) : Array.isArray(state.data) && state.data.length > 0 ? (
                     state.data.map((row, index) => (

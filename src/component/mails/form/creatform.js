@@ -26,6 +26,8 @@ import { getData, postData } from "../../../API/apiService";
 import { BaseUrl,CREATE_INTERNAL_MAIL, FETCHOFFICE } from "../../../API/api";
 
 export default function CreatMails({ open, onClose  }) {
+  
+
   const [offices, setOffices] = useState([]);
 const [selectedOfficeId, setSelectedOfficeId] = useState("");
   const [subject,setsubject]= useState("")
@@ -132,7 +134,13 @@ async function handleCreat(){
       {/* العمود الأيمن */}
       <Grid item xs={12} sm={6}>
        
-
+<Box sx={{
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  px: 2,
+  pt: 2
+}}>
         <Box sx={{ mb: 3 }}>
           <Typography variant="subtitle1" sx={{ mb: 1 ,color: "black",fontSize:"20px",fontWeight: '700',}}>
              العنوان
@@ -143,46 +151,62 @@ async function handleCreat(){
        
 
         
-      </Grid>
+     
 
       {/* العمود الأيسر */}
-      <Grid item xs={12} sm={6}>
-
-        <Box sx={{ mb: 3, mr: -3 }}>
-  <Typography
-    variant="subtitle1"
-    sx={{
-      mb: 1,
-      color: "black",
-      fontSize: "20px",
-      fontWeight: "700",
-    }}
-  >
-    اسم المكتب
-  </Typography>
-  <FormControl sx={{ width: "60%" }}>
-    <Select
-      displayEmpty
-      value={selectedOfficeId}
+      <FormControl sx={{
+            minWidth: 300,
+            border: '2px solid rgb(14, 75, 35)',
+            borderRadius: '8px',
+            px: 1,
+            py: 0.5
+          }}>
+            <InputLabel
+              id="filter-label"
+              sx={{
+                color: "rgb(14, 75, 35)",
+                fontSize: '18px',
+                fontWeight: '700',
+                display: 'flex',
+                alignItems: 'center',
+                '&.Mui-focused': { color: "rgb(14, 75, 35)" },
+              }}
+            >
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                تصفية حسب الدائرة
+               
+              </Box>
+            </InputLabel>
+      
+            <Select
+              value={selectedOfficeId}
       onChange={(e) => setSelectedOfficeId(e.target.value)}
-      inputProps={{ "aria-label": "اختر المكتب" }}
-    >
-      <MenuItem disabled value="">
-        اختر المكتب
-      </MenuItem>
-      {offices.map((office) => (
-        <MenuItem key={office.id} value={office.id}>
-          {office.name}
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
-</Box>
-
-
-       
-      </Grid>
+              labelId="filter-label"
+              fullWidth
+              sx={{
+                color: "rgb(14, 75, 35)",
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: "rgb(14, 75, 35)",
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: "rgb(14, 75, 35)",
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: "rgb(14, 75, 35)",
+                }
+              }}
+            >
+              {offices.map((office) => (
+                <MenuItem key={office.id} value={office.id}>
+                  {office.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+       </Box>
     </Grid>
+    </Grid>
+     
      <Typography variant="subtitle1" sx={{ mb: 1,color: "black",fontSize:"20px",fontWeight: '700' }}>
              الموضوع
 

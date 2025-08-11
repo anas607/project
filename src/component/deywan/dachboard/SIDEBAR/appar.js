@@ -64,7 +64,7 @@ export default function Appar() {
             fontWeight: "700",
             marginTop: "1.9%",
             mr: 0.3,
-            width: "1457px",
+            width: "2020px",
             direction: "rtl",
             "& .MuiOutlinedInput-root": {
               borderRadius: "7px",
@@ -79,7 +79,7 @@ export default function Appar() {
               paddingRight: "5px",
               color: "rgb(105, 105, 102)",
               fontSize: "100%",
-              height: "34px",
+              height: "64px",
             },
           }}
           InputProps={{
@@ -134,8 +134,8 @@ export default function Appar() {
         <Paper
           elevation={4}
           sx={{
-            width: 420,
-            height: 400,
+            width: 678,
+            height: 764,
             maxHeight: 900,
             overflowY: "auto",
             borderRadius: 2,
@@ -145,7 +145,7 @@ export default function Appar() {
         >
           <Typography
             variant="h6"
-            sx={{ mb: 2, mr: 20, fontSize: "24px", fontWeight: "700" }}
+            sx={{ mb: 2, mr: 20, fontSize: "24px", fontWeight: "700",alignItems:'center' }}
           >
             الإشعارات
           </Typography>

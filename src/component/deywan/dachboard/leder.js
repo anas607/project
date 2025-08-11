@@ -46,27 +46,30 @@ const isAdmin=state.roles?.some(role => role === "المدير")
   {isAdmin?<Colum/>:<SmallBoxes/>}
      
   {/* البوكسين على اليمين */}
- <Box sx={{  display: 'flex', flexDirection: 'column', height: '790px',width: 'auto', maxWidth: '1204px', }}>
+ <Box sx={{  display: 'flex', flexDirection: 'column', height: '790px',width: 'auto', maxWidth: '1604px', }}>
   
   {/* الصف العلوي - البوكسين */}  
   <Box
-    sx={{
-      backgroundColor: "rgb(233, 232, 232)",
-      display: 'flex',
-      gap: '24px',// لضبط المحاذاة
-      height: '288px',
-      width: 'auto',  
-      justifyContent: 'flex-start', 
-    }}
-  >
-    <Box sx={{ width: '550px' }}>
-      <Peaper />
-    </Box>
-
-    <Box sx={{ width: '550px' }}>
-      <PeaperOut />
-    </Box>
+  sx={{
+    backgroundColor: "rgb(233, 232, 232)",
+    display: 'flex',
+    gap: '24px',
+    width: 'auto',  
+    justifyContent: 'flex-start', 
+    mt: 3,borderRadius:'20%',
+    mb:5
+  }}
+>
+  <Box sx={{ width: '1280px', flex: 1, minHeight: '200px',borderRadius:'4%' }}>
+    <Peaper />
   </Box>
+
+  <Box sx={{ width: '1280px', flex: 1, minHeight: '200px',borderRadius:'4%' }}>
+    <PeaperOut />
+  </Box>
+</Box>
+
+  
 
   <TableBox />
 </Box>

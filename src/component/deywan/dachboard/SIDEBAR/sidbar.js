@@ -38,7 +38,7 @@ export default function SidBar(){
         sx={{
           
           width: '381px',
-          height: '960px',
+          height: '1080',
          backgroundColor: 'white',
           borderRadius: '2px',
            

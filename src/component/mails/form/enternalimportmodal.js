@@ -19,10 +19,14 @@ import { CircularProgress } from "@mui/material";
 
 
 export default function EnternalMails({open,onClose,uuid,status}){
+  const [mailStatus, setMailStatus] = useState(status);
+
 const stateMalea=useSelector((state)=>state.user.roles[0])
 const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات"];
-const isManager = employeeRoles.some(role => stateMalea.includes(role));
-  const shouldShow = !isManager || !["مرسلة", "مرفوضة"].includes(status);
+const isEmployee = employeeRoles.some(role => stateMalea.includes(role));
+// const shouldShowButtons =  !["مرسلة", "مرفوضة"].includes(mailStatus);
+  const isAdmin = stateMalea.roles?.some(role => role === "المدير")
+const disableButtons = isEmployee || isAdmin;
 
     const [mailData, setMailData] = useState({subject:"",body:"",updated_at:"",from:""});
         const [isLoading, setIsLoading] = useState(false);
@@ -35,8 +39,6 @@ if (open && uuid) {
     }
   }, [open, uuid]);
 const fetchMail = async () => {
-    setIsLoading(true); // يبدأ التحميل
-
     try {
 const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
       setMailData(res);
@@ -45,8 +47,6 @@ const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
       // console.error(  err.response.data.message)  
 
 
-    }finally{
-       setIsLoading(false);
     }
   };
  async function EditMailStatus(status){
@@ -54,11 +54,17 @@ const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
     try{
 const response = await postData(`${BaseUrl}${EDIT_STATUS_MAIL}`,{
   uuid,status
-})
+  
+}
+)
+    // setMailStatus(newStatus);
+    // await fetchMail(); 
+alert( response.message)
+
 return response.data
 
     }catch(err){
-    console.error( err.response?.data || err.message);
+    alert( err.response?.data || err.message);
 
     }finally{
        setIsLoading(false);
@@ -107,26 +113,10 @@ return response.data
       sx={{ position: 'absolute', top: 16, left: 16, cursor: 'pointer', fontSize:'30px'}}
     />
 
-  {isLoading ? (
-  <Box
-    sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100%',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      zIndex: 10,
-      backgroundColor: 'rgba(255,255,255,0.8)',
-      borderRadius: 3,
-    }}
-  >
-    <CircularProgress sx={{ color: 'green' }} size={60} />
-  </Box>
-) : (
-
+   {!mailData ? (
+<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+    <CircularProgress color="success" size={60} />
+  </Box>      ) : (
         <>
           <Typography fontWeight="700" fontSize="24px" color="black">الجمهورية العربية السورية</Typography>
           <Typography fontWeight="700" fontSize="24px" color="black">وزارة الصحة</Typography>
@@ -162,13 +152,13 @@ return response.data
 
     </Typography>
     {/* زر الإرسال */}
-    {!shouldShow && (
+    {!isEmployee && (
   <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start', mt: 55 ,ml:'-50' }}>
   <Button
+   disabled={disableButtons}
   onClick={async () => {
     try {
       await EditMailStatus( "مرسلة");
-      alert("تم قبول البريد بنجاح");
       onClose(); 
     } catch {
       alert("حدث خطأ أثناء قبول الطلب");
@@ -187,13 +177,12 @@ return response.data
            {isLoading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "قبول"} 
   </Button>
   <Button
+  disabled={disableButtons}
    onClick={async () => {
     try {
       await EditMailStatus( "مرفوضة");
-      alert("تم رفض البريد بنجاح");
       onClose();
     } catch {
-      alert("حدث خطأ أثناء رفض الطلب");
     }
   }}
     variant="contained"

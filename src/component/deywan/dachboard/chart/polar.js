@@ -3,20 +3,39 @@ import {  Box } from '@mui/material';
 
 
 import { VictoryPie } from 'victory';
+import { useEffect,useState } from "react";
+import { getData } from "../../../../API/apiService";
+import { BaseUrl,  showInternalStatistics } from "../../../../API/api";
 
 
 
 
 
 
-const polarData = [
-  { x: "محول", y: 45 },
-  { x: "مرفوض", y: 30 },
-  { x: "قيد الدراسة", y: 25 },
+
+
+const COLORS = ["rgb(71,59,68)", "rgb(97,79,92)", "rgb(141,113,133)"];
+export default function Polar () {
+  const[state,setState]= useState([])
+  useEffect(()=>{
+    fetchInternalStatisticsSummary()
+  },[])
+  async function fetchInternalStatisticsSummary(){
+    try{const response =await getData(`${BaseUrl}${showInternalStatistics}`)
+    setState(response.data)
+        console.log(response.data)
+
+}catch(err){
+  console.log(err)
+}
+
+  }
+  const polarData = [
+  { x: "محول", y: state.approved },
+  { x: "مرفوض", y: state.rejected },
+  { x: "قيد الدراسة", y: state.pending },
 ];
 
-const COLORS = ["rgb(71,59,68)", "rgb(141,113,133)", "rgb(97,79,92)"];
-export default function Polar () {
   return (
     
 

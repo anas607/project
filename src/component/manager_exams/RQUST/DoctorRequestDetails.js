@@ -8,6 +8,8 @@ import {
   TextField,Checkbox,
   Avatar
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import {
   
   Dialog,
@@ -27,6 +29,9 @@ import { BaseUrl, EDIT_FORM_CONTENT_EXAM, SHOW_FORM_CONTENT } from "../../../API
 
 export default function DoctorRequestDetails({  setShowRequest,uuid }) {
    const state = useSelector((state) => state.user);
+   
+  const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
+  const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
 const [formData, setFormData] = useState({});
 const [Data, setData] = useState({});
 const [openDialog, setOpenDialog] = useState(false);
@@ -34,8 +39,6 @@ const [selectedImage, setSelectedImage] = useState(null);
 
 const isChecked = (field) => formData[field] === 'on';
 
-  const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
-  const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
 const handleOpenDialog = (imageUrl) => {
   setSelectedImage(imageUrl);
   setOpenDialog(true);
@@ -69,7 +72,7 @@ const handleAttachmentClick = (url) => {
   async function fetchRequest(){
     try{
 const response = await getData(`${BaseUrl}${SHOW_FORM_CONTENT}?uuid=${uuid}`)
-console.log(response.data.Doctor_image); // ✔️ هذا يعمل
+console.log(response.data.Doctor_image); 
 
 setData(response.data)
   const elementsArray = response.data.elements;
@@ -463,6 +466,10 @@ onClick={() => handleAttachmentClick(attachment.url)}
                     </Box>
                   </Grid>
                 </Grid>
+
+
+
+                
                 {ismanger_exam ? <>        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mt: 6 }}>
   <Button
     variant="contained"
@@ -503,6 +510,20 @@ onClick={() => handleAttachmentClick(attachment.url)}
     
     </Box>
     <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md">
+       <DialogTitle sx={{ m: 0, p: 2 }}>
+    <IconButton
+      aria-label="close"
+      onClick={() => setOpenDialog(false)}
+      sx={{
+        position: "absolute",
+        right: 8,
+        top: 8,
+        color: (theme) => theme.palette.grey[500],
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
+  </DialogTitle>
   <DialogContent>
     <img src={encodeURI(selectedImage)} alt="Preview" 
 

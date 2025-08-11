@@ -1,53 +1,27 @@
 import { Box, Paper, Typography } from "@mui/material";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import CreateIcon from "@mui/icons-material/Create";
-import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
-import GroupRemoveOutlinedIcon from "@mui/icons-material/GroupRemoveOutlined";
-import LogoutIcon from "@mui/icons-material/Logout";
-import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 
-import { VictoryPie } from "victory";
 import PolarOut from "../chart/polarout";
-import { BaseUrl, showExternalStatistics } from "../../../../API/api";
-import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../../../API/apiService";
-
-import { useEffect } from "react";
-import externalStatistics, {
-  setExternalStatistics,
-} from "../../../../reducer/externalStatistics";
-
-const polarData = [
-  { x: "محول", y: 45 },
-  { x: "مرفوض", y: 30 },
-  { x: "قيد الدراسة", y: 25 },
-];
-
-const COLORS = ["#1E88E5", "#D32F2F", "#FBC02D"];
+import  {
+  BaseUrl,showExternalStatistics
+} from "../../../../API/api";
+import { useEffect,useState } from "react";
 export default function PeaperOut() {
-  // const dispatch = useDispatch();
-  // const { approved, pending, rejected } = useSelector(
-  //   (state) => state.externalStatistics
-  // );
+ const[state,setState]= useState([])
+   useEffect(()=>{
+     fetchInternalStatisticsSummary()
+   },[])
+   async function fetchInternalStatisticsSummary(){
+     try{const response =await getData(`${BaseUrl}${showExternalStatistics}`)
+    //  console.log(response.data)
+          setState(response.data)
 
-  // useEffect(() => {
-  //   const fetchExternalStatistics = async () => {
-  //     try {
-  //       const response = await getData(`${BaseUrl}${showExternalStatistics}`);
-
-  //       if (response?.data?.data) {
-  //         dispatch(setExternalStatistics(response.data.data));
-  //       } else {
-  //         console.warn("الرد لا يحتوي على البيانات المتوقعة:", response);
-  //       }
-  //     } catch (error) {
-  //       console.error("فشل في جلب الإحصائيات:", error);
-  //     }
-  //   };
-
-  //   fetchExternalStatistics();
-  // }, [dispatch]);
+ }catch(err){
+   console.log(err)
+ }
+ 
+   }
+  
 
   return (
     <>
@@ -56,7 +30,7 @@ export default function PeaperOut() {
         sx={{ flex: 1, backgroundColor: "white", borderRadius: 2, padding: 2 }}
       >
         <Typography
-          sx={{ marginLeft: "69%", fontSize: "16px", mt: 1, fontWeight: "700" }}
+          sx={{ marginLeft: "69%", fontSize: "42px", mt: 1, fontWeight: "700" }}
           variant="h5"
         >
           البريد الخارجي
@@ -70,6 +44,7 @@ export default function PeaperOut() {
         >
           {/* Text content on the RIGHT */}
           <Box>
+            
             <Typography
               sx={{
                 fontSize: "40px",
@@ -79,10 +54,10 @@ export default function PeaperOut() {
               }}
               variant="h5"
             ></Typography>
-            {/* {approved + rejected + pending} */}1
-            <Typography
+              {/* {done + pending + under_review} */}
+{state.done}            <Typography
               sx={{
-                fontSize: "10px",
+                fontSize: "18px",
                 fontWeight: "700",
                 marginTop: "1%",
                 marginBottom: "5%",
@@ -103,21 +78,21 @@ export default function PeaperOut() {
                 }}
               />
               <Typography
-                sx={{ fontSize: "10px", fontWeight: "700", mr: 1 }}
+                sx={{ fontSize: "18px", fontWeight: "700", mr: 1 }}
                 variant="h5"
               >
+                
                 <Box
                   component="span"
                   sx={{
                     ml: 1,
                     fontWeight: "500",
-                    // fontSize: "16px",
+                    //  fontSize: "18px",
                     color: "#666",
                   }}
                 >
-                  {/* {approved} */}2
-                </Box>
-                من البريد المحول
+{state.done}                </Box>
+                من البريد المنتهي
               </Typography>
             </Box>
             <Box display="flex" alignItems="center" mb={1}>
@@ -131,16 +106,16 @@ export default function PeaperOut() {
                 }}
               />
               <Typography
-                sx={{ fontSize: "10px", mr: 1, fontWeight: "600" }}
+                sx={{ fontSize: "18px", mr: 1, fontWeight: "700" }}
                 variant="h5"
               >
                 <Box
                   component="span"
                   sx={{ ml: 1, fontWeight: "500", color: "#666" }}
                 >
-                  {/* {rejected} */}3
-                </Box>
-                من البريد المرفوض
+
+{state.pending}                </Box>
+                من البريد انتظار
               </Typography>
             </Box>
             <Box display="flex" alignItems="center">
@@ -154,15 +129,15 @@ export default function PeaperOut() {
                 }}
               />
               <Typography
-                sx={{ fontSize: "10px", mr: 1, fontWeight: "600" }}
+                sx={{ fontSize: "18px", mr: 1, fontWeight: "700" }}
                 variant="h5"
               >
                 <Box
                   component="span"
                   sx={{ ml: 1, fontWeight: "500", color: "#666" }}
                 >
-                  {/* {pending} */}
-                </Box>
+                  {state.under_review}                </Box>
+
                 من البريد قيد الدراسة
               </Typography>
             </Box>

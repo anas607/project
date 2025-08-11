@@ -214,8 +214,9 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginTop:ismanger_exam ?"70%" :"119%",
-          mr: -10,
+position: 'absolute',
+  bottom: 0,          margin:'auto'
+
         }}
       >
         <Avatar

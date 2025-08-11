@@ -16,6 +16,7 @@ import {
  
 } from "@mui/material";
 import NoteIcon from '@mui/icons-material/Note';import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useEffect } from "react";
 
 const mockDoctorData = {
   fullName: "محمد ملهم",
@@ -39,7 +40,12 @@ const mockDoctorData = {
   sessionYear: "2025",
 };
 
-export default function EXPORTMAILS({open,onClose}){
+export default function EXPORTMAILS({open,onClose,uuid}){
+  useEffect(() => {
+      if (open && uuid) {
+        console.log(uuid)
+      }
+    }, [open, uuid]);
     return(
 
 <>

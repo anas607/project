@@ -59,11 +59,12 @@ const headStyle = {
 };
 
 const Outer_EDeywan = () => {
+  const[uuid,setuuid]=useState(false)
   const [showrecipit,setShowRecipit]=  useState(false)
      const [id, setid] = useState(null);
 
   const stateexport=useSelector((state)=>state.outerexport)
-
+console.log(stateexport.data)
     const dispatch = useDispatch()
       const stateimport=useSelector((state)=>state.outereimport)
       console.log(stateimport.data)
@@ -89,6 +90,10 @@ useEffect(() => {
 function handleRecipit(uuid){
 setid(uuid)
 setShowRecipit(true)
+}
+function handleEditeTransction(uuid){
+  setuuid(uuid)
+  setOpenModal(true)
 }
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
@@ -248,28 +253,32 @@ setShowRecipit(true)
   rows.map((row, index) => (
     <TableRow key={index} sx={{ borderBottom: "2px solid #1f4d38" }}>
 
-      <TableCell sx={headofStyle} align="center">{row.id}</TableCell>
+      <TableCell sx={headofStyle} align="center">{row.uuid}</TableCell>
       <TableCell align="center">
         <Avatar  sx={{ width: 56, height: 56, margin: "auto" }}  src={row.senderImg || row.receiverImg} />
       </TableCell>
       <TableCell sx={headofStyle} align="center">
-        {isInbox ? row.senderName : row.receiverName}
+        {isInbox ? row.doctor_name : row.receiverName}
       </TableCell>
       <TableCell sx={headofStyle} align="center">
-        {isInbox ? row.senderPhone : row.receiverPhone}
+        {isInbox ? row.doctor_phone : row.receiverPhone}
       </TableCell>
-            <TableCell sx={headofStyle} align="center">{row.mailTitle}</TableCell>
+            <TableCell sx={headofStyle} align="center">{row.form_name}</TableCell>
 
       <TableCell sx={headofStyle} align="center">
-        {isInbox ? row.senderName : row.receiverName}
+        {isInbox ? row.from_path : row.receiverName}
       </TableCell>
-      <TableCell sx={headofStyle} align="center">{row.dateSubmitted}</TableCell>
+      <TableCell sx={headofStyle} align="center">      {new Date(row.received_at).toLocaleDateString()}  
+</TableCell>
+
       <TableCell sx={headofStyle} align="center">
-        {isInbox ? row.dateReceived : row.dateSent}
-      </TableCell>
+  {isInbox ? new Date(row.submitted_at).toLocaleDateString() : row.dateSent}
+</TableCell>
+
       <TableCell align="center">
         <IconButton
-          onClick={() => setOpenModal(true)}
+
+          onClick={handleEditeTransction(row.uuid)}
           sx={{
             border: "1px solid rgba(212, 208, 212, 0.31)",
             borderRadius: "50px",
@@ -318,7 +327,7 @@ uuid={id}
       {<EXPORTMAILS
          open={openModal}
          onClose={()=>setOpenModal(false)}
-         
+         uuid={uuid}
          
          />}
     </Box>

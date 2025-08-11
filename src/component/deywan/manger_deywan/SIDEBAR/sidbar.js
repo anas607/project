@@ -12,8 +12,8 @@ import Navgation from './navgation';
         
          <Card
         sx={{
-           width: '381px',
-          height: '960px',
+         width: '381px',
+          height: '1080',
          backgroundColor: 'white',
           borderRadius: '2px',
           

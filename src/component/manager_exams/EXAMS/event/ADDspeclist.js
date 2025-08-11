@@ -260,7 +260,8 @@ onChange={(e) => setBachelorsDegree(e.target.value)}
 
 
             </Box>
- <Box onClick={(e) => e.stopPropagation()}>
+            {errorMessage? (
+             
         <Alert
           variant="outlined"
           severity="error"
@@ -268,7 +269,8 @@ onChange={(e) => setBachelorsDegree(e.target.value)}
         >
           {errorMessage}
         </Alert>
-            </Box>
+            ):""}
+ 
             <Button
             onClick={handladd}
               variant="contained"

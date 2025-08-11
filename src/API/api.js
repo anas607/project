@@ -54,4 +54,6 @@ export const ANNOUNCEMENT ="announcement/"
 export const UPDATE_STATUS ="update-status/"
 export const REVIEW ="review/"
 export const RECEPIET_IMAGE ="receipt_image/"
-export const UNDER="under-review"
+export const UNDER="under-review/"
+export const RECEPIET_STATUS ="receipt_status/"
+

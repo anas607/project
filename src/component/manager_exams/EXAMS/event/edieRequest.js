@@ -204,7 +204,7 @@ export default function EditRequest({ open, onClose }) {
                         }}
                       >
                          
-            رفض
+            تراجع
                       </Button>  <Button
                         variant="contained"
                         sx={{

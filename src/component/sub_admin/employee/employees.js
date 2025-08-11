@@ -31,6 +31,8 @@ import Appar from "../../deywan/dachboard/SIDEBAR/appar";
 import { getData } from "../../../API/apiService";
 import { BaseUrl, BY, EMPLOYEES, FETCHOFFICE, Show } from "../../../API/api";
 import Loading from "../../../wrong/mails/loading";
+import ADDEmployees from "./addemployee";
+import EditEmployeeModal from "./editemployee";
 
 
 
@@ -40,10 +42,24 @@ const headStyle = {
   py: 1.5,
 };
 const Employyes = () => {
+      const [id, setId] = useState(false);
+
+  const [showAddEmployee, setShowAddEmployee] = useState(false);
+    const [showEditEmployee, setShowEditEmployee] = useState(false);
 const [selectedOffice, setSelectedOffice] = useState(null);
   const [offices, setOffices] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [loading, setloading] = useState(false);
+
+
+
+function handleEditEmployees (id){
+  setId(id)
+  setShowEditEmployee(true)
+}
+
+
+
 
 useEffect(() => {
 
@@ -98,7 +114,7 @@ async function fetchEmployeesByOfficeName(officeName) {
           
             display="flex"
             alignItems="center"
-            sx={{ cursor: "pointer", gap: 23  ,}}
+            sx={{ cursor: "pointer", gap: 205  ,}}
            
           style={{marginTop:'3%'}}
           >
@@ -110,6 +126,7 @@ async function fetchEmployeesByOfficeName(officeName) {
     );
   }}
 /> */}
+
 
   <FormControl sx={{ minWidth: 300 ,border:'2px solid rgb(14, 75, 35) ',borderRadius:'5%'}}>
  <InputLabel
@@ -184,12 +201,21 @@ async function fetchEmployeesByOfficeName(officeName) {
   </Select>
 </FormControl>
  
+<Button 
+onClick={()=>{setShowAddEmployee(true)}}
+sx={{backgroundColor:"rgb(14,75,35)",color:'white',
+  borderRadius:"30px" ,width:"11%",height:"70px",
+  fontSize:'24px',fontWeight:'700'}}>اضافة موظف</Button>
 
 
 
 
 
           </Box>
+          {<ADDEmployees
+          open={showAddEmployee}
+          onClose={()=>{setShowAddEmployee(false)}}
+          />}
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none",mt:6 }}>
   <Table sx={{width:"1573px", height:'88px'}}>
@@ -258,6 +284,7 @@ async function fetchEmployeesByOfficeName(officeName) {
         </TableCell>
         <TableCell align="center">
           <IconButton
+          onClick={handleEditEmployees(row.id)}
             sx={{
               border: "1px solid rgba(212, 208, 212, 0.31)",
               borderRadius: "50px",
@@ -302,12 +329,12 @@ async function fetchEmployeesByOfficeName(officeName) {
 
 
 
-  {/* {<EnternalMails
-  open={openModal}
-  onClose={()=>{setOpenModal(false)}}
-  uuid={selectedUuid}
+  {<EditEmployeeModal
+  open={showEditEmployee}
+  onClose={()=>{setShowEditEmployee(false)}}
+  id={setId}
   />
-} */}
+}
     </Box>
   );
 };

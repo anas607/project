@@ -173,10 +173,7 @@ useEffect(() => {
 
   fetcharcive();
 }, [selectedType]);
-const handleOpenModal = (uuid) => {
-  setSelectedUuid(uuid);
-  setTimeout(() => setOpenModal(true), 0); // أو 100ms لو بدك تتأكد
-};
+
     return(
         <>
           <Box
@@ -206,7 +203,7 @@ const handleOpenModal = (uuid) => {
   }}
 >
  
-  <Box display="flex" justifyContent="space-between" alignItems="center">
+  <Box sx={{gap:'90'}} display="flex" justifyContent="space-between"  >
   {/* جهة اليمين */}
   <Box display="flex" alignItems="center" gap={1}>
     <MenuIcon />
@@ -399,8 +396,7 @@ const handleOpenModal = (uuid) => {
         setuuid(row.uuid);
          handleRecipit(row.uuid)
       } else {
-        setuuid(row.uuid);
-        setOpenExportModal(true);
+       handleEditeTransction({ id: row.uuid, type: selectedType ? 'البريد الصادر الخارجي' : '' }) 
       }
     } else {
       setSelectedUuid(row.uuid);
@@ -451,14 +447,13 @@ const handleOpenModal = (uuid) => {
     open={openExportModal}
     onClose={() => setOpenExportModal(false)}
     uuid={uuid}
-    type={selectedType}
+  type={selectedType ? 'البريد الصادر الخارجي' : ''}
   />
 )}
  {selectedType !== "البريد الصادر الخارجي" && (
   <EnternalMails
     open={openInternalModal}
     onClose={() => setOpenInternalModal(false)}
-    uuid={selectedUuid}
   />
 )}
   {<ShowReicipet   open={showrecipit}

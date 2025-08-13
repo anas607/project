@@ -67,56 +67,31 @@ async function handladd() {
 
     const response = await postData(`${BaseUrl}${Specializations}${ADD}`, payload);
     console.log("Response:", response);
-     setSnackbar({
-        open: true,
-        message: response?.data?.message || "تم تنفيذ العملية بنجاح",
-        color: "rgb(14,75,35)",
-      });
-    // alert(response?.message || "تم إنشاء الاختصاص بنجاح");
+    
+    alert(response?.message || "تم إنشاء الاختصاص بنجاح");
     onClose();
         if (onSuccess) onSuccess();
 
   } catch (err) {
     const errorMessage = err?.message || err?.errors?.[0] || "حدث خطأ أثناء الإرسال";
     // alert(errorMessage);
-    setSnackbar({
-        open: true,
-        message:
-          err?.response?.data?.message || "حدث خطأ أثناء تعديل الحالة",
-        color: "red",
-      });
 seterrorMessage(errorMessage)
   } finally {
     setLoading(false); 
-        setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
-
   }
 }
+useEffect(() => {
+  if (errorMessage) {
+    const timer = setTimeout(() => {
+      seterrorMessage(""); // إعادة تعيين الرسالة لإخفائها
+    }, 2000); // 2000 ملي ثانية = ثانيتين
+
+    return () => clearTimeout(timer); // تنظيف المؤقت عند تغير الرسالة أو تفكيك الكمبوننت
+  }
+}, [errorMessage]);
 
   return (
     <>
-     {snackbar.open && (
-            <Box
-              sx={{
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                backgroundColor: snackbar.color,
-                color: "white",
-                padding: "24px 36px",
-                borderRadius: "10px",
-                fontSize: "22px",
-                fontWeight: "bold",
-                textAlign: "center",
-                zIndex: 2000,
-                boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
-                minWidth: "300px",
-              }}
-            >
-              {snackbar.message}
-            </Box>
-          )}
       <Modal
         open={open}
         onClose={onClose}

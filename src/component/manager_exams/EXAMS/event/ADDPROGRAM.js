@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchspeclise } from "../../../../reducer/managerexam/showspeclice";
 import { postData } from "../../../../API/apiService";
 import { ADD, BaseUrl, PROGRAM } from "../../../../API/api";
+import { Backdrop, Alert } from "@mui/material";
 
 
 
@@ -26,6 +27,7 @@ import { ADD, BaseUrl, PROGRAM } from "../../../../API/api";
 export default function AddProgramForm({ setAddProgram }) {
   const [selectedMonth, setSelectedMonth] = useState("");
 const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const[errorMessage,seterrorMessage]=useState("")
 
   const [exams, setExams] = useState([
   {
@@ -81,10 +83,18 @@ const handleSubmitProgram = async () => {
     alert("تمت الإضافة بنجاح");
     setExams([]);
   } catch (err) {
-    alert(err.message || "فشل في إرسال البيانات");
+    seterrorMessage(err.message || "فشل في إرسال البيانات");
   }
 };
+useEffect(() => {
+  if (errorMessage) {
+    const timer = setTimeout(() => {
+      seterrorMessage(""); // إعادة تعيين الرسالة لإخفائها
+    }, 2000); // 2000 ملي ثانية = ثانيتين
 
+    return () => clearTimeout(timer); // تنظيف المؤقت عند تغير الرسالة أو تفكيك الكمبوننت
+  }
+}, [errorMessage]);
 
 // const [specializations, setSpecializations] = useState([]);
 
@@ -190,7 +200,7 @@ useEffect(() => {
 </Select>
 
         </Box>
-         <Button  onClick={handleSubmitProgram}  variant="contained" color="rgb(14,74,35)"  sx={{borderRadius:"30px" ,width:"11%",height:"60px",backgroundColor:"rgb(14,74,35)",color:"white",fontSize:'24px',fontWeight:'700',mr:90}}>
+         <Button  onClick={handleSubmitProgram}  variant="contained" color="rgb(14,74,35)"  sx={{borderRadius:"30px" ,width:"11%",height:"60px",backgroundColor:"rgb(14,74,35)",color:"white",fontSize:'24px',fontWeight:'700',mr:170}}>
                                 اضافة 
                                 </Button>
       </Box>
@@ -198,9 +208,9 @@ useEffect(() => {
       {/* جدول أو محتوى آخر */}
       <Box>
       
-               <TableContainer sx={{ mr: -1, backgroundColor: "transparent", boxShadow: "none" , width: "1593px",mt:2}}>
+               <TableContainer sx={{ mr: -1, backgroundColor: "transparent", boxShadow: "none" , width: "2000px",mt:2}}>
             <Table  sx={{Width: '100%'}}>
-             <TableHead sx={{width:"1503px", height:'88px'}}>
+             <TableHead sx={{width:"2000px", height:'88px'}}>
             <TableRow sx={{ backgroundColor: (theme) => theme.palette.primary.main }}>
               <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
                 الاختصاص 
@@ -234,7 +244,7 @@ useEffect(() => {
           
           <TableBody>
            
-       
+      
                {exams.map((exam, index) => (
     <TableRow key={index}>
       <TableCell align="center">
@@ -372,6 +382,7 @@ useEffect(() => {
           
             </Table>
           </TableContainer>
+          
           <Box sx={{ position: "relative" }}>
   {/* TableContainer هنا */}
   <TableContainer>...</TableContainer>
@@ -403,6 +414,16 @@ useEffect(() => {
 
         {/* يمكنك وضع جدول MUI هنا */}
       </Box>
+       {errorMessage? (
+                    
+               <Alert
+                 variant="outlined"
+                 severity="error"
+                 sx={{ fontSize: "1.5rem", fontWeight: "700", alignItems:'center'}}
+               >
+                 {errorMessage}
+               </Alert>
+                   ):""}
     </Box></Box>
   );
 }

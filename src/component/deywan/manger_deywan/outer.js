@@ -289,7 +289,9 @@ function handleEditeTransction(uuid,type ){
       <TableCell align="center">
         <IconButton
 
-          onClick={()=>{handleEditeTransction(row.uuid ,isInbox ? 'inbox' : 'outbox')}}
+onClick={() => { 
+  handleEditeTransction({ id: row.uuid, type: isInbox ? 'inbox' : 'outbox' }) 
+}}
           sx={{
             border: "1px solid rgba(212, 208, 212, 0.31)",
             borderRadius: "50px",
@@ -339,7 +341,7 @@ uuid={id}
          open={openModal}
          onClose={()=>setOpenModal(false)}
          uuid={uuid}
-         type={isInbox}
+  type={isInbox ? 'inbox' : 'outbox'}
          />}
     </Box>
   );

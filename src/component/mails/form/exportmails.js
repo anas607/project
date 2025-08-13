@@ -19,14 +19,16 @@ import NoteIcon from "@mui/icons-material/Note";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { useEffect, useState } from "react";
 import { getData, patchData, postData } from "../../../API/apiService";
-import { BaseUrl, Show, STATUS, TRANSACTION, TRANSACTION_STATUS, UNDER } from "../../../API/api";
+import { BaseUrl, CONTENT, Show, STATUS, TRANSACTION, TRANSACTION_STATUS, UNDER } from "../../../API/api";
 import { useSelector } from "react-redux";
 
 export default function EXPORTMAILS({ open, onClose, uuid,type }) {
+  const [buttonsDisabled, setButtonsDisabled] = useState(true); // بشكل افتراضي معطلة
+
   const stateexport=useSelector((state)=>state.outerexport)
    console.log(stateexport.data)
    const statusValue = stateexport.data.length > 0 ? stateexport.data[0].status : null;
-console.log(statusValue);
+
   const state = useSelector((state) => state.user);
 
 // التحقق إذا كان أي دور يحتوي على كلمة "رئيس"
@@ -49,7 +51,7 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
           open: true,
           message: res?.data?.message || "تم التحديث بنجاح",
           color: "rgb(14,75,35)",
-        });
+        }); setButtonsDisabled(false);
       } catch (err) {
         console.log(err.response.data.message);
         setSnackbar({
@@ -71,12 +73,16 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
   async function showTransaction() {
     setLoading(true);
         let url = "";
-     if (uuid?.type === "inbox") {
-      url = `${BaseUrl}${TRANSACTION}${Show}${uuid}`;
-    } else {
-      url = `${BaseUrl}${TRANSACTION}content/${uuid}`;
-    }
+        console.log("UUID value:", uuid, "Type:", typeof uuid);
 
+   if (type === "inbox") {
+
+  url = `${BaseUrl}${TRANSACTION}${Show}${uuid.id}`;
+} else if(type ==="البريد الصادر الخارجي" ||type === "outbox" ) {
+  url = `${BaseUrl}${TRANSACTION}${CONTENT}${uuid.id}`;
+}
+
+ console.log(uuid.type)
     try {
       const response = await getData(url);
       console.log(response)
@@ -162,7 +168,7 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
           elevation={4}
           sx={{
            width: 800,
-      height: '80vh',
+      height: '500px',
             p: 3,
             borderRadius: 3,
             direction: "rtl",
@@ -184,11 +190,14 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
   }}
 >
   {/* أيقونة العين على اليسار */}
+ {statusValue !== "محول"  && (
   <IconButton onClick={UnderReview} sx={{ color: "#0e4a23" }}>
     <VisibilityIcon />
   </IconButton>
+)}
 
   {/* أيقونة الإغلاق على اليمين */}
+  
   <IconButton onClick={onClose} sx={{ color: "red" }}>
     <HighlightOffIcon />
   </IconButton>
@@ -203,7 +212,7 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
               textAlign: "center",
             }}
           >
-            {formData?.form_name || "بدون اسم"}
+            {formData?.form_name }
           </Typography>
 
           {loading ? (
@@ -212,162 +221,161 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
             </Box>
           ) : formData ? (
             <>
-              <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                {formData.elements.map((el, i) => (
-                  <Grid item xs={12} sm={6} key={i}>
-                    <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                      <Typography
-                        sx={{
-                          fontSize: "20px",
-                          fontWeight: "700",
-                          color: "rgb(98,91,113)",
-                          whiteSpace: "nowrap",
-                          mr: 1,
-                        }}
-                      >
-                        {el.label} :
-                      </Typography>
-                      {el.type === 6 ? (
-                       <Checkbox
-  checked={el.label === el.value}
-  disabled
-  sx={{
-    color: el.label === el.value ? "green" : "rgba(0,0,0,0.4)",
-    '&.Mui-checked': {
-      color: "green",
-    },
-  }}
-/>
+              {/* العناصر */}
+<Grid container spacing={8} sx={{ flexGrow: 1 }}>
+  {formData.elements.map((el, index) => (
+    <Grid  item xs={12} sm={6} key={index}>
+      <Box sx={{ display: "flex", alignItems: "center",}}>
+        <Typography
+          sx={{
+            fontSize: "20px",
+            fontWeight: "700",
+            color: "rgb(98,91,113)",
+            whiteSpace: "nowrap",
+            mr: 1,
+          }}
+        >
+          {el.label} :
+        </Typography>
+        {el.type === 6 ? (
+          <Checkbox
+            checked={el.label === el.value}
+            disabled
+            sx={{
+              color: el.label === el.value ? "green" : "rgba(0,0,0,0.4)",
+              '&.Mui-checked': { color: "green" },
+            }}
+          />
+        ) : (
+          <Typography
+            sx={{
+              fontSize: "20px",
+              fontWeight: "700",
+              color: "black",
+              userSelect: "text",
+            }}
+          >
+            {el.value || ""}
+          </Typography>
+        )}
+      </Box>
+    </Grid>
+  ))}
+</Grid>
 
-                      ) : (
-                        <Typography
-                          sx={{
-                            fontSize: "20px",
-                            fontWeight: "700",
-                            color: "black",
-                            userSelect: "text",
-                          }}
-                        >
-                          {el.value || ""}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Grid>
-                ))}
-              </Grid>
 
-              {/* المرفقات - كلمة المرفقات */}
-              {formData.media?.length > 0 && (
-                <>
-                  <Typography
-                    sx={{
-                      fontSize: "20px",
-                      fontWeight: "700",
-                      mt: 3,
-                      mb: 1,
-                      color: "black",
-                    }}
-                  >
-                    المرفقات
-                  </Typography>
+{/* المرفقات */}
+{formData.media?.length > 0 && (
+  <>
+    <Typography
+      sx={{
+        fontSize: "20px",
+        fontWeight: "700",
+       
+        mb: 1,
+        color: "black",
+      }}
+    >
+      المرفقات
+    </Typography>
 
-                  <Grid container spacing={2}>
-                    {formData.media.map((m, i) => {
-                      // رابط صورة (receipt أو image)
-                      const imageUrl = m.receipt || m.image;
-                      if (imageUrl) {
-                        return (
-                          <Grid item xs={12} sm={6} key={i}>
-                            <Button
-                              variant="outlined"
-                              onClick={() => openImageDialog(imageUrl)}
-                              sx={{
-                                height: 130,
-                                width: "100%",
-                                borderStyle: "dashed",
-                                border: "2px dashed rgba(197, 193, 193, 0.79)",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                borderRadius: "10%",
-                                backgroundColor: "white",
-                              }}
-                            >
-                              <NoteIcon
-                                sx={{ fontSize: 30, color: "black", mb: 1 }}
-                              />
-                              <Typography
-                                sx={{
-                                  fontSize: "16px",
-                                  fontWeight: "700",
-                                  color: "black",
-                                  textAlign: "center",
-                                }}
-                              >
-                                صورة
-                              </Typography>
-                            </Button>
-                          </Grid>
-                        );
-                      }
+    <Grid container spacing={2}>
+      {formData.media.map((m, i) => {
+        const imageUrl = m.receipt || m.image;
+        const fileUrl = m.file;
 
-                      // زر الملف يظهر إذا فيه ملف
-                      if (m.file) {
-                        return (
-                          <Grid item xs={12} sm={6} key={i}>
-                            <Button
-                              variant="outlined"
-                              component="a"
-                              href={m.file}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              sx={{
-                                height: 130,
-                                width: "100%",
-                                borderStyle: "dashed",
-                                border: "2px dashed rgba(197, 193, 193, 0.79)",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                borderRadius: "10%",
-                                backgroundColor: "white",
-                                textDecoration: "none",
-                              }}
-                            >
-                              <InsertDriveFileIcon
-                                sx={{ fontSize: 30, color: "black", mb: 1 }}
-                              />
-                              <Typography
-                                sx={{
-                                  fontSize: "16px",
-                                  fontWeight: "700",
-                                  color: "black",
-                                  textAlign: "center",
-                                }}
-                              >
-                                ملف
-                              </Typography>
-                            </Button>
-                          </Grid>
-                        );
-                      }
+        if (imageUrl) {
+          return (
+            <Grid item xs={12} sm={6} key={i}>
+              <Button
+                variant="outlined"
+                onClick={() => openImageDialog(imageUrl)}
+                sx={{
+                  height: 130,
+                  width: "100%",
+                  borderStyle: "dashed",
+                  border: "2px dashed rgba(197, 193, 193, 0.79)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "10%",
+                  backgroundColor: "white",
+                }}
+              >
+                <NoteIcon sx={{ fontSize: 30, color: "black", mb: 1 }} />
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    fontWeight: "700",
+                    color: "black",
+                    textAlign: "center",
+                  }}
+                >
+                  صورة
+                </Typography>
+              </Button>
+            </Grid>
+          );
+        }
 
-                      // إذا ما فيه صورة ولا ملف
-                      return null;
-                    })}
-                  </Grid>
-                </>
-              )}
+        if (fileUrl) {
+          return (
+            <Grid item xs={12} sm={6} key={i}>
+              <Button
+                variant="outlined"
+                component="a"
+                href={fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  height: 130,
+                  width: "100%",
+                  borderStyle: "dashed",
+                  border: "2px dashed rgba(197, 193, 193, 0.79)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "10%",
+                  backgroundColor: "white",
+                  textDecoration: "none",
+                }}
+              >
+                <InsertDriveFileIcon
+                  sx={{ fontSize: 30, color: "black", mb: 1 }}
+                />
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    fontWeight: "700",
+                    color: "black",
+                    textAlign: "center",
+                  }}
+                >
+                  ملف
+                </Typography>
+              </Button>
+            </Grid>
+          );
+        }
+
+        return null;
+      })}
+    </Grid>
+  </>
+)}
+
 
               {/* أزرار الرفض والتحويل في آخر المودال */}
              {((statusValue !== "محول" )) &&(<Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
             <Box
               component="button"
               onClick={() => EDITTRANSCTIONSTATUS("محول")}
+                  disabled={buttonsDisabled || editLoading}
+
               style={{
-                backgroundColor: "rgba(9, 83, 35, 1)",
+      backgroundColor: buttonsDisabled ? "rgba(9, 83, 35, 0.5)" : "rgba(9, 83, 35, 1)",
                 color: "white",
                 border: "none",
                 borderRadius: "6px",
@@ -390,8 +398,10 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
               onClick={() => EDITTRANSCTIONSTATUS("مرفوض")
                
               }
+                  disabled={buttonsDisabled || editLoading}
+
               style={{
-                backgroundColor: "red",
+      backgroundColor: buttonsDisabled ? "rgba(255,0,0,0.5)" : "red",
                 color: "white",
                 border: "none",
                 borderRadius: "6px",

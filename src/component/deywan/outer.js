@@ -389,7 +389,8 @@ setShowRecipit(true)
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
-                        onClick={()=>{handleEditeTransction(row.uuid ,isInbox ? 'inbox' : 'outbox')}}
+                        onClick={()=>{  handleEditeTransction({ id: row.uuid, type: isInbox ? 'inbox' : 'outbox' }) 
+}}
           
                         sx={{
                           border: "1px solid rgba(212, 208, 212, 0.31)",
@@ -436,6 +437,8 @@ setShowRecipit(true)
          open={openModal}
          onClose={()=>setOpenModal(false)}
          uuid={uuid}
+           type={isInbox ? 'inbox' : 'outbox'}
+
          
          />}
          {<ShowReicipet   open={showrecipit}

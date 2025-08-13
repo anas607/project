@@ -29,7 +29,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import SidBar from "../../deywan/dachboard/SIDEBAR/sidbar";
 import Appar from "../../deywan/dachboard/SIDEBAR/appar";
 import { getData } from "../../../API/apiService";
-import { BaseUrl, BY, EMPLOYEES, FETCHOFFICE, Show } from "../../../API/api";
+import { ALL_ROLL, BaseUrl, BY, EMPLOYEES, FETCHOFFICE, Show } from "../../../API/api";
 import Loading from "../../../wrong/mails/loading";
 import ADDEmployees from "./addemployee";
 import EditEmployeeModal from "./editemployee";
@@ -48,6 +48,8 @@ const Employyes = () => {
     const [showEditEmployee, setShowEditEmployee] = useState(false);
 const [selectedOffice, setSelectedOffice] = useState(null);
   const [offices, setOffices] = useState([]);
+ 
+
     const [employees, setEmployees] = useState([]);
     const [loading, setloading] = useState(false);
 
@@ -57,7 +59,6 @@ function handleEditEmployees (id){
   setId(id)
   setShowEditEmployee(true)
 }
-
 
 
 
@@ -114,7 +115,7 @@ async function fetchEmployeesByOfficeName(officeName) {
           
             display="flex"
             alignItems="center"
-            sx={{ cursor: "pointer", gap: 205  ,}}
+            sx={{ cursor: "pointer", gap: 220 ,}}
            
           style={{marginTop:'3%'}}
           >
@@ -218,8 +219,8 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
           />}
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none",mt:6 }}>
-  <Table sx={{width:"1573px", height:'88px'}}>
-    <TableHead sx={{width:"1573px", height:'88px'}}>
+  <Table sx={{width:"2000px", height:'88px'}}>
+    <TableHead sx={{width:"2000px", height:'88px'}}>
   <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
     <TableCell align="center" sx={headStyle}>صورة الموظف </TableCell>
 
@@ -284,7 +285,10 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
         </TableCell>
         <TableCell align="center">
           <IconButton
-          onClick={handleEditEmployees(row.id)}
+         
+  onClick={() => handleEditEmployees(row.id)}
+
+
             sx={{
               border: "1px solid rgba(212, 208, 212, 0.31)",
               borderRadius: "50px",

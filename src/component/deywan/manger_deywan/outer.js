@@ -339,7 +339,7 @@ uuid={id}
          open={openModal}
          onClose={()=>setOpenModal(false)}
          uuid={uuid}
-         
+         type={isInbox}
          />}
     </Box>
   );

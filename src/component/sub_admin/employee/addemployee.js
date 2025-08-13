@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Paper,
@@ -9,41 +9,137 @@ import {
   Select,
   MenuItem,
   TextField,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SatelliteIcon from "@mui/icons-material/Satellite";
+import { getData, postData } from "../../../API/apiService";
+import { ALL_ROLL, BaseUrl, registerEmployee } from "../../../API/api";
 
 export default function AddEmployeeModal({ open, onClose }) {
-  const [formData, setFormData] = useState({
-    employeeName: "",
+  const [Rolls, setRolls] = useState([]);
+  const [selectedOfficeName, setSelectedOfficeName] = useState("");
+  const [formValues, setFormValues] = useState({
+    name: "",
     email: "",
-    phone: "",
-    address: "",
     password: "",
-    role: "",
-    department: "",
-    image: null,
+    address: "",
+    phone: "",
+    avatar: null,
+    role_id: "", // مضافة هنا من البداية
   });
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "image") {
-      setFormData((prev) => ({ ...prev, image: files[0] }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+ const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    color: "",
+  });
+  // جلب الرولات
+  const fetchRolles = async () => {
+    try {
+      const res = await getData(`${BaseUrl}${ALL_ROLL}`);
+      if (Array.isArray(res?.data)) {
+        setRolls(res.data);
+      }
+    } catch (error) {
+      console.error("فشل في جلب الرولات:", error);
     }
   };
 
+  useEffect(() => {
+    fetchRolles();
+  }, []);
+
+  // تغيير قيمة أي حقل
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "avatar") {
+      setFormValues({ ...formValues, avatar: files[0] });
+    } else {
+      setFormValues({ ...formValues, [name]: value });
+    }
+  };
+
+  // اختيار الرول
+  const handleRoleChange = (roleId) => {
+    setFormValues((prev) => ({ ...prev, role_id: roleId }));
+    const role = Rolls.find((r) => r.id === roleId);
+    setSelectedOfficeName(role?.office_name || "");
+  };
+
+  // إرسال البيانات
+  const handleAddEmployee = async () => {
+    if (!formValues.role_id) {
+      alert("الرجاء اختيار الدور");
+      return;
+    }
+
+    const formData = new FormData();
+    Object.keys(formValues).forEach((key) => {
+      if (formValues[key] !== null) {
+        formData.append(key, formValues[key]);
+      }
+    });
+
+    try {
+      const res = await postData(`${BaseUrl}${registerEmployee}`, formData);
+       setSnackbar({
+        open: true,
+        message: res?.data?.message || "تم تنفيذ العملية بنجاح",
+        color: "rgb(14,75,35)",
+      });
+      console.log("تمت الإضافة بنجاح:", res.data);
+         setTimeout(() => {
+      onClose();
+      setSnackbar((prev) => ({ ...prev, open: false }));
+    }, 2000); 
+   } catch (err) {
+//  errorMessages=("خطأ في إضافة الموظف:", err.message);
+
+  // جلب كل الأخطاء التفصيلية من الباك
+ 
+  setSnackbar({
+    open: true,
+    message: err.message,
+    color: "red",
+  });
+
+
+       
+    }finally{     setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+}
+  };
+
   return (
+    <>
+     {snackbar.open && (
+            <Box
+              sx={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: snackbar.color,
+                color: "white",
+                padding: "24px 36px",
+                borderRadius: "10px",
+                fontSize: "22px",
+                fontWeight: "bold",
+                textAlign: "center",
+                zIndex: 2000,
+                boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                minWidth: "300px",
+              }}
+            >
+              {snackbar.message}
+            </Box>
+          )}
+  
     <Modal
       open={open}
       onClose={onClose}
       aria-labelledby="add-employee-modal"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
     >
       <Paper
         elevation={4}
@@ -64,6 +160,7 @@ export default function AddEmployeeModal({ open, onClose }) {
           onClick={onClose}
           sx={{ fontSize: "25px", cursor: "pointer", mb: 1, float: "left" }}
         />
+
         {/* العنوان */}
         <Typography
           variant="h6"
@@ -82,54 +179,34 @@ export default function AddEmployeeModal({ open, onClose }) {
           إضافة موظف
         </Typography>
 
-        {/* النموذج: العمودين */}
-        <Grid
-          container
-          spacing={2}
-          sx={{ mt: 1, flexGrow: 1, columnGap: 6 }} // زيادة المسافة بين العمودين
-        >
+        <Grid container spacing={2} sx={{ mt: 1, flexGrow: 1, columnGap: 6 }}>
           {/* العمود الأيمن */}
           <Grid item xs={12} sm={6}>
             <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                اسم الموظف
-              </Typography>
+              <Typography sx={{ mb: 0.7, fontWeight: "700" }}>اسم الموظف</Typography>
               <TextField
                 fullWidth
-                name="employeeName"
-                value={formData.employeeName}
+                name="name"
+                value={formValues.name}
                 onChange={handleChange}
                 size="small"
               />
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                البريد الإلكتروني
-              </Typography>
+              <Typography sx={{ mb: 0.7, fontWeight: "700" }}>البريد الإلكتروني</Typography>
               <TextField
                 fullWidth
                 name="email"
                 type="email"
-                value={formData.email}
+                value={formValues.email}
                 onChange={handleChange}
                 size="small"
               />
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                صورة الموظف
-              </Typography>
+              <Typography sx={{ mb: 0.7, fontWeight: "700" }}>صورة الموظف</Typography>
               <Button
                 variant="outlined"
                 component="label"
@@ -138,7 +215,6 @@ export default function AddEmployeeModal({ open, onClose }) {
                   justifyContent: "flex-start",
                   textTransform: "none",
                   padding: "6px 8px",
-                  borderRadius: "4px",
                   border: "1px solid #ccc",
                   color: "#333",
                   backgroundColor: "#fff",
@@ -147,7 +223,7 @@ export default function AddEmployeeModal({ open, onClose }) {
                 تحميل صورة
                 <input
                   type="file"
-                  name="image"
+                  name="avatar"
                   hidden
                   accept="image/*"
                   onChange={handleChange}
@@ -156,115 +232,69 @@ export default function AddEmployeeModal({ open, onClose }) {
               </Button>
             </Box>
 
-            <Box sx={{ mt: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                الدور
-              </Typography>
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <InputLabel>اختر الدور</InputLabel>
               <Select
-                fullWidth={false}
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                sx={{ height: 35, width: "90%" }}
-                displayEmpty
-                inputProps={{ "aria-label": "الدور" }}
-                size="small"
+                value={formValues.role_id}
+                onChange={(e) => handleRoleChange(e.target.value)}
               >
-                <MenuItem value="">
-                  <em>اختر الدور</em>
-                </MenuItem>
-                <MenuItem value="مدير">مدير</MenuItem>
-                <MenuItem value="موظف">موظف</MenuItem>
-                <MenuItem value="محاسب">محاسب</MenuItem>
+                {Rolls.map((roll) => (
+                  <MenuItem key={roll.id} value={roll.id}>
+                    {roll.name}
+                  </MenuItem>
+                ))}
               </Select>
-            </Box>
+            </FormControl>
+
+            {selectedOfficeName && (
+              <Typography sx={{ mt: 1, color: "gray" }}>
+                الدائرة: {selectedOfficeName}
+              </Typography>
+            )}
           </Grid>
 
           {/* العمود الأيسر */}
           <Grid item xs={12} sm={6}>
             <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                رقم الجوال
-              </Typography>
+              <Typography sx={{ mb: 0.7, fontWeight: "700" }}>رقم الجوال</Typography>
               <TextField
                 fullWidth
                 name="phone"
-                value={formData.phone}
+                value={formValues.phone}
                 onChange={handleChange}
                 size="small"
               />
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                العنوان
-              </Typography>
+              <Typography sx={{ mb: 0.7, fontWeight: "700" }}>العنوان</Typography>
               <TextField
                 fullWidth
                 name="address"
-                value={formData.address}
+                value={formValues.address}
                 onChange={handleChange}
                 size="small"
               />
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                كلمة السر
-              </Typography>
+              <Typography sx={{ mb: 0.7, fontWeight: "700" }}>كلمة السر</Typography>
               <TextField
                 fullWidth
                 name="password"
-                type="password"
-                value={formData.password}
+                 type="text"
+                value={formValues.password}
                 onChange={handleChange}
                 size="small"
               />
-            </Box>
-
-            <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                الدائرة
-              </Typography>
-              <Select
-                fullWidth
-                name="department"
-                value={formData.department}
-                onChange={handleChange}
-                sx={{ height: 35, width: "100%" }}
-                displayEmpty
-                inputProps={{ "aria-label": "دائرة" }}
-                size="small"
-              >
-                <MenuItem value="">
-                  <em>اختر الدائرة</em>
-                </MenuItem>
-                <MenuItem value={1}>دائرة 1</MenuItem>
-                <MenuItem value={2}>دائرة 2</MenuItem>
-                <MenuItem value={3}>دائرة 3</MenuItem>
-              </Select>
             </Box>
           </Grid>
         </Grid>
 
-        {/* زر الإضافة أسفل كل شيء */}
+        {/* زر الإضافة */}
         <Box sx={{ mt: 3, textAlign: "left", mt: "auto" }}>
           <Button
+            onClick={handleAddEmployee}
             variant="contained"
             sx={{
               borderRadius: "20px",
@@ -281,5 +311,6 @@ export default function AddEmployeeModal({ open, onClose }) {
         </Box>
       </Paper>
     </Modal>
+      </>
   );
 }

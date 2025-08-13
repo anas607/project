@@ -33,6 +33,7 @@ import NoData from "../../wrong/mails/noData";
 import { useSelector } from "react-redux";
 import FlashlightOnIcon from '@mui/icons-material/FlashlightOn';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
+import ShowReicipet from "../mails/form/showRecipiet";
 
 
   const headStyle = {
@@ -42,6 +43,11 @@ import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 };
 
 export default function Archiv(){
+       const [id, setid] = useState(null);
+  
+  const [openExportModal, setOpenExportModal] = useState(false);
+const [openInternalModal, setOpenInternalModal] = useState(false);
+
     const[uuid,setuuid]=useState(false)
   
   const [offices, setOffices] = useState([]);
@@ -49,11 +55,18 @@ export default function Archiv(){
    const state = useSelector((state) => state.user);
   const isSub_Admin=state.roles[0].includes("نائب المدير")
     const isAdmin=state.roles[0].includes("المدير")
+    const isMaleaManager=state.roles[0].includes("رئيس المالية")
+
 const [selectedUuid, setSelectedUuid] = useState(null);
+const [showrecipit,setShowRecipit]=  useState(false)
 
 function handleEditeTransction(uuid,type ){
   setuuid(uuid)
   setOpenModal(true)
+}
+function handleRecipit(uuid){
+setid(uuid)
+setShowRecipit(true)
 }
   
   const [loading, setLoading] = useState(false);
@@ -63,7 +76,7 @@ function handleEditeTransction(uuid,type ){
    const[importintearnalmail,setImportInternalmail]=useState([])
     const[exportmail,setExportmail]=useState([])
     const [openModal, setOpenModal] = useState(false);
-    console.log(exporintearnalmail)
+    // console.log(exporintearnalmail)
   const mailTypes = ["البريد الصادر الخارجي", "البريد الداخلي الوارد", "البريد الداخلي الصادر"];
 
 const [mailStep, setMailStep] = useState(0);  
@@ -107,9 +120,11 @@ let tableHeaders = [];
 
 switch (selectedType) {
   case "البريد الصادر الخارجي":
-    rows = exportmail;
-    tableHeaders = ["رقم المعاملة", "صورة الطبيب", "اسم الطبيب", "رقم الطبيب", "نوع المعاملة", "المستقبل", "تاريخ التقديم", "تاريخ الإرسال"];
-    break;
+     if (isMaleaManager) {
+      tableHeaders = ["رقم المعاملة", "اسم الطبيب", "رقم الإيصال", "نوع المعاملة", "رسوم المعاملة", "تاريخ التقديم", "تاريخ الإرسال"];
+    } else {
+      tableHeaders = ["رقم المعاملة", "صورة الطبيب", "اسم الطبيب", "رقم الطبيب", "نوع المعاملة", "المستقبل", "تاريخ التقديم", "تاريخ الإرسال"];
+    }
   case "البريد الداخلي الوارد":
     rows = importintearnalmail;
     tableHeaders = ["رقم البريد", "صورة المرسل", "اسم المرسل", "رقم المرسل", "عنوان البريد", "اسم المكتب", "تاريخ الاستلام"];
@@ -337,6 +352,18 @@ const handleOpenModal = (uuid) => {
           <TableCell  sx={headStyle}align="center">{row.dateSent}</TableCell>
         </>
       )}
+      {selectedType === "البريد الصادر الخارجي" && isMaleaManager && (
+  <>
+    <TableCell sx={headStyle} align="center">{row.mailTitle}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.receiverName}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.receiptNumber}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.type}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.fees}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.dateSubmitted}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.dateSent}</TableCell>
+
+  </>
+)}
       {selectedType === "البريد الداخلي الوارد" && (
         <>
           <TableCell  sx={headStyle}align="center">{row.uuid}</TableCell>
@@ -365,11 +392,22 @@ const handleOpenModal = (uuid) => {
       <TableCell align="center">
         <IconButton
           
-             onClick={
-            
-            selectedType === "البريد الصادرالخارجي " ?
-            () => handleEditeTransction(row.uuid) : ()=>handleOpenModal(row.uuid)}
-            
+            onClick={() => {
+    if (selectedType === "البريد الصادر الخارجي") {
+      if (isMaleaManager) {
+        // مودال خاص برئيس المالية
+        setuuid(row.uuid);
+         handleRecipit(row.uuid)
+      } else {
+        setuuid(row.uuid);
+        setOpenExportModal(true);
+      }
+    } else {
+      setSelectedUuid(row.uuid);
+      setOpenInternalModal(true);
+    }
+  }}
+
         
           sx={{
             border: "1px solid rgba(212, 208, 212, 0.31)",
@@ -408,18 +446,27 @@ const handleOpenModal = (uuid) => {
           </TableContainer>
           </Box>
         </Box>
- {<EXPORTMAILS
-         open={openModal}
-         onClose={()=>setOpenModal(false)}
-         uuid={uuid}
+{selectedType === "البريد الصادر الخارجي" && (
+  <EXPORTMAILS
+    open={openExportModal}
+    onClose={() => setOpenExportModal(false)}
+    uuid={uuid}
+    type={selectedType}
+  />
+)}
+ {selectedType !== "البريد الصادر الخارجي" && (
+  <EnternalMails
+    open={openInternalModal}
+    onClose={() => setOpenInternalModal(false)}
+    uuid={selectedUuid}
+  />
+)}
+  {<ShowReicipet   open={showrecipit}
+         onClose={()=>{setShowRecipit(false)}}
+         uuid={id}
+         
          
          />}
- {<EnternalMails
-  open={openModal}
-  onClose={()=>{setOpenModal(false)}}
-  uuid={selectedUuid}
-  />
- }
 </Box>
 
     </>)}

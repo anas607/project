@@ -28,6 +28,7 @@ import { fetchexportouter } from "../../reducer/deywan/outer/outer";
 import { fetchimportouter } from "../../reducer/deywan/outer/importouter";
 import Loading from "../../wrong/mails/loading";
 import NoData from "../../wrong/mails/noData";
+import ShowReicipet from "../mails/form/showRecipiet";
 // بيانات البريد الوارد (وارد)
 
 
@@ -41,6 +42,7 @@ const headStyle = {
  fontWeight: "700" ,fontSize:'18px',
   py: 1.5,borderBottom: "3px solid rgb(14, 74, 35)" 
 };
+
 
 const Outer = () => {
   const stateRole=useSelector((state)=>state.user.roles[0])
@@ -56,6 +58,8 @@ const isManager = allowedRoles.some(role => stateRole.includes(role));
   const dispatch = useDispatch()
     const stateimport=useSelector((state)=>state.outereimport)
 // console.log(stateexport.data)
+const [showrecipit,setShowRecipit]=  useState(false)
+     const [id, setid] = useState(null);
    const [anchorEl, setAnchorEl] = useState(null);
   const [selectedType, setSelectedType] = useState("البريد الوارد");
   const [openModal, setOpenModal] = useState(false);
@@ -72,6 +76,10 @@ useEffect(() => {
 function handleEditeTransction(uuid,type ){
   setuuid(uuid)
   setOpenModal(true)
+}
+function handleRecipit(uuid){
+setid(uuid)
+setShowRecipit(true)
 }
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
@@ -206,7 +214,9 @@ function handleEditeTransction(uuid,type ){
       </TableCell>
       <TableCell align="center">
         <IconButton
-                       
+                       onClick={()=>{
+                     
+                              handleRecipit(row.uuid)}}    
                         sx={{
                           border: "1px solid rgba(212, 208, 212, 0.31)",
                           borderRadius: "50px",
@@ -426,6 +436,12 @@ function handleEditeTransction(uuid,type ){
          open={openModal}
          onClose={()=>setOpenModal(false)}
          uuid={uuid}
+         
+         />}
+         {<ShowReicipet   open={showrecipit}
+         onClose={()=>{setShowRecipit(false)}}
+         uuid={id}
+         
          
          />}
     </Box>

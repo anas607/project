@@ -20,18 +20,21 @@ import { CircularProgress } from "@mui/material";
 
 export default function EnternalMails({open,onClose,uuid,status}){
   const [mailStatus, setMailStatus] = useState(status);
-
+  const shouldShowButtons = !["مرسلة", "مرفوضة"].includes(mailStatus)
 const stateMalea=useSelector((state)=>state.user.roles[0])
-const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات"];
-const isEmployee = employeeRoles.some(role => stateMalea.includes(role));
+
 // const shouldShowButtons =  !["مرسلة", "مرفوضة"].includes(mailStatus);
   const isAdmin = stateMalea.roles?.some(role => role === "المدير")
-const disableButtons = isEmployee || isAdmin;
+// const disableButtons = isEmployee || isAdmin;
 
     const [mailData, setMailData] = useState({subject:"",body:"",updated_at:"",from:""});
         const [isLoading, setIsLoading] = useState(false);
     
-    
+    useEffect(() => {
+    if (open) {
+      setMailStatus(status);
+    }
+  }, [open, status]);
    
 useEffect(()=>{
 if (open && uuid) {
@@ -42,25 +45,29 @@ const fetchMail = async () => {
     try {
 const res = await getData(`${BaseUrl}${SHOW_INTERNAL_MAIL}?uuid=${uuid}`);
       setMailData(res);
-      console.log("المعاملة:", res);
+      // console.log("المعاملة:", res);
     } catch (err) {
       // console.error(  err.response.data.message)  
 
 
     }
   };
- async function EditMailStatus(status){
+ async function EditMailStatus(newStatus){
    setIsLoading(true);
     try{
 const response = await postData(`${BaseUrl}${EDIT_STATUS_MAIL}`,{
-  uuid,status
+  uuid, status: newStatus
   
 }
 )
     // setMailStatus(newStatus);
     // await fetchMail(); 
-alert( response.message)
+    console.log( response)
 
+alert( response.message)
+ if (response.mail && response.mail.status) {
+      setMailStatus(response.mail.status);
+    }
 return response.data
 
     }catch(err){
@@ -152,10 +159,10 @@ return response.data
 
     </Typography>
     {/* زر الإرسال */}
-    {!isEmployee && (
+    {shouldShowButtons  && (
   <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start', mt: 55 ,ml:'-50' }}>
   <Button
-   disabled={disableButtons}
+   
   onClick={async () => {
     try {
       await EditMailStatus( "مرسلة");
@@ -177,7 +184,7 @@ return response.data
            {isLoading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "قبول"} 
   </Button>
   <Button
-  disabled={disableButtons}
+ 
    onClick={async () => {
     try {
       await EditMailStatus( "مرفوضة");

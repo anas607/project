@@ -61,6 +61,7 @@ console.log(outboxRows)
 const [error, setError] = useState(null);
 
 const [selectedUuid, setSelectedUuid] = useState(null);
+   const [selectedStatus, setSelectedStatus] = useState(null);
 
    const [anchorEl, setAnchorEl] = useState(null);
   const [selectedType, setSelectedType] = useState("البريد الوارد");
@@ -71,9 +72,11 @@ const [selectedUuid, setSelectedUuid] = useState(null);
   const isInbox = selectedType === "البريد الوارد";
   const rows = isInbox ? inboxRows: outboxRows;
   
-const handleOpenModal = (uuid) => {
+const handleOpenModal = (uuid,status) => {
   setSelectedUuid(uuid);
-  setTimeout(() => setOpenModal(true), 0); // أو 100ms لو بدك تتأكد
+    setSelectedStatus(status);
+
+  setTimeout(() => setOpenModal(true), 0); 
 };
 useEffect(() => {
   const fetchData = async () => {
@@ -244,7 +247,7 @@ useEffect(() => {
     
           <TableCell align="center">
             <IconButton
-          onClick={() => handleOpenModal(row.uuid)}
+         onClick={() => handleOpenModal(row.uuid ,row.status)}
               sx={{
                 border: '1px solid rgba(212, 208, 212, 0.31)',
                 borderRadius: '50px',
@@ -283,11 +286,11 @@ useEffect(() => {
    
     
     
-    
-     {<EnternalMails
+    {<EnternalMails
       open={openModal}
       onClose={()=>{setOpenModal(false)}}
       uuid={selectedUuid}
+      status={selectedStatus}
       />
     }
         </Box>

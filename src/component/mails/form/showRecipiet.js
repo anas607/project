@@ -16,8 +16,13 @@ import {
   RECEPIET_STATUS,
 } from "../../../API/api";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function ShowReicipet({ open, onClose, uuid }) {
+    const stateRole=useSelector((state)=>state.user.roles[0])
+  
+  const allowedRoles = ["رئيس الإقامة", "رئيس الشهادات","رئيس المجالس","رئيس المفاضلة","رئيس الديوان","رئيس المالية"];
+const ishead = allowedRoles.some(role => stateRole.includes(role));
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [showImage, setShowImage] = useState(true);
@@ -172,8 +177,7 @@ export default function ShowReicipet({ open, onClose, uuid }) {
           ) : (
             !loading && "لا توجد صورة متاحة"
           )}
-
-          <Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
+{!ishead && (<Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
             <Box
               component="button"
               onClick={() => EDITRCIPITSTATUS("مرسلة")}
@@ -219,7 +223,8 @@ export default function ShowReicipet({ open, onClose, uuid }) {
                 "رفض"
               )}
             </Box>
-          </Box>
+          </Box>)}
+          
         </DialogContent>
       </Dialog>
     </>

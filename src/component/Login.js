@@ -134,19 +134,19 @@ if (userRoles.some(role => managerRoles.includes(role))) {
               <img
                 src="logo.png"
                 style={{
-                  width: "170px",
-                  height: "170px",
-                  marginTop: "5%",
+                  width: "180px",
+                  height: "160px",
+                  marginTop: "15%",
                   filter: "brightness(0) invert(1)",
                 }}
               />
               <Typography
-                variant="h2"
+                variant="h1"
                 sx={{
                   color: (theme) => theme.palette.secondary.main,
                   mt: "10%",
                   mb: "2",
-                  fontSize: "36px",
+                  fontSize: "40px",
                   fontWeight: "700",
                 }}
               >
@@ -154,8 +154,8 @@ if (userRoles.some(role => managerRoles.includes(role))) {
               </Typography>
 
               <Typography
-                variant="h6"
-                sx={{ mt: 2, color: (theme) => theme.palette.secondary.main }}
+                variant="h5"
+                sx={{ mt: 5,mb:14, color: (theme) => theme.palette.secondary.main }}
               >
                 مرحبا بعودتك
               </Typography>
@@ -170,13 +170,13 @@ if (userRoles.some(role => managerRoles.includes(role))) {
                   dir="rtl"
                   variant="outlined"
                   sx={{
-                    width: "100%",
-                    borderRadius: "8px",
+                    width: "90%",
+                    borderRadius: "10px",
                     backgroundColor: (theme) => theme.palette.secondary.main,
-                    mb: 2,
+                    mb: 4,
                     "& .MuiOutlinedInput-root": {
-                      borderRadius: "8px",
-                      height: "60px",
+                      borderRadius: "10px",
+                      height: "70px",
                       boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
                       paddingRight: "8px",
                       "& fieldset": {
@@ -202,13 +202,13 @@ if (userRoles.some(role => managerRoles.includes(role))) {
                   dir="rtl"
                   variant="outlined"
                   sx={{
-                    width: "100%",
-                    borderRadius: "8px",
+                    width: "90%",
+                    borderRadius: "10px",
                     backgroundColor: (theme) => theme.palette.secondary.main,
                     mb: 2,
                     "& .MuiOutlinedInput-root": {
-                      borderRadius: "8px",
-                      height: "60px",
+                      borderRadius: "10px",
+                      height: "70px",
                       boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
                       paddingRight: "8px", // يعطي مسافة صغيرة بين النص والأيقونة
                       "& fieldset": {
@@ -260,10 +260,10 @@ if (userRoles.some(role => managerRoles.includes(role))) {
                   borderRadius: "23px",
                   backgroundColor: (theme) => theme.palette.secondary.main,
                   color: (theme) => theme.palette.primary.main,
-                  fontSize: "20px",
+                  fontSize: "24px",
                   fontWeight: "700",
                   mt: "25%",
-                  width: "55%",
+                  width: "35%",
                   mb: 2,
                   direction: "rtl",
                   textTransform: "none",

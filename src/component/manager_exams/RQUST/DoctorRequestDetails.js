@@ -461,7 +461,7 @@ onClick={() => handleAttachmentClick(attachment.url)}
                         }}
                       >
                        
-<Avatar src={Data.Doctor_image?.replace(/\\/g, '/')} sx={{ width: 80, height: 80 }} />
+<img src={Data.Doctor_image?.replace(/\\/g, '/')} sx={{ width:' 100%', height: '100%' }} />
                       </Box>
                     </Box>
                   </Grid>

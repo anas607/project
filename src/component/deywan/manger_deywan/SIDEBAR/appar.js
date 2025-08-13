@@ -83,7 +83,7 @@ export default function Appar() {
               paddingRight: "5px",
               color: "rgb(105, 105, 102)",
               fontSize: "100%",
-              height: "34px",
+              height: "64px",
             },
           }}
           InputProps={{

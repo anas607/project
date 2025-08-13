@@ -42,13 +42,19 @@ import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 };
 
 export default function Archiv(){
+    const[uuid,setuuid]=useState(false)
+  
   const [offices, setOffices] = useState([]);
   const [selectedOfficeId, setSelectedOfficeId] = useState("");
    const state = useSelector((state) => state.user);
   const isSub_Admin=state.roles[0].includes("نائب المدير")
     const isAdmin=state.roles[0].includes("المدير")
+const [selectedUuid, setSelectedUuid] = useState(null);
 
-
+function handleEditeTransction(uuid,type ){
+  setuuid(uuid)
+  setOpenModal(true)
+}
   
   const [loading, setLoading] = useState(false);
   const[setenter,setOpenEnter]=useState(false)
@@ -57,7 +63,7 @@ export default function Archiv(){
    const[importintearnalmail,setImportInternalmail]=useState([])
     const[exportmail,setExportmail]=useState([])
     const [openModal, setOpenModal] = useState(false);
-    
+    console.log(exporintearnalmail)
   const mailTypes = ["البريد الصادر الخارجي", "البريد الداخلي الوارد", "البريد الداخلي الصادر"];
 
 const [mailStep, setMailStep] = useState(0);  
@@ -152,7 +158,10 @@ useEffect(() => {
 
   fetcharcive();
 }, [selectedType]);
-
+const handleOpenModal = (uuid) => {
+  setSelectedUuid(uuid);
+  setTimeout(() => setOpenModal(true), 0); // أو 100ms لو بدك تتأكد
+};
     return(
         <>
           <Box
@@ -285,7 +294,7 @@ useEffect(() => {
 </Box>
 
 
-               <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,width:"1560px", mt:1 ,overflowX: "hidden",}}>
+               <TableContainer sx={{ mr: -1, backgroundColor: "transparent", boxShadow: "none" ,width:"2000px", mt:3 ,overflowX: "hidden",}}>
             <Table  sx={{ width: "100%" }}>
             <TableHead  sx={{ height: "88px" }} >
   <TableRow sx={{ backgroundColor: (theme) => theme.palette.primary.main }}>
@@ -342,12 +351,14 @@ useEffect(() => {
       {selectedType === "البريد الداخلي الصادر" && (
         <>
           <TableCell  sx={headStyle} align="center">{row.uuid}</TableCell>
-          <TableCell  sx={headStyle} align="center">{row.from_office}</TableCell>
-          <TableCell  sx={headStyle} align="center">{row.from_phone}</TableCell>
+          <TableCell  sx={headStyle} align="center">{row.name_office}</TableCell>
+          <TableCell  sx={headStyle} align="center">{row.phone_from_user}</TableCell>
           <TableCell sx={headStyle}  align="center">{row.subject}</TableCell>
-          <TableCell  sx={headStyle} align="center">مُرسل</TableCell>
-          <TableCell  sx={headStyle} align="center">{row.received_at}</TableCell>
-          <TableCell  sx={headStyle} align="center">{row.sender_at}</TableCell>
+          <TableCell sx={{color: row.status ==='مرسلة'? 'green': row.status ==='مرفوضة'?"red":"black",
+ fontWeight: "700" ,fontSize:'20px',
+  py: 1.5,whiteSpace:'nowrap'}} align="center">{row.status}</TableCell>
+          <TableCell  sx={headStyle} align="center">{new Date(row.received_at).toLocaleDateString() }</TableCell>
+          <TableCell  sx={headStyle} align="center">{new Date(row.sender_at).toLocaleDateString() }</TableCell>
         </>
       )}
 
@@ -357,7 +368,7 @@ useEffect(() => {
              onClick={
             
             selectedType === "البريد الصادرالخارجي " ?
-            () => setOpenModal(true) : ()=>setOpenEnter(true)}
+            () => handleEditeTransction(row.uuid) : ()=>handleOpenModal(row.uuid)}
             
         
           sx={{
@@ -397,17 +408,18 @@ useEffect(() => {
           </TableContainer>
           </Box>
         </Box>
-{<EXPORTMAILS
-open={openModal}
-onClose={()=>setOpenModal(false)}
-
-
-/>}
-{<EnternalMails
-open={setenter}
-onclose={()=>setOpenEnter(false)}
-
-/>}
+ {<EXPORTMAILS
+         open={openModal}
+         onClose={()=>setOpenModal(false)}
+         uuid={uuid}
+         
+         />}
+ {<EnternalMails
+  open={openModal}
+  onClose={()=>{setOpenModal(false)}}
+  uuid={selectedUuid}
+  />
+ }
 </Box>
 
     </>)}

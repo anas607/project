@@ -159,8 +159,8 @@ const handleOpenModal = (uuid,status) => {
           </Box>
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none",mt:6 }}>
-  <Table sx={{width:"1573px", height:'88px'}}>
-    <TableHead sx={{width:"1573px", height:'88px'}}>
+  <Table sx={{width:"2000px", height:'88px'}}>
+    <TableHead sx={{width:"2000px", height:'88px'}}>
   <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
     <TableCell align="center" sx={headStyle}>رقم البريد</TableCell>
 

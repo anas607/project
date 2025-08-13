@@ -18,16 +18,50 @@ import CloseIcon from "@mui/icons-material/Close";
 import NoteIcon from "@mui/icons-material/Note";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { useEffect, useState } from "react";
-import { getData } from "../../../API/apiService";
-import { BaseUrl, Show, TRANSACTION } from "../../../API/api";
+import { getData, patchData, postData } from "../../../API/apiService";
+import { BaseUrl, Show, STATUS, TRANSACTION, TRANSACTION_STATUS, UNDER } from "../../../API/api";
+import { useSelector } from "react-redux";
 
-export default function EXPORTMAILS({ open, onClose, uuid }) {
+export default function EXPORTMAILS({ open, onClose, uuid,type }) {
+  const stateexport=useSelector((state)=>state.outerexport)
+   console.log(stateexport.data)
+   const statusValue = stateexport.data.length > 0 ? stateexport.data[0].status : null;
+console.log(statusValue);
+  const state = useSelector((state) => state.user);
+
+// التحقق إذا كان أي دور يحتوي على كلمة "رئيس"
+const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
+
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(null);
   const [showImage, setShowImage] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
   const [editLoading, setEditLoading] = useState(false);
-
+ const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    color: "",
+  });
+   async function UnderReview() {
+      try {
+        const res = await patchData(`${BaseUrl}${TRANSACTION}${UNDER}${uuid}`);
+        setSnackbar({
+          open: true,
+          message: res?.data?.message || "تم التحديث بنجاح",
+          color: "rgb(14,75,35)",
+        });
+      } catch (err) {
+        console.log(err.response.data.message);
+        setSnackbar({
+          open: true,
+          message:
+            err?.response?.data?.message || "حدث خطأ أثناء تغيير الحالة",
+          color: "red",
+        });
+      } finally {
+        setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+      }
+    }
   useEffect(() => {
     if (open && uuid) {
       showTransaction();
@@ -36,8 +70,16 @@ export default function EXPORTMAILS({ open, onClose, uuid }) {
 
   async function showTransaction() {
     setLoading(true);
+        let url = "";
+     if (uuid?.type === "inbox") {
+      url = `${BaseUrl}${TRANSACTION}${Show}${uuid}`;
+    } else {
+      url = `${BaseUrl}${TRANSACTION}content/${uuid}`;
+    }
+
     try {
-      const response = await getData(`${BaseUrl}${TRANSACTION}${Show}${uuid}`);
+      const response = await getData(url);
+      console.log(response)
       if (response.success) {
         setFormData(response.data);
       }
@@ -53,17 +95,63 @@ export default function EXPORTMAILS({ open, onClose, uuid }) {
     setShowImage(true);
   }
 
-  function EDITRCIPITSTATUS(status) {
-    setEditLoading(true);
-    setTimeout(() => {
-      console.log("تم تغيير الحالة إلى:", status);
+  async function EDITTRANSCTIONSTATUS(status) {
+      setEditLoading(true);
+      try {
+        const response = await postData(
+          `${BaseUrl}${TRANSACTION}${STATUS}${uuid}`,
+          {  status }
+        );
+        setSnackbar({
+          open: true,
+          message: response?.data?.message || "تم تنفيذ العملية بنجاح",
+          color: "rgb(14,75,35)",
+        });
+      } catch (err) {
+        console.log(err);
+        setSnackbar({
+          open: true,
+          message:
+            err?.response?.data?.message || "حدث خطأ أثناء تعديل الحالة",
+          color: "red",
+        });
+      } finally {
       setEditLoading(false);
-      setShowImage(false);
-    }, 1000);
-  }
+  
+      // إغلاق المودال بعد ظهور الرسالة بقليل
+      setTimeout(() => {
+        onClose();
+      }, 300);
+  
+      // إخفاء الرسالة بعد 2.5 ثانية
+      setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+    }
+    }
 
   return (
     <>
+     {snackbar.open && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: snackbar.color,
+            color: "white",
+            padding: "24px 36px",
+            borderRadius: "10px",
+            fontSize: "22px",
+            fontWeight: "bold",
+            textAlign: "center",
+            zIndex: 2000,
+            boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+            minWidth: "300px",
+          }}
+        >
+          {snackbar.message}
+        </Box>
+      )}
       <Modal
         open={open}
         onClose={onClose}
@@ -73,8 +161,8 @@ export default function EXPORTMAILS({ open, onClose, uuid }) {
         <Paper
           elevation={4}
           sx={{
-            width: 900,
-            maxHeight: "90vh",
+           width: 800,
+      height: '80vh',
             p: 3,
             borderRadius: 3,
             direction: "rtl",
@@ -85,17 +173,26 @@ export default function EXPORTMAILS({ open, onClose, uuid }) {
             position: "relative",
           }}
         >
-          <HighlightOffIcon
-            onClick={onClose}
-            sx={{
-              position: "absolute",
-              right: 16,
-              top: 16,
-              cursor: "pointer",
-              color: "red",
-              zIndex: 10,
-            }}
-          />
+
+      <Box
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+   
+    padding: "8px 16px",
+  }}
+>
+  {/* أيقونة العين على اليسار */}
+  <IconButton onClick={UnderReview} sx={{ color: "#0e4a23" }}>
+    <VisibilityIcon />
+  </IconButton>
+
+  {/* أيقونة الإغلاق على اليمين */}
+  <IconButton onClick={onClose} sx={{ color: "red" }}>
+    <HighlightOffIcon />
+  </IconButton>
+</Box>
 
           <Typography
             variant="h6"
@@ -265,49 +362,54 @@ export default function EXPORTMAILS({ open, onClose, uuid }) {
               )}
 
               {/* أزرار الرفض والتحويل في آخر المودال */}
-              <Box
-                sx={{
-                  mt: 3,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 2,
-                }}
-              >
-                <Button
-                  onClick={() => EDITRCIPITSTATUS("مرسلة")}
-                  sx={{
-                    backgroundColor: "rgba(9, 83, 35, 1)",
-                    color: "white",
-                    fontWeight: "700",
-                    fontSize: "20px",
-                    width: "48%",
-                    "&:hover": { backgroundColor: "rgba(9, 83, 35, 0.9)" },
-                  }}
-                >
-                  {editLoading ? (
-                    <CircularProgress size={24} sx={{ color: "white" }} />
-                  ) : (
-                    "تحويل"
-                  )}
-                </Button>
-                <Button
-                  onClick={() => EDITRCIPITSTATUS("مرفوضة")}
-                  sx={{
-                    backgroundColor: "red",
-                    color: "white",
-                    fontWeight: "700",
-                    fontSize: "20px",
-                    width: "48%",
-                    "&:hover": { backgroundColor: "darkred" },
-                  }}
-                >
-                  {editLoading ? (
-                    <CircularProgress size={24} sx={{ color: "white" }} />
-                  ) : (
-                    "رفض"
-                  )}
-                </Button>
-              </Box>
+             {((statusValue !== "محول" )) &&(<Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
+            <Box
+              component="button"
+              onClick={() => EDITTRANSCTIONSTATUS("محول")}
+              style={{
+                backgroundColor: "rgba(9, 83, 35, 1)",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "6px 16px",
+                cursor: "pointer",
+                fontWeight: "700",
+                fontSize: "24px",
+                width: "94px",
+              }}
+            >
+              {editLoading ? (
+                <CircularProgress size={24} sx={{ color: "white" }} />
+              ) : (
+                "تحويل"
+              )}
+            </Box>
+
+            <Box
+              component="button"
+              onClick={() => EDITTRANSCTIONSTATUS("مرفوض")
+               
+              }
+              style={{
+                backgroundColor: "red",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "6px 16px",
+                cursor: "pointer",
+                fontWeight: "700",
+                fontSize: "24px",
+                width: "94px",
+              }}
+            >
+              {editLoading ? (
+                <CircularProgress size={24} sx={{ color: "white" }} />
+              ) : (
+                "رفض"
+              )}
+            </Box>
+          </Box>)}
+               
             </>
           ) : (
             <Typography>لا توجد بيانات</Typography>
@@ -329,9 +431,7 @@ export default function EXPORTMAILS({ open, onClose, uuid }) {
           <IconButton sx={{ color: "#0e4a23" }}>
             <VisibilityIcon />
           </IconButton>
-          <IconButton onClick={() => setShowImage(false)} sx={{ color: "red" }}>
-            <CloseIcon />
-          </IconButton>
+        
         </Box>
         <DialogContent sx={{ textAlign: "center" }}>
           {loading ? (

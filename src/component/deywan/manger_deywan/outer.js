@@ -64,10 +64,9 @@ const Outer_EDeywan = () => {
      const [id, setid] = useState(null);
 
   const stateexport=useSelector((state)=>state.outerexport)
-console.log(stateexport.data)
+// console.log(stateexport.data)
     const dispatch = useDispatch()
       const stateimport=useSelector((state)=>state.outereimport)
-      console.log(stateimport.data)
 
       const stateMalea=useSelector((state)=>state.user.roles[0])
       const isMaleaManager=stateMalea.includes("موظف المالية")
@@ -91,7 +90,7 @@ function handleRecipit(uuid){
 setid(uuid)
 setShowRecipit(true)
 }
-function handleEditeTransction(uuid){
+function handleEditeTransction(uuid,type ){
   setuuid(uuid)
   setOpenModal(true)
 }
@@ -132,8 +131,8 @@ function handleEditeTransction(uuid){
                 </Box>
 
       <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6 ,overflowY: 'auto',maxHeight: '700px', }}>
-       <Table sx={{width:"1573px", height:'88px'}}>
-        <TableHead sx={{width:"1573px", height:'88px'}}>
+       <Table sx={{width:"2000px", height:'88px'}}>
+        <TableHead sx={{width:"2000px", height:'88px'}}>
        <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
          {isMaleaManager ? <>
          
@@ -169,6 +168,9 @@ function handleEditeTransction(uuid){
     <TableCell align="center"sx={headStyle}>
       {isInbox ? "المرسل" : "المستقبل"}
     </TableCell>
+    <TableCell align="center" sx={headStyle}>
+  الحالة
+</TableCell>
     <TableCell align="center" sx={headStyle}>
       تاريخ التقديم
     </TableCell>
@@ -255,30 +257,39 @@ function handleEditeTransction(uuid){
 
       <TableCell sx={headofStyle} align="center">{row.uuid}</TableCell>
       <TableCell align="center">
-        <Avatar  sx={{ width: 56, height: 56, margin: "auto" }}  src={row.senderImg || row.receiverImg} />
+        <Avatar  sx={{ width: 56, height: 56, margin: "auto" }}  src={row.doctor_image || row.doctor_image} />
       </TableCell>
       <TableCell sx={headofStyle} align="center">
-        {isInbox ? row.doctor_name : row.receiverName}
+        {isInbox ? row.doctor_name : row.doctor_name}
       </TableCell>
       <TableCell sx={headofStyle} align="center">
-        {isInbox ? row.doctor_phone : row.receiverPhone}
+        {isInbox ? row.doctor_phone : row.doctor_phone}
       </TableCell>
             <TableCell sx={headofStyle} align="center">{row.form_name}</TableCell>
 
       <TableCell sx={headofStyle} align="center">
-        {isInbox ? row.from_path : row.receiverName}
+        {isInbox ? row.from_path : row.to_path?? '--'}
       </TableCell>
-      <TableCell sx={headofStyle} align="center">      {new Date(row.received_at).toLocaleDateString()}  
-</TableCell>
-
+        <TableCell sx={{color: row.status ==='محول'? 'green': row.status ==='مرفوض'?"red":"black",
+ fontWeight: "700" ,fontSize:'20px',
+  py: 1.5,whiteSpace:'nowrap'}}  align="center">
+       {row.status} 
+      </TableCell>
       <TableCell sx={headofStyle} align="center">
-  {isInbox ? new Date(row.submitted_at).toLocaleDateString() : row.dateSent}
+  {isInbox 
+    ? new Date(row.received_at).toLocaleDateString() 
+    : new Date(row.submitted_at).toLocaleDateString()
+  }
+</TableCell>
+      <TableCell sx={headofStyle} align="center">
+  {isInbox ? new Date(row.submitted_at).toLocaleDateString() :new Date(row.sent_at).toLocaleDateString() 
+}
 </TableCell>
 
       <TableCell align="center">
         <IconButton
 
-          onClick={()=>{handleEditeTransction(row.uuid)}}
+          onClick={()=>{handleEditeTransction(row.uuid ,isInbox ? 'inbox' : 'outbox')}}
           sx={{
             border: "1px solid rgba(212, 208, 212, 0.31)",
             borderRadius: "50px",

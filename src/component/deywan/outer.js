@@ -50,11 +50,12 @@ const isAdmin=stateRole.includes("المدير")
 
 const allowedRoles = ["رئيس الإقامة", "رئيس الشهادات","رئيس المجالس","رئيس المفاضلة"];
 const isManager = allowedRoles.some(role => stateRole.includes(role));
+  const[uuid,setuuid]=useState(false)
 
   const stateexport=useSelector((state)=>state.outerexport)
   const dispatch = useDispatch()
     const stateimport=useSelector((state)=>state.outereimport)
-console.log(stateimport.data)
+// console.log(stateexport.data)
    const [anchorEl, setAnchorEl] = useState(null);
   const [selectedType, setSelectedType] = useState("البريد الوارد");
   const [openModal, setOpenModal] = useState(false);
@@ -68,7 +69,10 @@ useEffect(() => {
     dispatch(fetchexportouter());
   }
 }, [selectedType, dispatch]);
-
+function handleEditeTransction(uuid,type ){
+  setuuid(uuid)
+  setOpenModal(true)
+}
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
       <SidBar />
@@ -106,8 +110,8 @@ useEffect(() => {
           </Box>
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6, overflowY: 'auto',maxHeight: '700px', }}>
-  <Table sx={{width:"1573px", height:'88px'}}>
-   <TableHead sx={{width:"1573px", height:'88px'}}>
+  <Table sx={{width:"2000px", height:'88px'}}>
+   <TableHead sx={{width:"2000px", height:'88px'}}>
   <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
     {isMaleaManager ? (
       <>
@@ -157,6 +161,8 @@ useEffect(() => {
           {isInbox ? "المرسل" : "المستقبل"}
         </TableCell>
         <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
+               <TableCell align="center" sx={headerStyle}>{isInbox ? "" : "الحالة"} </TableCell>
+
         <TableCell align="center" sx={headerStyle}>
           {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
         </TableCell>
@@ -343,31 +349,38 @@ useEffect(() => {
 ):(
                 rows.map((row, index) => (
                   <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)" }}>
-                    <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">{row.mailTitle}</TableCell>
+                    <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">{row.form_name}</TableCell>
                     <TableCell align="center">
                       <Avatar
                         sx={{ width: 56, height: 56, margin: 'auto' }}
-                        src={row.senderImg || row.receiverImg}
+                        src={row.doctor_image || row.doctor_image}
                       />
                     </TableCell>
                     <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
-                      {isInbox ? row.senderName : row.receiverName}
+                      {isInbox ? row.doctor_name : row.doctor_name}
                     </TableCell>
                     <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
-                      {isInbox ? row.senderPhone : row.receiverPhone}
+                      {isInbox ? row.doctor_phone : row.doctor_phone}
                     </TableCell>
                     <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
-                      {isInbox ? row.senderName : row.receiverName}
+                      {isInbox ? row.from_path : row.to_path?? '--'}
                     </TableCell>
+                 
                     <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
-                      {row.dateSubmitted}
+                       {new Date(row.submitted_at).toLocaleDateString()}
                     </TableCell>
+                      <TableCell sx={{color: row.status ==='محول'? 'green': row.status ==='مرفوض'?"red":"black",
+                     fontWeight: "700" ,fontSize:'20px',
+                      py: 1.5,whiteSpace:'nowrap'}}  align="center">
+                           {row.status} 
+                          </TableCell>
                     <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
-                      {isInbox ? row.dateReceived : row.dateSent}
+                      {isInbox ? row.dateReceived :new Date(row.sent_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
-                        onClick={() => setOpenModal(true)}
+                        onClick={()=>{handleEditeTransction(row.uuid ,isInbox ? 'inbox' : 'outbox')}}
+          
                         sx={{
                           border: "1px solid rgba(212, 208, 212, 0.31)",
                           borderRadius: "50px",
@@ -409,13 +422,12 @@ useEffect(() => {
 
 
       </Box>
-
-     {<EXPORTMAILS
-     open={openModal}
-     onClose={()=>setOpenModal(false)}
-     
-     
-     />}
+ {<EXPORTMAILS
+         open={openModal}
+         onClose={()=>setOpenModal(false)}
+         uuid={uuid}
+         
+         />}
     </Box>
   );
 };

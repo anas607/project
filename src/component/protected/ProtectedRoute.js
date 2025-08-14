@@ -58,7 +58,7 @@ useEffect(() => {
   const checkSession = async () => {
     try {
       const data = await getData(`${BaseUrl}${CHECK_SESSION}`);
-            console.log("RESPONSE:", data);
+            console.log("RESPONSE:", data.user.avatar);
 
       dispatch(
         setUserData({
@@ -66,6 +66,7 @@ useEffect(() => {
           roles: data.user.roles || [],
         })
       );
+
       console.log("Allowed:", allowedRole);
 console.log("User roles:", roles);
 

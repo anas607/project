@@ -42,7 +42,10 @@ const headStyle = {
   py: 1.5,
 };
 const Employyes = () => {
+  const [searchResults, setSearchResults] = useState([]);
+
       const [id, setId] = useState(false);
+const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const [showAddEmployee, setShowAddEmployee] = useState(false);
     const [showEditEmployee, setShowEditEmployee] = useState(false);
@@ -55,8 +58,9 @@ const [selectedOffice, setSelectedOffice] = useState(null);
 
 
 
-function handleEditEmployees (id){
-  setId(id)
+function handleEditEmployees (employee,row){
+  console.log(row); 
+  setSelectedEmployee(employee);
   setShowEditEmployee(true)
 }
 
@@ -110,7 +114,7 @@ async function fetchEmployeesByOfficeName(officeName) {
 
           
         </Box>
- <Appar/>
+ <Appar setSearchResults={setSearchResults}/>
       <Box
           
             display="flex"
@@ -286,7 +290,11 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
         <TableCell align="center">
           <IconButton
          
-  onClick={() => handleEditEmployees(row.id)}
+  onClick={() => {
+  console.log(row);
+  handleEditEmployees(row);
+}}
+
 
 
             sx={{
@@ -336,7 +344,8 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
   {<EditEmployeeModal
   open={showEditEmployee}
   onClose={()=>{setShowEditEmployee(false)}}
-  id={setId}
+
+  employe={selectedEmployee}
   />
 }
     </Box>

@@ -83,7 +83,8 @@ const ismanger_exam=state.roles?.some(role => role ==="موظف الامتحان
             borderBottom: "3px solid transparent",
             mr: 6,
           }}
-          src={state.user.Avatar}
+         
+          // src={Avatar}
         />
 
         <Box sx={{ mr: 1 }}>

@@ -211,7 +211,7 @@ useEffect(() => {
             borderBottom: "2px solid #1f4d38",
           }}
         >
-          <TableCell align="center" sx={{  fontWeight: "700" ,fontSize:'16px' }}>{row.uuid}</TableCell>
+          <TableCell align="center" sx={{  fontWeight: "700" ,fontSize:'16px' }}>{index+1}</TableCell>
     
           {isInbox ? (
             <>

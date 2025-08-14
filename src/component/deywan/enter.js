@@ -219,7 +219,7 @@ const handleOpenModal = (uuid,status) => {
         borderBottom: "3px solid rgb(14, 74, 35)",
       }}
     >
-      <TableCell align="center" sx={{ py: 1.5 ,fontWeight: "700" ,fontSize:'16px'}}>{row.uuid}</TableCell>
+      <TableCell align="center" sx={{ py: 1.5 ,fontWeight: "700" ,fontSize:'16px'}}>{index+1}</TableCell>
       {isInbox ? (
         <>
           <TableCell align="center">

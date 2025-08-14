@@ -99,7 +99,7 @@ fetchweeklyByOfficeName(defaultOffice.id);
 }
 
   return (
-    <Box sx={{ backgroundColor: 'white', flex: 3, mt: -4, borderRadius: 2, height: '650px', p: -2, width: '1120px' }}>
+    <Box sx={{ backgroundColor: 'white', flex: 3, mt: -4, borderRadius: 2, height: '697px', p: -2, width: '1590px' }}>
      <Box sx={{
   display: 'flex',
   justifyContent: 'space-between',

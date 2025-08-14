@@ -46,7 +46,7 @@ const isAdmin=state.roles?.some(role => role === "المدير")
   {isAdmin?<Colum/>:<SmallBoxes/>}
      
   {/* البوكسين على اليمين */}
- <Box sx={{  display: 'flex', flexDirection: 'column', height: '790px',width: 'auto', maxWidth: '1604px', }}>
+ <Box sx={{  display: 'flex', flexDirection: 'column', height: '1020px',width: 'auto', maxWidth: '1604px', }}>
   
   {/* الصف العلوي - البوكسين */}  
   <Box

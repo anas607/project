@@ -64,7 +64,7 @@ const Outer_EDeywan = () => {
      const [id, setid] = useState(null);
 
   const stateexport=useSelector((state)=>state.outerexport)
-// console.log(stateexport.data)
+console.log(stateexport.data)
     const dispatch = useDispatch()
       const stateimport=useSelector((state)=>state.outereimport)
 
@@ -143,6 +143,8 @@ function handleEditeTransction(uuid,type ){
                  <TableCell align="center" sx={headerStyle}>رقم الإيصال</TableCell>
                  <TableCell align="center" sx={headerStyle}>نوع المعاملة</TableCell>
                  <TableCell align="center" sx={headerStyle}>رسوم المعاملة</TableCell>
+                                 <TableCell align="center" sx={headerStyle}>{isInbox ? "" : "الحالة"} </TableCell>
+                 
                  <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
                  <TableCell align="center" sx={headerStyle}>
                    {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
@@ -206,15 +208,24 @@ function handleEditeTransction(uuid,type ){
               ) :( isMaleaManager ? (
                 rows.map((row, index) => (
                   <TableRow key={index}>
-                    <TableCell sx={headofStyle} align="center">{row.uuid}</TableCell>
+                    <TableCell sx={headofStyle} align="center">{index+1}</TableCell>
                     <TableCell sx={headofStyle} align="center">{row.doctor_name}</TableCell>
                     <TableCell sx={headofStyle}align="center">{row.receipt_number}</TableCell>
                     <TableCell sx={headofStyle}align="center">{row.form_name}</TableCell>
                     <TableCell sx={headofStyle} align="center">{row.form_cost} ل.س</TableCell>
-                    <TableCell sx={headofStyle} align="center">{row.submitted_at}</TableCell>
+                      <TableCell sx={{color: row.status ==='محول'? 'green': row.status ==='مرفوض'?"red":"black",
+                                         fontWeight: "700" ,fontSize:'20px',
+                                          py: 1.5,whiteSpace:'nowrap'}}  align="center">
+                                               {row.status} 
+                                              </TableCell>
+
                     <TableCell sx={headofStyle} align="center">
-                      {isInbox ? row.received_at
-              : row.sent_at}
+        {new Date(row.submitted_at).toLocaleDateString()}
+                      </TableCell>
+                    <TableCell sx={headofStyle} align="center">
+                     {isInbox ? new Date(row.received_at).toLocaleDateString()
+: 
+new Date(row.sent_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
@@ -255,7 +266,7 @@ function handleEditeTransction(uuid,type ){
   rows.map((row, index) => (
     <TableRow key={index} sx={{ borderBottom: "2px solid #1f4d38" }}>
 
-      <TableCell sx={headofStyle} align="center">{row.uuid}</TableCell>
+      <TableCell sx={headofStyle} align="center">{index+1}</TableCell>
       <TableCell align="center">
         <Avatar  sx={{ width: 56, height: 56, margin: "auto" }}  src={row.doctor_image || row.doctor_image} />
       </TableCell>

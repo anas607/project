@@ -57,7 +57,9 @@ const isManager = allowedRoles.some(role => stateRole.includes(role));
   const stateexport=useSelector((state)=>state.outerexport)
   const dispatch = useDispatch()
     const stateimport=useSelector((state)=>state.outereimport)
-// console.log(stateexport.data)
+console.log(stateexport.data)
+console.log(stateimport.data)
+
 const [showrecipit,setShowRecipit]=  useState(false)
      const [id, setid] = useState(null);
    const [anchorEl, setAnchorEl] = useState(null);
@@ -128,6 +130,8 @@ setShowRecipit(true)
         <TableCell align="center" sx={headerStyle}>رقم الإيصال</TableCell>
         <TableCell align="center" sx={headerStyle}>نوع المعاملة</TableCell>
         <TableCell align="center" sx={headerStyle}>رسوم المعاملة</TableCell>
+                <TableCell align="center" sx={headerStyle}>{isInbox ? "" : "الحالة"} </TableCell>
+
         <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
         <TableCell align="center" sx={headerStyle}>
           {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
@@ -141,6 +145,8 @@ setShowRecipit(true)
     <TableCell align="center" sx={headerStyle}>رقم الطبيب</TableCell>
     <TableCell align="center" sx={headerStyle}>نوع المعاملة</TableCell>
     <TableCell align="center" sx={headerStyle}>{isInbox ? "المرسل" : "المستقبل"}</TableCell>
+            <TableCell align="center" sx={headerStyle}>{isInbox ? "" : "الحالة"} </TableCell>
+
     <TableCell align="center" sx={headerStyle}>تاريخ التقديم</TableCell>
     <TableCell align="center" sx={headerStyle}>{isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}</TableCell>
   </> ): isSub_Admin || isAdmin?(<>
@@ -202,15 +208,24 @@ setShowRecipit(true)
               isMaleaManager ? (
   rows.map((row, index) => (
     <TableRow key={index}>
-      <TableCell sx={headStyle} align="center">{row.uuid}</TableCell>
+      <TableCell sx={headStyle} align="center">{index+1}</TableCell>
       <TableCell sx={headStyle} align="center">{row.doctor_name}</TableCell>
       <TableCell sx={headStyle}align="center">{row.receipt_number}</TableCell>
       <TableCell sx={headStyle}align="center">{row.form_name}</TableCell>
       <TableCell sx={headStyle} align="center">{row.form_cost} ل.س</TableCell>
-      <TableCell sx={headStyle} align="center">{row.submitted_at}</TableCell>
+      <TableCell sx={{color: row.status ==='محول'? 'green': row.status ==='مرفوض'?"red":"black",
+                     fontWeight: "700" ,fontSize:'20px',
+                      py: 1.5,whiteSpace:'nowrap'}}  align="center">
+                           {row.status} 
+                          </TableCell>
+      <TableCell sx={headStyle} align="center"> 
+        {new Date(row.submitted_at).toLocaleDateString()}
+        </TableCell>
       <TableCell sx={headStyle} align="center">
-        {isInbox ? row.received_at
-: row.sent_at}
+         
+        {isInbox ? new Date(row.received_at).toLocaleDateString()
+: 
+new Date(row.sent_at).toLocaleDateString()}
       </TableCell>
       <TableCell align="center">
         <IconButton

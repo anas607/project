@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Paper,
@@ -12,20 +12,30 @@ import {
 } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SatelliteIcon from "@mui/icons-material/Satellite";
+import { getData, postData } from "../../../API/apiService";
+import { BaseUrl, EDIT_EMPLOYEE_INFORMATION, EMPLOYEES } from "../../../API/api";
 
-export default function EditEmployeeModal({ open, onClose ,id}) {
+export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}) {
   const [formData, setFormData] = useState({
-    employeeName: "",
-    email: "",
-    phone: "",
-    address: "",
-    password: "",
-    role: "",
-    department: "",
-    image: null,
-  });
+      employeeName: "",
+      email: "",
+      phone: "",
+      address: "",
+      image: null,
+    });
+ useEffect(() => {
+     if (employe) {
+       setFormData({
+         employeeName: employe.name || "",
+         email: employe.email || "",
+         phone: employe.phone || "",
+         address: employe.address || "",
+         image: null,
+       });
+     }
+   }, [employe]);
 
-  const handleChange = (e) => {
+   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image") {
       setFormData((prev) => ({ ...prev, image: files[0] }));
@@ -33,6 +43,39 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
+
+   async function EDITEMPLOYEES() {
+    try {
+      const data = new FormData();
+data.append("employee_id", id || employe.id);
+      data.append("employeeName", formData.employeeName);
+      data.append("email", formData.email);
+      data.append("phone", formData.phone);
+      data.append("address", formData.address);
+      if (formData.image) {
+        data.append("image", formData.image);
+      }
+  
+      const response = await postData(
+        `${BaseUrl}${EDIT_EMPLOYEE_INFORMATION}`,
+        data,
+        {},
+        true // نحدد أنه FormData
+      );
+  
+      console.log("تم التعديل:", response);
+      onUpdate(); // تحديث الجدول
+      onClose();  // إغلاق المودال
+    } catch (err) {
+      console.log("خطأ في التعديل:", err);
+    }
+  }
+
+
+
+
+
+
 
   return (
     <Modal
@@ -48,8 +91,8 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
       <Paper
         elevation={4}
         sx={{
-          width: "800px",
-          height: "700px",
+          width: "1057px",
+          height: "1016px",
           p: 4,
           borderRadius: 3,
           direction: "rtl",
@@ -70,7 +113,7 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
           sx={{
             fontWeight: "700",
             color: "rgb(14,74,35)",
-            fontSize: "22px",
+            fontSize: "32px",
             mb: 1,
             borderBottom: "3px solid",
             borderImage:
@@ -79,29 +122,28 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
             pb: 0.5,
           }}
         >
-          إضافة موظف
+          تعديل موظف
         </Typography>
 
         {/* النموذج: العمودين */}
         <Grid
           container
-          spacing={2}
+           rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} // مسافة بين الصفوف
           sx={{ mt: 1, flexGrow: 1, columnGap: 6 }} // زيادة المسافة بين العمودين
         >
           {/* العمود الأيمن */}
-          <Grid item xs={12} sm={6}>
+          <Grid item  size={4}>
             <Box sx={{ mb: 2 }}>
               <Typography
                 variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
+                sx={{ mb: 0.7, fontSize: "24px", fontWeight: "700" }}
               >
                 اسم الموظف
               </Typography>
               <TextField
                 fullWidth
                 name="employeeName"
-                value={formData.employeeName}
-                onChange={handleChange}
+                value={formData.employeeName} onChange={handleChange}
                 size="small"
               />
             </Box>
@@ -109,7 +151,7 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
             <Box sx={{ mb: 2 }}>
               <Typography
                 variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
+                sx={{ mb: 0.7, fontSize: "24px", fontWeight: "700" }}
               >
                 البريد الإلكتروني
               </Typography>
@@ -117,8 +159,7 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
                 fullWidth
                 name="email"
                 type="email"
-                value={formData.email}
-                onChange={handleChange}
+                 value={formData.email} onChange={handleChange}
                 size="small"
               />
             </Box>
@@ -126,7 +167,7 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
             <Box sx={{ mb: 2 }}>
               <Typography
                 variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
+                sx={{ mb: 0.7, fontSize: "24px", fontWeight: "700" }}
               >
                 صورة الموظف
               </Typography>
@@ -156,39 +197,15 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
               </Button>
             </Box>
 
-            <Box sx={{ mt: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                الدور
-              </Typography>
-              <Select
-                fullWidth={false}
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                sx={{ height: 35, width: "90%" }}
-                displayEmpty
-                inputProps={{ "aria-label": "الدور" }}
-                size="small"
-              >
-                <MenuItem value="">
-                  <em>اختر الدور</em>
-                </MenuItem>
-                <MenuItem value="مدير">مدير</MenuItem>
-                <MenuItem value="موظف">موظف</MenuItem>
-                <MenuItem value="محاسب">محاسب</MenuItem>
-              </Select>
-            </Box>
+          
           </Grid>
 
           {/* العمود الأيسر */}
-          <Grid item xs={12} sm={6}>
+         <Grid item  size={4}> 
             <Box sx={{ mb: 2 }}>
               <Typography
                 variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
+                sx={{ mb: 0.7, fontSize: "24px", fontWeight: "700" }}
               >
                 رقم الجوال
               </Typography>
@@ -204,7 +221,7 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
             <Box sx={{ mb: 2 }}>
               <Typography
                 variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
+                sx={{ mb: 0.7, fontSize: "24px", fontWeight: "700" }}
               >
                 العنوان
               </Typography>
@@ -217,54 +234,15 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
               />
             </Box>
 
-            <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                كلمة السر
-              </Typography>
-              <TextField
-                fullWidth
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                size="small"
-              />
-            </Box>
+          
 
-            <Box sx={{ mb: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ mb: 0.7, fontSize: "18px", fontWeight: "700" }}
-              >
-                الدائرة
-              </Typography>
-              <Select
-                fullWidth
-                name="department"
-                value={formData.department}
-                onChange={handleChange}
-                sx={{ height: 35, width: "100%" }}
-                displayEmpty
-                inputProps={{ "aria-label": "دائرة" }}
-                size="small"
-              >
-                <MenuItem value="">
-                  <em>اختر الدائرة</em>
-                </MenuItem>
-                <MenuItem value={1}>دائرة 1</MenuItem>
-                <MenuItem value={2}>دائرة 2</MenuItem>
-                <MenuItem value={3}>دائرة 3</MenuItem>
-              </Select>
-            </Box>
+         
           </Grid>
         </Grid>
 
-        {/* <Box sx={{ mt: 3, textAlign: "left", mt: "auto" }}> */}
+        {/* <Box sx={{  textAlign: "left", mt: "-10%" }}> */}
                   
-          <Box sx={{display:"flex",gap:3 ,mr:58,width:'300',mt: "auto",position:'fixed'}}>
+          <Box sx={{display:"flex",gap:3 ,mr:70,width:'300', mt: "33%",position:'fixed'}}>
                     
                       <Button
                  onClick={onClose}
@@ -284,6 +262,7 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
                          
             تراجع
                       </Button>  <Button
+                      onClick={EDITEMPLOYEES}
                         variant="contained"
                         sx={{
                           borderRadius: "30px",
@@ -300,6 +279,7 @@ export default function EditEmployeeModal({ open, onClose ,id}) {
                         موافق
             
                       </Button></Box>
+                      {/* </Box> */}
       </Paper>
     </Modal>
   );

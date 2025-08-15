@@ -49,25 +49,28 @@ const isAdmin=state.roles?.some(role => role === "المدير")
  <Box sx={{  display: 'flex', flexDirection: 'column', height: '1020px',width: 'auto', maxWidth: '1604px', }}>
   
   {/* الصف العلوي - البوكسين */}  
-  <Box
+<Box
   sx={{
-    backgroundColor: "rgb(233, 232, 232)",
+    backgroundColor: "rgba(218, 215, 215, 1)",
     display: 'flex',
     gap: '24px',
-    width: 'auto',  
+    height: '500px',
+    width: '100%',  
     justifyContent: 'flex-start', 
-    mt: 3,borderRadius:'20%',
-    mb:5
+    mt: 3,
+    borderRadius:'20%',
+    mb:7
   }}
 >
-  <Box sx={{ width: '1280px', flex: 1, minHeight: '200px',borderRadius:'4%' }}>
+  <Box sx={{ flex: 1, height: '100%', borderRadius:'4%', display: 'flex', flexDirection: 'column' }}>
     <Peaper />
   </Box>
 
-  <Box sx={{ width: '1280px', flex: 1, minHeight: '200px',borderRadius:'4%' }}>
+  <Box sx={{ flex: 1, height: '100%', borderRadius:'4%', display: 'flex', flexDirection: 'column' }}>
     <PeaperOut />
   </Box>
 </Box>
+
 
   
 

@@ -27,7 +27,9 @@ export default function ShowReicipet({ open, onClose, uuid }) {
 const ishead = allowedRoles.some(role => stateRole.includes(role));
   const [loading, setLoading] = useState(false);
     const [buttonsDisabled, setButtonsDisabled] = useState(true); // بشكل افتراضي معطلة
-  
+    const stateexport=useSelector((state)=>state.outerexport)
+     console.log(stateexport.data)
+     const statusValue = stateexport.data.length > 0 ? stateexport.data[0].status : null;
   const [imageUrl, setImageUrl] = useState("");
   const [showImage, setShowImage] = useState(true);
   const [editLoading, setEditLoading] = useState(false);
@@ -159,9 +161,11 @@ const ishead = allowedRoles.some(role => stateRole.includes(role));
             padding: "8px 16px",
           }}
         >
-          <IconButton onClick={UnderReview} sx={{ color: "#0e4a23" }}>
-            <VisibilityIcon />
-          </IconButton>
+          {statusValue !== "محول"  && (
+            <IconButton onClick={UnderReview} sx={{ color: "#0e4a23" }}>
+              <VisibilityIcon />
+            </IconButton>
+          )}
 
           <IconButton onClick={onClose} sx={{ color: "red" }}>
             <CloseIcon />
@@ -185,7 +189,9 @@ const ishead = allowedRoles.some(role => stateRole.includes(role));
           ) : (
             !loading && "لا توجد صورة متاحة"
           )}
-{!ishead  && !hideButtons && (<Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
+{ statusValue !== "محول"  && (
+
+  <Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
             <Box
               component="button"
               onClick={() => EDITRCIPITSTATUS("مرسلة")}

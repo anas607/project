@@ -206,7 +206,7 @@ export default function Colum() {
     <Box
       sx={{
         width: "400px",
-        height: "972px",
+        height: "1072px",
         backgroundColor: "rgb(232, 232, 232)",
         borderRadius: "8px",
         padding: "16px",
@@ -335,7 +335,7 @@ export default function Colum() {
       {/* البوكس الأزرق الأساسي تحته */}
       <Box
         sx={{
-          width: "100%",
+          width: "100%",height:'655px',
           backgroundColor: "#ffffff",
           borderRadius: "8px",
           mt: 2,

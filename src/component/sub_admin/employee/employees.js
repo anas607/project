@@ -33,6 +33,7 @@ import { ALL_ROLL, BaseUrl, BY, EMPLOYEES, FETCHOFFICE, Show } from "../../../AP
 import Loading from "../../../wrong/mails/loading";
 import ADDEmployees from "./addemployee";
 import EditEmployeeModal from "./editemployee";
+import { useSelector } from "react-redux";
 
 
 
@@ -42,6 +43,8 @@ const headStyle = {
   py: 1.5,
 };
 const Employyes = () => {
+  const state = useSelector((state) => state.user);
+const isSub_Admin=state.roles[0].includes("نائب المدير")
   const [searchResults, setSearchResults] = useState([]);
 
       const [id, setId] = useState(false);
@@ -205,13 +208,13 @@ async function fetchEmployeesByOfficeName(officeName) {
 ))}
   </Select>
 </FormControl>
- 
-<Button 
+ {isSub_Admin &&(<Button 
 onClick={()=>{setShowAddEmployee(true)}}
 sx={{backgroundColor:"rgb(14,75,35)",color:'white',
   borderRadius:"30px" ,width:"11%",height:"70px",
   fontSize:'24px',fontWeight:'700'}}>اضافة موظف</Button>
 
+)}
 
 
 
@@ -220,6 +223,10 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
           {<ADDEmployees
           open={showAddEmployee}
           onClose={()=>{setShowAddEmployee(false)}}
+                  onSuccess={() =>
+                  {fetchEmployeesByOfficeName()}
+                  }
+          
           />}
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none",mt:6 }}>

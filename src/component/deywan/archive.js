@@ -339,42 +339,49 @@ useEffect(() => {
     <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)" }}>
       {selectedType === "البريد الصادر الخارجي" && (
         <>
-          <TableCell  sx={headStyle}align="center">{row.mailTitle}</TableCell>
-          <TableCell sx={headStyle} align="center"><Avatar  sx={{margin:'auto',width: 56, height: 56}} src={row.receiverImg} /></TableCell>
-          <TableCell sx={headStyle} align="center">{row.receiverName}</TableCell>
-          <TableCell sx={headStyle} align="center">{row.receiverPhone}</TableCell>
+          <TableCell  sx={headStyle}align="center">{index+1}</TableCell>
+          <TableCell sx={headStyle} align="center"><Avatar  sx={{margin:'auto',width: 56, height: 56}} src={ row.doctor_image} /></TableCell>
+          <TableCell sx={headStyle} align="center">{row.doctor_name}</TableCell>
+          <TableCell sx={headStyle} align="center">{row.doctor_phone}</TableCell>
           <TableCell sx={headStyle} align="center">{row.type}</TableCell>
-          <TableCell sx={headStyle} align="center">{row.receiverName}</TableCell>
-          <TableCell sx={headStyle} align="center">{row.dateSubmitted}</TableCell>
-          <TableCell  sx={headStyle}align="center">{row.dateSent}</TableCell>
+          <TableCell sx={headStyle} align="center">{row.from_path}</TableCell>
+          <TableCell sx={headStyle} align="center">                      
+             {new Date(row.submitted_at).toLocaleDateString()}
+</TableCell>
+          <TableCell  sx={headStyle}align="center">
+            {new Date(row.sent_at).toLocaleDateString()}
+            </TableCell>
         </>
       )}
       {selectedType === "البريد الصادر الخارجي" && isMaleaManager && (
   <>
-    <TableCell sx={headStyle} align="center">{row.mailTitle}</TableCell>
-    <TableCell sx={headStyle} align="center">{row.receiverName}</TableCell>
-    <TableCell sx={headStyle} align="center">{row.receiptNumber}</TableCell>
-    <TableCell sx={headStyle} align="center">{row.type}</TableCell>
-    <TableCell sx={headStyle} align="center">{row.fees}</TableCell>
-    <TableCell sx={headStyle} align="center">{row.dateSubmitted}</TableCell>
-    <TableCell sx={headStyle} align="center">{row.dateSent}</TableCell>
+    <TableCell sx={headStyle} align="center">{index+1}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.doctor_name}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.receipt_number}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.form_name}</TableCell>
+    <TableCell sx={headStyle} align="center">{row.form_cost}ل.س</TableCell>
+    <TableCell sx={headStyle} align="center">
+             {new Date(row.submitted_at).toLocaleDateString()}
+      </TableCell>
+    <TableCell sx={headStyle} align="center">            {new Date(row.sent_at).toLocaleDateString()}
+</TableCell>
 
   </>
 )}
       {selectedType === "البريد الداخلي الوارد" && (
         <>
-          <TableCell  sx={headStyle}align="center">{row.uuid}</TableCell>
+          <TableCell  sx={headStyle}align="center">{index+1}</TableCell>
           <TableCell sx={headStyle} align="center"><Avatar sx={{margin:'auto',width: 56, height: 56}}src={row.from_avatar} /></TableCell>
           <TableCell sx={headStyle} align="center">{row.from_name}</TableCell>
           <TableCell sx={headStyle} align="center">{row.from_phone}</TableCell>
           <TableCell  sx={headStyle}align="center">{row.subject}</TableCell>
           <TableCell  sx={headStyle}align="center">{row.from_office}</TableCell>
-          <TableCell sx={headStyle} align="center">{row.received_at}</TableCell>
+          <TableCell sx={headStyle} align="center">{new Date(row.received_at).toLocaleDateString}</TableCell>
         </>
       )}
       {selectedType === "البريد الداخلي الصادر" && (
         <>
-          <TableCell  sx={headStyle} align="center">{row.uuid}</TableCell>
+          <TableCell  sx={headStyle} align="center">{index+1}</TableCell>
           <TableCell  sx={headStyle} align="center">{row.name_office}</TableCell>
           <TableCell  sx={headStyle} align="center">{row.phone_from_user}</TableCell>
           <TableCell sx={headStyle}  align="center">{row.subject}</TableCell>

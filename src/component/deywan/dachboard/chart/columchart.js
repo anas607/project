@@ -44,20 +44,21 @@ export default function ColumnChart() {
     <VictoryChart
   theme={VictoryTheme.material}
   domainPadding={{ x: 40 }}
-  height={350}
+  height={650}
   padding={{ top: 20, bottom: 100, left: 50, right: 20 }} // 👈 زدنا bottom
 >
 
       {/* المحور الأفقي (أسماء الدوائر) */}
      <VictoryAxis
   style={{
+    
     tickLabels: {
-      fontSize: 16,
-      fontWeight: '700',
-      angle: -45,
+      fontSize: 22,
+      fontWeight: '700',padding:'10px',
+      // angle: -45,
            // بدون زاوية
       textAnchor: "middle", // ثبّت النص تحت العمود بالمنتصف
-      padding: 10,
+     
       direction: "rtl",
     },
   }}
@@ -66,6 +67,7 @@ export default function ColumnChart() {
 
       {/* الأعمدة */}
       <VictoryBar
+      horizontal
         data={chartData}
         x="name"
         y="value"

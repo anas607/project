@@ -33,7 +33,11 @@ const [selectedOfficeId, setSelectedOfficeId] = useState("");
   const [subject,setsubject]= useState("")
     const [body,setbody]= useState("")
     const [isLoading, setIsLoading] = useState(false);
-
+const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    color: "",
+  });
 
 useEffect(() => {
   if (open) {
@@ -66,8 +70,12 @@ async function handleCreat(){
     const response = await postData(`${BaseUrl}${CREATE_INTERNAL_MAIL}`,formData)
      console.log("Response:", response);
 
-        alert(response?.message || "تم إنشاء البريد بنجاح");
- 
+       // alert(response?.message || "تم إنشاء البريد بنجاح");
+ setSnackbar({
+        open: true,
+        message: response?.message || "تم التحديث بنجاح",
+        color: "rgb(14,75,35)",
+      });
 
   setsubject("");
     setbody("");
@@ -75,14 +83,45 @@ async function handleCreat(){
     onClose(); // ✅ هذا هو الصحيح
   } catch (err) {
      const errorMessage = err?.message || err?.errors?.[0] || "حدث خطأ أثناء الإرسال";
-    alert( errorMessage);
+   // alert( errorMessage);
+     setSnackbar({
+        open: true,
+        message:
+           err?.message || "حدث خطأ أثناء تغيير الحالة",
+        color: "red",
+      });
     
   }finally {
-    setIsLoading(false); //  إيقاف اللودر
+    setIsLoading(false);
+          setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+ //  إيقاف اللودر
   }
 }
   return (
     <>
+     {snackbar.open && (
+            <Box
+              sx={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: snackbar.color,
+                color: "white",
+                padding: "24px 36px",
+                borderRadius: "10px",
+                fontSize: "22px",
+                fontWeight: "bold",
+                textAlign: "center",
+                zIndex: 2000,
+                boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                minWidth: "300px",
+              }}
+            >
+              {snackbar.message}
+            </Box>
+          )}
+    
     <Modal
       open={open}
       onClose={onClose}

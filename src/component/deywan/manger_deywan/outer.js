@@ -170,9 +170,8 @@ function handleEditeTransction(uuid,type ){
     <TableCell align="center"sx={headStyle}>
       {isInbox ? "المرسل" : "المستقبل"}
     </TableCell>
-    <TableCell align="center" sx={headStyle}>
-  الحالة
-</TableCell>
+                                     <TableCell align="center" sx={headerStyle}>{isInbox ? "" : "الحالة"} </TableCell>
+
     <TableCell align="center" sx={headStyle}>
       تاريخ التقديم
     </TableCell>

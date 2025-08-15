@@ -17,7 +17,7 @@ import SatelliteIcon from "@mui/icons-material/Satellite";
 import { getData, postData } from "../../../API/apiService";
 import { ALL_ROLL, BaseUrl, registerEmployee } from "../../../API/api";
 
-export default function AddEmployeeModal({ open, onClose }) {
+export default function AddEmployeeModal({ open, onClose ,onSuccess}) {
   const [Rolls, setRolls] = useState([]);
     const [editLoading, seteditLoading] = useState(false);
 
@@ -55,7 +55,6 @@ export default function AddEmployeeModal({ open, onClose }) {
     fetchRolles();
   }, []);
 
-  // تغيير قيمة أي حقل
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "avatar") {
@@ -65,7 +64,6 @@ export default function AddEmployeeModal({ open, onClose }) {
     }
   };
 
-  // اختيار الرول
   const handleRoleChange = (roleId) => {
     const role = Rolls.find((r) => r.id === roleId);
     setFormValues((prev) => ({
@@ -93,11 +91,13 @@ seteditLoading(true)
         message: res?.data?.message || "تم تنفيذ العملية بنجاح",
         color: "rgb(14,75,35)",
       });
-      console.log("تمت الإضافة بنجاح:", res.data);
+      // console.log("تمت الإضافة بنجاح:", res.data);
+if (onSuccess) onSuccess();
       setTimeout(() => {
         onClose();
         setSnackbar((prev) => ({ ...prev, open: false }));
       }, 2000);
+      
     } catch (err) {
       setSnackbar({
         open: true,

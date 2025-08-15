@@ -46,14 +46,14 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
   });
    async function UnderReview() {
       try {
-        const res = await patchData(`${BaseUrl}${TRANSACTION}${UNDER}${uuid}`);
+      const res = await patchData(`${BaseUrl}${TRANSACTION}${UNDER}${uuid.id}`);
         setSnackbar({
           open: true,
           message: res?.data?.message || "تم التحديث بنجاح",
           color: "rgb(14,75,35)",
         }); setButtonsDisabled(false);
       } catch (err) {
-        console.log(err.response.data.message);
+        console.log(err);
         setSnackbar({
           open: true,
           message:
@@ -105,7 +105,7 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
       setEditLoading(true);
       try {
         const response = await postData(
-          `${BaseUrl}${TRANSACTION}${STATUS}${uuid}`,
+          `${BaseUrl}${TRANSACTION}${STATUS}${uuid.id}`,
           {  status }
         );
         setSnackbar({
@@ -190,7 +190,7 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
   }}
 >
   {/* أيقونة العين على اليسار */}
- {statusValue !== "محول"  && (
+ {statusValue !== "مرفوض"  && (
   <IconButton onClick={UnderReview} sx={{ color: "#0e4a23" }}>
     <VisibilityIcon />
   </IconButton>
@@ -368,57 +368,57 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
 
 
               {/* أزرار الرفض والتحويل في آخر المودال */}
-             {((statusValue !== "محول" )) &&(<Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
-            <Box
-              component="button"
-              onClick={() => EDITTRANSCTIONSTATUS("محول")}
-                  disabled={buttonsDisabled || editLoading}
+            {/* أزرار الرفض والتحويل في آخر المودال */}
+{statusValue !== "مرفوض" && statusValue !== "مرسلة" && (
+  <Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
+    <Box
+      component="button"
+      onClick={() => EDITTRANSCTIONSTATUS("محول")}
+      disabled={buttonsDisabled || editLoading}
+      style={{
+        backgroundColor: buttonsDisabled ? "rgba(9, 83, 35, 0.5)" : "rgba(9, 83, 35, 1)",
+        color: "white",
+        border: "none",
+        borderRadius: "6px",
+        padding: "6px 16px",
+        cursor: "pointer",
+        fontWeight: "700",
+        fontSize: "24px",
+        width: "94px",
+      }}
+    >
+      {editLoading ? (
+        <CircularProgress size={24} sx={{ color: "white" }} />
+      ) : (
+        "تحويل"
+      )}
+    </Box>
 
-              style={{
-      backgroundColor: buttonsDisabled ? "rgba(9, 83, 35, 0.5)" : "rgba(9, 83, 35, 1)",
-                color: "white",
-                border: "none",
-                borderRadius: "6px",
-                padding: "6px 16px",
-                cursor: "pointer",
-                fontWeight: "700",
-                fontSize: "24px",
-                width: "94px",
-              }}
-            >
-              {editLoading ? (
-                <CircularProgress size={24} sx={{ color: "white" }} />
-              ) : (
-                "تحويل"
-              )}
-            </Box>
+    <Box
+      component="button"
+      onClick={() => EDITTRANSCTIONSTATUS("مرفوض")}
+      disabled={buttonsDisabled || editLoading}
+      style={{
+        backgroundColor: buttonsDisabled ? "rgba(255,0,0,0.5)" : "red",
+        color: "white",
+        border: "none",
+        borderRadius: "6px",
+        padding: "6px 16px",
+        cursor: "pointer",
+        fontWeight: "700",
+        fontSize: "24px",
+        width: "94px",
+      }}
+    >
+      {editLoading ? (
+        <CircularProgress size={24} sx={{ color: "white" }} />
+      ) : (
+        "رفض"
+      )}
+    </Box>
+  </Box>
+)}
 
-            <Box
-              component="button"
-              onClick={() => EDITTRANSCTIONSTATUS("مرفوض")
-               
-              }
-                  disabled={buttonsDisabled || editLoading}
-
-              style={{
-      backgroundColor: buttonsDisabled ? "rgba(255,0,0,0.5)" : "red",
-                color: "white",
-                border: "none",
-                borderRadius: "6px",
-                padding: "6px 16px",
-                cursor: "pointer",
-                fontWeight: "700",
-                fontSize: "24px",
-                width: "94px",
-              }}
-            >
-              {editLoading ? (
-                <CircularProgress size={24} sx={{ color: "white" }} />
-              ) : (
-                "رفض"
-              )}
-            </Box>
-          </Box>)}
                
             </>
           ) : (

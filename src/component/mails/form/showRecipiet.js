@@ -19,11 +19,15 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function ShowReicipet({ open, onClose, uuid }) {
+  const [hideButtons, setHideButtons] = useState(false);
+
     const stateRole=useSelector((state)=>state.user.roles[0])
   
   const allowedRoles = ["رئيس الإقامة", "رئيس الشهادات","رئيس المجالس","رئيس المفاضلة","رئيس الديوان","رئيس المالية"];
 const ishead = allowedRoles.some(role => stateRole.includes(role));
   const [loading, setLoading] = useState(false);
+    const [buttonsDisabled, setButtonsDisabled] = useState(true); // بشكل افتراضي معطلة
+  
   const [imageUrl, setImageUrl] = useState("");
   const [showImage, setShowImage] = useState(true);
   const [editLoading, setEditLoading] = useState(false);
@@ -62,7 +66,7 @@ const ishead = allowedRoles.some(role => stateRole.includes(role));
         open: true,
         message: res?.data?.message || "تم التحديث بنجاح",
         color: "rgb(14,75,35)",
-      });
+      });setButtonsDisabled(false);
     } catch (err) {
       console.log(err);
       setSnackbar({
@@ -83,6 +87,10 @@ const ishead = allowedRoles.some(role => stateRole.includes(role));
         `${BaseUrl}${TRANSACTION}${RECEPIET_STATUS}`,
         { uuid, status }
       );
+      if (response?.status === 200) {
+  setHideButtons(true);
+}
+
       setSnackbar({
         open: true,
         message: response?.data?.message || "تم تنفيذ العملية بنجاح",
@@ -177,12 +185,14 @@ const ishead = allowedRoles.some(role => stateRole.includes(role));
           ) : (
             !loading && "لا توجد صورة متاحة"
           )}
-{!ishead && (<Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
+{!ishead  && !hideButtons && (<Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
             <Box
               component="button"
               onClick={() => EDITRCIPITSTATUS("مرسلة")}
+                                disabled={buttonsDisabled || editLoading}
+
               style={{
-                backgroundColor: "rgba(9, 83, 35, 1)",
+        backgroundColor: buttonsDisabled ? "rgba(9, 83, 35, 0.5)" : "rgba(9, 83, 35, 1)",
                 color: "white",
                 border: "none",
                 borderRadius: "6px",
@@ -205,8 +215,10 @@ const ishead = allowedRoles.some(role => stateRole.includes(role));
               onClick={() => EDITRCIPITSTATUS("مرفوضة")
                
               }
+                                disabled={buttonsDisabled || editLoading}
+
               style={{
-                backgroundColor: "red",
+        backgroundColor: buttonsDisabled ? "rgba(255,0,0,0.5)" : "red",
                 color: "white",
                 border: "none",
                 borderRadius: "6px",

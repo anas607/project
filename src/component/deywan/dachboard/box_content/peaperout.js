@@ -18,28 +18,31 @@ import externalStatistics, {
   setExternalStatistics,
 } from "../../../../reducer/externalStatistics";
 
-const polarData = [
-  { x: "محول", y: 45 },
-  { x: "مرفوض", y: 30 },
-  { x: "قيد الدراسة", y: 25 },
-];
+// const polarData = [
+//   { x: "محول", y: 45 },
+//   { x: "مرفوض", y: 30 },
+//   { x: "قيد الدراسة", y: 25 },
+// ];
 
 const COLORS = ["#1E88E5", "#D32F2F", "#FBC02D"];
 export default function PeaperOut() {
-  // const dispatch = useDispatch();
-  // const { approved, pending, rejected } = useSelector(
-  //   (state) => state.externalStatistics
-  // );
+  const dispatch = useDispatch();
+  const { total, done, pending, under_review } = useSelector(
+    (state) => state.externalStatistics
+  );
 
   // useEffect(() => {
   //   const fetchExternalStatistics = async () => {
   //     try {
   //       const response = await getData(`${BaseUrl}${showExternalStatistics}`);
 
-  //       if (response?.data?.data) {
+  //       if (response?.data.data) {
   //         dispatch(setExternalStatistics(response.data.data));
   //       } else {
-  //         console.warn("الرد لا يحتوي على البيانات المتوقعة:", response);
+  //         console.warn(
+  //           "الرد لا يحتوي على البيانات المتوقعة:",
+  //           response.data.data
+  //         );
   //       }
   //     } catch (error) {
   //       console.error("فشل في جلب الإحصائيات:", error);
@@ -48,6 +51,34 @@ export default function PeaperOut() {
 
   //   fetchExternalStatistics();
   // }, [dispatch]);
+
+  useEffect(() => {
+    const fetchInternalStatistics = async () => {
+      try {
+        const response = await getData(`${BaseUrl}${showExternalStatistics}`);
+
+        if (response?.success === true && typeof response.data === "object") {
+          const stats = {
+            total: response.data.total ?? 0,
+            pending: response.data.pending ?? 0,
+            done: response.data.done ?? 0,
+            under_review: response.data.under_review ?? 0,
+          };
+
+          dispatch(setExternalStatistics(stats));
+        } else {
+          console.warn(
+            "الرد لم يكن ناجحًا أو لا يحتوي على البيانات:",
+            response.data
+          );
+        }
+      } catch (error) {
+        console.error("فشل في جلب الإحصائيات:", error);
+      }
+    };
+
+    fetchInternalStatistics();
+  }, [dispatch]);
 
   return (
     <>
@@ -79,7 +110,7 @@ export default function PeaperOut() {
               }}
               variant="h5"
             ></Typography>
-            {/* {approved + rejected + pending} */}1
+            {total}
             <Typography
               sx={{
                 fontSize: "10px",
@@ -115,7 +146,7 @@ export default function PeaperOut() {
                     color: "#666",
                   }}
                 >
-                  {/* {approved} */}2
+                  {done}
                 </Box>
                 من البريد المحول
               </Typography>
@@ -138,7 +169,7 @@ export default function PeaperOut() {
                   component="span"
                   sx={{ ml: 1, fontWeight: "500", color: "#666" }}
                 >
-                  {/* {rejected} */}3
+                  {pending}
                 </Box>
                 من البريد المرفوض
               </Typography>
@@ -161,7 +192,7 @@ export default function PeaperOut() {
                   component="span"
                   sx={{ ml: 1, fontWeight: "500", color: "#666" }}
                 >
-                  {/* {pending} */}
+                  {under_review}
                 </Box>
                 من البريد قيد الدراسة
               </Typography>

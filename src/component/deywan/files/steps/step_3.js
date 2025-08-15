@@ -1,128 +1,127 @@
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import SortIcon from '@mui/icons-material/Sort';
-import { Typography,} from '@mui/material';
+import { useDispatch } from "react-redux";
+import { addElement } from "../../../../reducer/form";
+import { useState } from "react";
+import { Box, Typography, Button } from "@mui/material";
 
+export default function Step_3() {
+  const dispatch = useDispatch();
 
-export default function Step_3(){
-return(
+  const [imageLabel, setImageLabel] = useState("");
+  const [fileLabel, setFileLabel] = useState("");
 
+  const handleAddAttachments = () => {
+    if (imageLabel) {
+      dispatch(addElement({ label: imageLabel, type: 4 }));
+    }
+    if (fileLabel) {
+      dispatch(addElement({ label: fileLabel, type: 5 }));
+    }
 
-         
-          <>
-          <Box sx={{ flex: 1,mt:1}}>
-            
-             <Box sx={{display:"flex", gap:4 }}>
-               <Button
-              component="label"
-              sx={{
-                backgroundColor: ' rgb(14,74,35)',
-                color: 'white',
-                borderRadius: '5px',mt:2,
-                minWidth: '70px',width:'20%',height:'69px',fontSize:"24px"
-,fontWeight:700,
-                
-              }}
-            >
-                 <input
-      type="file"
-      accept="image/*"
-      hidden
-      onChange={(e) => {
-        const file = e.target.files[0];
-      
-      }}
-    />
-              صورة 
-            </Button>
+    setImageLabel("");
+    setFileLabel("");
+  };
 
-             <Button
-             component="label"
-              sx={{
-                backgroundColor: ' rgb(14,74,35)',
-                color: 'white',
-                borderRadius: '5px',mt:2,mr:-2,
-                minWidth: '70px',textTransform: 'none'
-                ,width:'20%',height:'69px',fontSize:"24px"
-,fontWeight:700,
-              }}
-            >
-              ملف  excel
-               <input
-      type="file"
-      accept=".xlsx, .xls"
-      hidden
-      onChange={(e) => {
-        const file = e.target.files[0];
-        console.log('ملف إكسل مرفوع:', file);
-        // هون فيك تضيف معالجتك لملف الإكسل
-      }}
-    />
-            </Button>
-           
-             
+  return (
+    <Box sx={{ flex: 1, mt: 1 }}>
+      {/* أزرار الرفع (بدون تخزين الملف حالياً) */}
+      <Box sx={{ display: "flex", gap: 4 }}>
+        <Button component="label" sx={buttonStyle}>
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={(e) => {
+              const file = e.target.files[0];
+              console.log("صورة مرفوعة:", file);
+            }}
+          />
+          صورة
+        </Button>
 
-     
-            </Box>
-            <Box sx={{mt:2}}>
-              
-              
-             
-           
-           
-            
-           
-            
-{/* 2 */}
- <Typography sx={{fontSize:"24px",mb:1
-,fontWeight:700}} > صورة:</Typography>
+        <Button component="label" sx={buttonStyle}>
+          <input
+            type="file"
+            accept=".xlsx,.xls"
+            hidden
+            onChange={(e) => {
+              const file = e.target.files[0];
+              console.log("ملف إكسل مرفوع:", file);
+            }}
+          />
+          ملف Excel
+        </Button>
+      </Box>
 
-<Box sx={{display:"flex", gap:2 }}><Typography sx={{color:"rgb(30,30,30)" ,fontSize:"24px"
-,fontWeight:700 ,mt:0.5
-            }}>  العنوان
-             
-            </Typography>
-             <input style={{height:"40px" ,width:'65%',border:'2px solid rgba(71, 59, 68, 1) ',borderRadius:'5px'}}/></Box>
-            <hr style={{ height: "2px",border: "none",marginRight:-9,
-            width: "100%",
-            background:"rgba(206, 199, 199, 0.43)"}}/>
-            {/* 3 */}
- <Typography sx={{fontSize:"24px",mb:1
-,fontWeight:700}} >ملف excel :</Typography>
+      <Box sx={{ mt: 2 }}>
+        <Typography sx={titleStyle}>صورة:</Typography>
+        <Box sx={inputRowStyle}>
+          <Typography sx={labelStyle}>العنوان</Typography>
+          <input
+            value={imageLabel}
+            onChange={(e) => setImageLabel(e.target.value)}
+            style={inputStyle}
+          />
+        </Box>
+        <hr />
 
-<Box sx={{display:"flex", gap:2 }}><Typography sx={{color:"rgb(30,30,30)" ,fontSize:"24px"
-,fontWeight:700 ,mt:0.5
-            }}>  العنوان
-             
-            </Typography>
-           <input style={{height:"40px" ,width:'65%',border:'2px solid rgba(71, 59, 68, 1) ',borderRadius:'5px'}}/></Box>
-            <hr style={{ height: "2px",border: "none",marginRight:-9,
-            width: "100%",
-            background:"rgba(206, 199, 199, 0.43)"}}/>
-            {/* 4*/}
- 
-             </Box>
-          </Box></>
+        <Typography sx={titleStyle}>ملف Excel:</Typography>
+        <Box sx={inputRowStyle}>
+          <Typography sx={labelStyle}>العنوان</Typography>
+          <input
+            value={fileLabel}
+            onChange={(e) => setFileLabel(e.target.value)}
+            style={inputStyle}
+          />
+        </Box>
+        <hr />
 
-         
-           
-)}
-   
+        <Button
+          onClick={handleAddAttachments}
+          variant="contained"
+          color="success"
+          sx={{ mt: 2 }}
+        >
+          إضافة المرفقات
+        </Button>
+      </Box>
+    </Box>
+  );
+}
 
+// أنماط مساعدة
+const buttonStyle = {
+  backgroundColor: "rgb(14,74,35)",
+  color: "white",
+  borderRadius: "5px",
+  mt: 2,
+  minWidth: "70px",
+  width: "20%",
+  height: "69px",
+  fontSize: "24px",
+  fontWeight: 700,
+};
 
+const titleStyle = {
+  fontSize: "24px",
+  mb: 1,
+  fontWeight: 700,
+};
 
+const labelStyle = {
+  color: "rgb(30,30,30)",
+  fontSize: "24px",
+  fontWeight: 700,
+  mt: 0.5,
+};
 
-      
+const inputRowStyle = {
+  display: "flex",
+  gap: 2,
+};
 
-
-
-
-
-
-
-
-
-
-
-       
+const inputStyle = {
+  height: "40px",
+  width: "65%",
+  border: "2px solid rgba(71, 59, 68, 1)",
+  borderRadius: "5px",
+};

@@ -9,18 +9,18 @@ import {
   TableContainer,
   TableHead,
   TableRow,
- 
   IconButton,
-  
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import NoteIcon from '@mui/icons-material/Note';import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ArrowDropDownCircleOutlinedIcon from "@mui/icons-material/ArrowDropDownCircleOutlined";
+import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
+import NoteIcon from "@mui/icons-material/Note";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SidBar from "./dachboard/SIDEBAR/sidbar";
 import Appar from "./dachboard/SIDEBAR/appar";
-import ArticleIcon from '@mui/icons-material/Article';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
- import {useDispatch,useSelector }  from "react-redux"
+import ArticleIcon from "@mui/icons-material/Article";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { useDispatch, useSelector } from "react-redux";
 import EXPORTMAILS from "../mails/form/exportmails";
 import { getData } from "../../API/apiService";
 import { fetchexportouter } from "../../reducer/deywan/outer/outer";
@@ -29,31 +29,35 @@ import Loading from "../../wrong/mails/loading";
 import NoData from "../../wrong/mails/noData";
 // بيانات البريد الوارد (وارد)
 
-
-
-
 const Outer = () => {
-  const stateexport=useSelector((state)=>state.outerexport)
-  const dispatch = useDispatch()
-    const stateimport=useSelector((state)=>state.outereimport)
+  const stateexport = useSelector((state) => state.outerexport);
+  const dispatch = useDispatch();
+  const stateimport = useSelector((state) => state.outereimport);
 
-   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [selectedType, setSelectedType] = useState("البريد الوارد");
   const [openModal, setOpenModal] = useState(false);
-const[close,setclose]=useState(false)
-   const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const [close, setclose] = useState(false);
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
   const isInbox = selectedType === "البريد الوارد";
   const rows = isInbox ? stateimport.data : stateexport.data;
-useEffect(() => {
-  if (selectedType === "البريد الوارد") {
-    dispatch(fetchimportouter());
-  } else {
-    dispatch(fetchexportouter());
-  }
-}, [selectedType, dispatch]);
+  useEffect(() => {
+    if (selectedType === "البريد الوارد") {
+      dispatch(fetchimportouter());
+    } else {
+      dispatch(fetchexportouter());
+    }
+  }, [selectedType, dispatch]);
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
+    <Box
+      sx={{
+        display: "flex",
+        height: "100vh",
+        direction: "rtl",
+        backgroundColor: "rgb(233,232,232)",
+      }}
+    >
       <SidBar />
       <Box flex={1} p={2}>
         <Box
@@ -61,66 +65,92 @@ useEffect(() => {
           justifyContent="space-between"
           alignItems="center"
           mb={3}
-          
+        ></Box>
+        <Appar />
+        <Box
+          display="flex"
+          alignItems="center"
+          sx={{ cursor: "pointer", gap: 1, mb: 3 }}
+          onClick={handleClick}
+          style={{ marginTop: "3%" }}
         >
-        
-
-        
-
-          
+          <MenuIcon sx={{ mr: 1 }} />
+          <Typography fontWeight="700" sx={{ fontSize: "24px" }}>
+            {selectedType}
+          </Typography>
+          <ArrowDropDownCircleOutlinedIcon
+            sx={{ fontSize: "30px" }}
+            onClick={() => {
+              setSelectedType((prev) =>
+                prev === "البريد الوارد" ? "البريد الصادر" : "البريد الوارد"
+              );
+            }}
+          />
         </Box>
- <Appar/>
-      <Box
-          
-            display="flex"
-            alignItems="center"
-            sx={{ cursor: "pointer", gap: 1 ,mb:3 }}
-            onClick={handleClick}
-            style={{marginTop:'3%'}}
-          >
-            <MenuIcon sx={{mr:1}} />
-            <Typography fontWeight="700" sx={{fontSize:'24px'}}>{selectedType}</Typography>
-             <ArrowDropDownCircleOutlinedIcon  sx={{fontSize:'30px'}} onClick={() => {
-    setSelectedType(prev =>
-      prev === "البريد الوارد" ? "البريد الصادر" : "البريد الوارد"
-    );
-  }}
-/>
-          </Box>
 
-     <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6}}>
-  <Table sx={{width:"1573px", height:'88px'}}>
-   <TableHead sx={{width:"1573px", height:'88px'}}>
-  <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px' }}>
-      نوع المعاملة
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      صورة الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      اسم الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      رقم الطبيب
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      {isInbox ? "المرسل" : "المستقبل"}
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "bold" }}>
-      تاريخ التقديم
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
-    </TableCell>
-    <TableCell align="center" sx={{ color: "white", fontWeight: "700" ,fontSize:'20px'  }}>
-      {/* أيقونة */}
-    </TableCell>
-  </TableRow>
-</TableHead>
+        <TableContainer
+          sx={{
+            mr: 1,
+            backgroundColor: "transparent",
+            boxShadow: "none",
+            mt: 6,
+          }}
+        >
+          <Table sx={{ width: "1573px", height: "88px" }}>
+            <TableHead sx={{ width: "1573px", height: "88px" }}>
+              <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
+                <TableCell
+                  align="center"
+                  sx={{ color: "white", fontWeight: "700", fontSize: "20px" }}
+                >
+                  نوع المعاملة
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: "white", fontWeight: "700", fontSize: "20px" }}
+                >
+                  صورة الطبيب
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: "white", fontWeight: "700", fontSize: "20px" }}
+                >
+                  اسم الطبيب
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: "white", fontWeight: "700", fontSize: "20px" }}
+                >
+                  رقم الطبيب
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: "white", fontWeight: "700", fontSize: "20px" }}
+                >
+                  {isInbox ? "المرسل" : "المستقبل"}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: "white", fontWeight: "bold" }}
+                >
+                  تاريخ التقديم
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: "white", fontWeight: "700", fontSize: "20px" }}
+                >
+                  {isInbox ? "تاريخ الاستلام" : "تاريخ الإرسال"}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: "white", fontWeight: "700", fontSize: "20px" }}
+                >
+                  {/* أيقونة */}
+                </TableCell>
+              </TableRow>
+            </TableHead>
 
-
- <TableBody>
+            <TableBody>
               {(isInbox ? stateimport.isloading : stateexport.isloading) ? (
                 <TableRow>
                   <TableCell colSpan={8} align="center">
@@ -129,36 +159,62 @@ useEffect(() => {
                 </TableRow>
               ) : (isInbox ? stateimport.error : stateexport.error) ? (
                 <TableRow>
-                  <TableCell colSpan={8} align="center" sx={{ color: 'red', fontWeight: 'bold' }}>
-                    {(isInbox ? stateimport.error : stateexport.error)}
+                  <TableCell
+                    colSpan={8}
+                    align="center"
+                    sx={{ color: "red", fontWeight: "bold" }}
+                  >
+                    {isInbox ? stateimport.error : stateexport.error}
                   </TableCell>
                 </TableRow>
               ) : rows.length === 0 ? (
-                
-<NoData/>                 
+                <NoData />
               ) : (
                 rows.map((row, index) => (
-                  <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)" }}>
-                    <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">{row.mailTitle}</TableCell>
+                  <TableRow
+                    key={index}
+                    sx={{ borderBottom: "3px solid rgb(14, 74, 35)" }}
+                  >
+                    <TableCell
+                      sx={{ fontWeight: "700", fontSize: "16px" }}
+                      align="center"
+                    >
+                      {row.mailTitle}
+                    </TableCell>
                     <TableCell align="center">
                       <Avatar
-                        sx={{ width: 56, height: 56, margin: 'auto' }}
+                        sx={{ width: 56, height: 56, margin: "auto" }}
                         src={row.senderImg || row.receiverImg}
                       />
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
+                    <TableCell
+                      sx={{ fontWeight: "700", fontSize: "16px" }}
+                      align="center"
+                    >
                       {isInbox ? row.senderName : row.receiverName}
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
+                    <TableCell
+                      sx={{ fontWeight: "700", fontSize: "16px" }}
+                      align="center"
+                    >
                       {isInbox ? row.senderPhone : row.receiverPhone}
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
+                    <TableCell
+                      sx={{ fontWeight: "700", fontSize: "16px" }}
+                      align="center"
+                    >
                       {isInbox ? row.senderName : row.receiverName}
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
+                    <TableCell
+                      sx={{ fontWeight: "700", fontSize: "16px" }}
+                      align="center"
+                    >
                       {row.dateSubmitted}
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">
+                    <TableCell
+                      sx={{ fontWeight: "700", fontSize: "16px" }}
+                      align="center"
+                    >
                       {isInbox ? row.dateReceived : row.dateSent}
                     </TableCell>
                     <TableCell align="center">
@@ -171,7 +227,8 @@ useEffect(() => {
                           width: 52,
                           height: 52,
                           padding: "8px",
-                          backgroundColor: (theme) => theme.palette.primary.main,
+                          backgroundColor: (theme) =>
+                            theme.palette.primary.main,
                           color: (theme) => theme.palette.secondary.main,
                         }}
                       >
@@ -196,22 +253,11 @@ useEffect(() => {
                 ))
               )}
             </TableBody>
-
-
-
-  </Table>
-</TableContainer>
-
-
-
+          </Table>
+        </TableContainer>
       </Box>
 
-     {<EXPORTMAILS
-     open={openModal}
-     onClose={()=>setOpenModal(false)}
-     
-     
-     />}
+      {<EXPORTMAILS open={openModal} onClose={() => setOpenModal(false)} />}
     </Box>
   );
 };

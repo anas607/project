@@ -5,7 +5,8 @@ export const showEmployees = "show_employees";
 export const showInternalStatistics = "statistics/InternalStatisticsSummary";
 export const showExternalStatistics = "statistics/external";
 export const registerEmployee = "register-employee";
-// export const showAllTransactions = "form/show_all";
+export const showAllTransactions = "form/show_all";
+export const addFormManual = "form/manual";
 /////
 export const show_internal_mails_export = "show_internal_mails_export";
 export const show_import_internal_mails = "show_import_internal_mails";

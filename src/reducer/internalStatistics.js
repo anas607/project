@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const internalStatisticsSlice = createSlice({
   name: "internalStatistics",
   initialState: {
-    approved: 0,
+    approved: 1,
     pending: 0,
     rejected: 0,
   },

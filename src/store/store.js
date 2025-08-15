@@ -11,6 +11,7 @@ import transactionsReducer from "../reducer/transaction";
 
 import outerexportReducer from "../reducer/deywan/outer/outer";
 import outereimportReducer from "../reducer/deywan/outer/importouter";
+import formReducer from "../reducer/form";
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -25,6 +26,7 @@ export default configureStore({
     // =======
     outerexport: outerexportReducer,
     outereimport: outereimportReducer,
+    form: formReducer,
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

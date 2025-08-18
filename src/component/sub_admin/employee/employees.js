@@ -222,16 +222,15 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
 
 
           </Box>
-          {<ADDEmployees
-          open={showAddEmployee}
-          onClose={()=>{setShowAddEmployee(false)}}
-                  onSuccess={() =>
-                  {fetchEmployeesByOfficeName()}
-                  }
-          
-          />}
-{message && <Alert severity="success" onClose={() => setMessage(null)}>{message}</Alert>}
-{error && <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>}
+        <ADDEmployees
+  open={showAddEmployee}
+  onClose={() => setShowAddEmployee(false)}
+  onSuccess={() => {
+    if(selectedOffice) fetchEmployeesByOfficeName(selectedOffice.name);
+  }}
+/>
+
+
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none",mt:6 }}>
   <Table sx={{width:"2000px", height:'88px'}}>
@@ -359,10 +358,8 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
   employe={selectedEmployee}
   onUpdate={(success) => {
     if (success) {
-      setMessage("✅ تم تعديل الموظف بنجاح");
       fetchEmployeesByOfficeName(selectedOffice?.name);
     } else {
-      setError("❌ فشل تعديل الموظف");
     }
   }}
 />

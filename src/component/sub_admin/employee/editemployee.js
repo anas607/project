@@ -24,9 +24,13 @@ export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}
       address: "",
       image: null,
     });
+     const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        color: "",
+      });
  useEffect(() => {
      if (employe) {
-      console.log("Employee ID sent:", employe?.id, id);
 
        setFormData({
          name: employe.name || "",
@@ -52,7 +56,7 @@ export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}
   setLoading(true);
 
   const data = new FormData();
-  data.append("employee_id", employe?.id || id);
+data.append("employee_id", employe?.employee_id || id);
   data.append("name", formData.name);
   data.append("email", formData.email);
   data.append("phone", formData.phone);
@@ -62,21 +66,34 @@ export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}
     data.append("image", formData.image);
   }
 
-  const response = await postData(
+  const res = await postData(
     `${BaseUrl}${EDIT_EMPLOYEE_INFORMATION}`,
     data,
     {},
     true
   );
-
-  console.log("تم التعديل:", response);
+  setSnackbar({
+        open: true,
+        message: res?.data?.message || "تم تنفيذ العملية بنجاح",
+        color: "rgb(14,75,35)",
+      });
+setTimeout(() => {
+        onClose();
+        setSnackbar((prev) => ({ ...prev, open: false }));
+      }, 2000);
   onUpdate(true);   // ✅ نجاح
   onClose();
 } catch (err) {
-  console.log("خطأ في التعديل:", err);
-  onUpdate(false);  // ❌ فشل
+  onUpdate(false); 
+ setSnackbar({
+        open: true,
+        message: err.message,
+        color: "red",
+      });
+        
 } finally {
-  setLoading(false);
+  setLoading(false);      setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+
 }
 
 }
@@ -89,7 +106,29 @@ export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}
 
 
   return (
-    
+    <>
+     {snackbar.open && (
+            <Box
+              sx={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: snackbar.color,
+                color: "white",
+                padding: "24px 36px",
+                borderRadius: "10px",
+                fontSize: "22px",
+                fontWeight: "bold",
+                textAlign: "center",
+                zIndex: 2000,
+                boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                minWidth: "300px",
+              }}
+            >
+              {snackbar.message}
+            </Box>
+          )}
     <Modal
       open={open}
       onClose={onClose}
@@ -298,5 +337,6 @@ export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}
                       {/* </Box> */}
       </Paper>
     </Modal>
+    </>
   );
 }

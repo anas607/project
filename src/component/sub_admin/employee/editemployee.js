@@ -7,8 +7,7 @@ import {
   Box,
   Button,
   Select,
-  MenuItem,
-  TextField,
+CircularProgress,  TextField,
 } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SatelliteIcon from "@mui/icons-material/Satellite";
@@ -16,8 +15,10 @@ import { getData, postData } from "../../../API/apiService";
 import { BaseUrl, EDIT_EMPLOYEE_INFORMATION, EMPLOYEES } from "../../../API/api";
 
 export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}) {
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
-      employeeName: "",
+      name: "",
       email: "",
       phone: "",
       address: "",
@@ -25,8 +26,10 @@ export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}
     });
  useEffect(() => {
      if (employe) {
+      console.log("Employee ID sent:", employe?.id, id);
+
        setFormData({
-         employeeName: employe.name || "",
+         name: employe.name || "",
          email: employe.email || "",
          phone: employe.phone || "",
          address: employe.address || "",
@@ -44,32 +47,40 @@ export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}
     }
   };
 
-   async function EDITEMPLOYEES() {
-    try {
-      const data = new FormData();
-data.append("employee_id", id || employe.id);
-      data.append("employeeName", formData.employeeName);
-      data.append("email", formData.email);
-      data.append("phone", formData.phone);
-      data.append("address", formData.address);
-      if (formData.image) {
-        data.append("image", formData.image);
-      }
-  
-      const response = await postData(
-        `${BaseUrl}${EDIT_EMPLOYEE_INFORMATION}`,
-        data,
-        {},
-        true // نحدد أنه FormData
-      );
-  
-      console.log("تم التعديل:", response);
-      onUpdate(); // تحديث الجدول
-      onClose();  // إغلاق المودال
-    } catch (err) {
-      console.log("خطأ في التعديل:", err);
-    }
+ async function EDITEMPLOYEES() {
+ try {
+  setLoading(true);
+
+  const data = new FormData();
+  data.append("employee_id", employe?.id || id);
+  data.append("name", formData.name);
+  data.append("email", formData.email);
+  data.append("phone", formData.phone);
+  data.append("address", formData.address);
+
+  if (formData.image) {
+    data.append("image", formData.image);
   }
+
+  const response = await postData(
+    `${BaseUrl}${EDIT_EMPLOYEE_INFORMATION}`,
+    data,
+    {},
+    true
+  );
+
+  console.log("تم التعديل:", response);
+  onUpdate(true);   // ✅ نجاح
+  onClose();
+} catch (err) {
+  console.log("خطأ في التعديل:", err);
+  onUpdate(false);  // ❌ فشل
+} finally {
+  setLoading(false);
+}
+
+}
+
 
 
 
@@ -78,6 +89,7 @@ data.append("employee_id", id || employe.id);
 
 
   return (
+    
     <Modal
       open={open}
       onClose={onClose}
@@ -142,8 +154,8 @@ data.append("employee_id", id || employe.id);
               </Typography>
               <TextField
                 fullWidth
-                name="employeeName"
-                value={formData.employeeName} onChange={handleChange}
+                name="name"
+                value={formData.name} onChange={handleChange}
                 size="small"
               />
             </Box>
@@ -276,7 +288,11 @@ data.append("employee_id", id || employe.id);
                           mt: 10,
                         }}
                       >
-                        موافق
+                         {loading ? (
+    <CircularProgress size={28} sx={{ color: "white" }} />
+  ) : (
+    "موافق"
+  )}
             
                       </Button></Box>
                       {/* </Box> */}

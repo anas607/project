@@ -4,7 +4,7 @@ import {
  
   
   Table,
-
+Alert,
   TableCell,
   TableContainer,
   TableHead,
@@ -47,7 +47,8 @@ const Employyes = () => {
 const isSub_Admin=state.roles[0].includes("نائب المدير")
   const [searchResults, setSearchResults] = useState([]);
 
-      const [id, setId] = useState(false);
+const [message, setMessage] = useState(null);
+const [error, setError] = useState(null);
 const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const [showAddEmployee, setShowAddEmployee] = useState(false);
@@ -61,11 +62,12 @@ const [selectedOffice, setSelectedOffice] = useState(null);
 
 
 
-function handleEditEmployees (employee,row){
-  console.log(row); 
+function handleEditEmployees(employee) {
+  console.log("Employee to edit:", employee);
   setSelectedEmployee(employee);
-  setShowEditEmployee(true)
+  setShowEditEmployee(true);
 }
+
 
 
 
@@ -228,6 +230,8 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
                   }
           
           />}
+{message && <Alert severity="success" onClose={() => setMessage(null)}>{message}</Alert>}
+{error && <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>}
 
      <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none",mt:6 }}>
   <Table sx={{width:"2000px", height:'88px'}}>
@@ -298,7 +302,7 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
           <IconButton
          
   onClick={() => {
-  console.log(row);
+  console.log(row.uuid);
   handleEditEmployees(row);
 }}
 
@@ -348,13 +352,21 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
 
 
 
-  {<EditEmployeeModal
+<EditEmployeeModal
   open={showEditEmployee}
-  onClose={()=>{setShowEditEmployee(false)}}
-
+  onClose={() => setShowEditEmployee(false)}
+  id={selectedEmployee?.id} 
   employe={selectedEmployee}
-  />
-}
+  onUpdate={(success) => {
+    if (success) {
+      setMessage("✅ تم تعديل الموظف بنجاح");
+      fetchEmployeesByOfficeName(selectedOffice?.name);
+    } else {
+      setError("❌ فشل تعديل الموظف");
+    }
+  }}
+/>
+
     </Box>
   );
 };

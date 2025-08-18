@@ -72,8 +72,7 @@ export default function Polar() {
         >
           <InfoOutlinedIcon sx={{ fontSize: 32, color: '#32065cff' }} />
           <Typography variant="caption" sx={{ fontSize: 20,fontWeight: "700", color: '#32065cff' }}>
-            لا يوجد بيانات حالياً
-          </Typography>
+بريدك الداخلي فارغ          </Typography>
         </Box>
       )}
     </Box>

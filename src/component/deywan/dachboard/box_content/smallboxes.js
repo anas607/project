@@ -24,21 +24,30 @@ import Cookies from "universal-cookie";
 export default function SmallBoxes() {
   const dispatch = useDispatch();
   const employees = useSelector((state) => state.employees.data);
+const state = useSelector((state) => state.user);
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        
-        const response = await getData(`${BaseUrl}${showEmployees}`);
+  const isSub_Admin = state.roles[0]?.includes("نائب المدير");
+ useEffect(() => {
+  const fetchEmployees = async () => {
+    try {
+      let endpoint = ""; // خليه فاضي بالبداية
 
-        dispatch(setEmployees(response.data));
-      } catch (error) {
-        console.error("فشل في جلب الموظفين:", error);
+      if (isSub_Admin) {
+        endpoint = "/api/show/employees/and/managers";
+      } else {
+        endpoint = showEmployees; // جاي من ملف api.js
       }
-    };
 
-    fetchEmployees();
-  }, [dispatch]);
+      const response = await getData(`${BaseUrl}${endpoint}`);
+      dispatch(setEmployees(response.data));
+    } catch (error) {
+      console.error("فشل في جلب الموظفين:", error);
+    }
+  };
+
+  fetchEmployees();
+}, [dispatch, isSub_Admin]);
+
 
  
   return (
@@ -101,7 +110,7 @@ export default function SmallBoxes() {
                   <Typography
                     sx={{ fontSize: "12px", fontWeight: "700", color: "gray" }}
                   >
-                    {emp.phone}
+                    {isSub_Admin ? emp.role : emp.phone}
                   </Typography>
                 </Box>
                 <Box

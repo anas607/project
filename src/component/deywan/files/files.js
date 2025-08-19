@@ -32,6 +32,7 @@ import { getData, patchData } from "../../../API/apiService";
 import { setTransactions } from "../../../reducer/transaction";
 import { BaseUrl, FORM, showAllTransactions, TOOGLE_STATUS } from "../../../API/api";
 import { fetchForm } from "../../../reducer/admin/forms";
+import DeatilsForm from "../../mails/form/detealsform";
 
 
 
@@ -49,7 +50,11 @@ export default function Files() {
   const [showFile, setShowFile] = useState(false);
   const [showaddfile, setShowAddFile] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+const [selectedStatus, setSelectedStatus] = useState("");
 
+    const[selectedid,setselectedid]=useState("")
+
+  const[shoeDeatils,setShoeDeatils]=useState(false)
 const [loadingStatus, setLoadingStatus] = useState({});
      const state=useSelector((state)=>state.fetchform)
      console.log(state.data)
@@ -99,7 +104,11 @@ async function handleToggleStatus(id) {
     setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
   }
 }
-
+ function handleShowDeatiels(id ,status){
+      setselectedid(id)
+      setSelectedStatus(status)
+setShoeDeatils(true)
+    }
   return (
     <>
     {snackbar.open && (
@@ -488,9 +497,10 @@ async function handleToggleStatus(id) {
 
   <Grid  key={item.id}>
     <Paper
+    onClick={() => handleShowDeatiels(item.id )}
       elevation={3}
       sx={{
-        height: 200,
+        height: 200,cursor:'pointer',
         width: "270px",
         p: 2,backgroundColor:'rgba(233,232,232,0.5)',
         border:
@@ -604,14 +614,14 @@ async function handleToggleStatus(id) {
             </Grid>
           </Box>
         </Box>
-        {
-          <FilesMails
-            open={showFile}
-            onclose={() => {
-              setShowFile(false);
-            }}
-          />
-        }
+        
+        {<FilesMails  open={shoeDeatils}
+            onClose={()=>{setShoeDeatils(false)}}
+           id= {selectedid}
+                onSuccess={() => dispatch(fetchForm())}
+              
+           
+           /> }
       </Box>
     </>
   );

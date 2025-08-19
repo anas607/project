@@ -11,11 +11,13 @@ CircularProgress,  TextField,
 } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SatelliteIcon from "@mui/icons-material/Satellite";
-import { getData, postData } from "../../../API/apiService";
-import { BaseUrl, CONVERT_STATUS, EDIT_EMPLOYEE_INFORMATION, EMPLOYEES } from "../../../API/api";
+import { getData, patchData, postData } from "../../../API/apiService";
+import { BaseUrl, CONVERT_STATUS, EDIT_EMPLOYEE_INFORMATION, eMPLOYEE, EMPLOYEE, EMPLOYEES } from "../../../API/api";
 
 export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}) {
   const [loading, setLoading] = useState(false);
+
+  const [loadingeditstatus, setloadingeditstatus] = useState(false);
 
   const [formData, setFormData] = useState({
       name: "",
@@ -99,13 +101,25 @@ setTimeout(() => {
 }
 
 async function handleEditeStatus(){
+  setloadingeditstatus(true);
   try{
-    const response = await getData(`${BaseUrl}${CONVERT_STATUS}?id=${employe?.employee_id}`)
-    console.log(response)
+    const response = await patchData(`${BaseUrl}${CONVERT_STATUS}${eMPLOYEE}?user_id=${employe?.employee_id}`)
+     setSnackbar({
+        open: true,
+        message: response.message,
+       color: "rgb(14,75,35)",
+      });
+         onUpdate(true);
+         employe.status = employe.status === 1 ? 0 : 1;
   }catch(err){
     console.log(err)
+    setSnackbar({
+        open: true,
+        message: err.message,
+        color: "red",
+      });
   }finally{
-    setLoading(false)
+    setloadingeditstatus(false);  setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
   }
 }
   
@@ -327,28 +341,27 @@ async function handleEditeStatus(){
   )}
             
                       </Button>
-                       <Button
-                      onClick={handleEditeStatus}
-                        variant="contained"
-                        sx={{
-                          borderRadius: "30px",
-                          width: "200px",
-                          height: "55px",
-                          backgroundColor: "rgba(121, 8, 8, 1)",
-                          color: "white",
-                          fontSize: "24px",
-                          fontWeight: "700",
-                          
-                          mt: 10,
-                        }}
-                      >
-                         {loading ? (
+                      <Button
+  onClick={handleEditeStatus}
+  variant="contained"
+  sx={{
+    borderRadius: "30px",
+    width: "200px",
+    height: "55px",
+    backgroundColor: employe?.status === 1 ? "rgba(121, 8, 8, 1)" : "rgb(14,74,35)",
+    color: "white",
+    fontSize: "24px",
+    fontWeight: "700",
+    mt: 10,
+  }}
+>
+  {loadingeditstatus ? (
     <CircularProgress size={28} sx={{ color: "white" }} />
   ) : (
-    "الغاء التفعيل"
+    employe?.status === 1 ? "إلغاء التفعيل" : "تفعيل"
   )}
-            
-                      </Button>
+</Button>
+
                        <Button
                  onClick={onClose}
                         variant="contained"

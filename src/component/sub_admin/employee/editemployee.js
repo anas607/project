@@ -12,7 +12,7 @@ CircularProgress,  TextField,
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SatelliteIcon from "@mui/icons-material/Satellite";
 import { getData, postData } from "../../../API/apiService";
-import { BaseUrl, EDIT_EMPLOYEE_INFORMATION, EMPLOYEES } from "../../../API/api";
+import { BaseUrl, CONVERT_STATUS, EDIT_EMPLOYEE_INFORMATION, EMPLOYEES } from "../../../API/api";
 
 export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}) {
   const [loading, setLoading] = useState(false);
@@ -98,7 +98,17 @@ setTimeout(() => {
 
 }
 
-
+async function handleEditeStatus(){
+  try{
+    const response = await getData(`${BaseUrl}${CONVERT_STATUS}?id=${employe?.employee_id}`)
+    console.log(response)
+  }catch(err){
+    console.log(err)
+  }finally{
+    setLoading(false)
+  }
+}
+  
 
 
 
@@ -156,7 +166,7 @@ setTimeout(() => {
         {/* زر الإغلاق */}
         <HighlightOffIcon
           onClick={onClose}
-          sx={{ fontSize: "25px", cursor: "pointer", mb: 1, float: "left" }}
+          sx={{ fontSize: "25px", cursor: "pointer",  float: "left" ,mr:'94%'}}
         />
         {/* العنوان */}
         <Typography
@@ -295,29 +305,12 @@ setTimeout(() => {
                   
           <Box sx={{display:"flex",gap:3 ,mr:70,width:'300', mt: "33%",position:'fixed'}}>
                     
-                      <Button
-                 onClick={onClose}
-                        variant="contained"
-                        sx={{
-                          borderRadius: "30px",
-                          width: "70%",
-                          height: "55px",
-                          backgroundColor: "rgba(189, 165, 165, 1)",
-                          color: "white",
-                          fontSize: "24px",
-                          fontWeight: "700",
-                         
-                          mt: 10,
-                        }}
-                      >
-                         
-            تراجع
-                      </Button>  <Button
+                       <Button
                       onClick={EDITEMPLOYEES}
                         variant="contained"
                         sx={{
                           borderRadius: "30px",
-                          width: "280px",
+                          width: "200px",
                           height: "55px",
                           backgroundColor: "rgb(14,74,35)",
                           color: "white",
@@ -333,6 +326,46 @@ setTimeout(() => {
     "موافق"
   )}
             
+                      </Button>
+                       <Button
+                      onClick={handleEditeStatus}
+                        variant="contained"
+                        sx={{
+                          borderRadius: "30px",
+                          width: "200px",
+                          height: "55px",
+                          backgroundColor: "rgba(121, 8, 8, 1)",
+                          color: "white",
+                          fontSize: "24px",
+                          fontWeight: "700",
+                          
+                          mt: 10,
+                        }}
+                      >
+                         {loading ? (
+    <CircularProgress size={28} sx={{ color: "white" }} />
+  ) : (
+    "الغاء التفعيل"
+  )}
+            
+                      </Button>
+                       <Button
+                 onClick={onClose}
+                        variant="contained"
+                        sx={{
+                          borderRadius: "30px",
+                          width: "35%",
+                          height: "55px",
+                          backgroundColor: "rgba(189, 165, 165, 1)",
+                          color: "white",
+                          fontSize: "24px",
+                          fontWeight: "700",
+                         
+                          mt: 10,
+                        }}
+                      >
+                         
+            تراجع
                       </Button></Box>
                       {/* </Box> */}
       </Paper>

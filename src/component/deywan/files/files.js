@@ -8,7 +8,7 @@ import {
   Grid,
   Paper,
   Modal,
-  Checkbox,
+  CircularProgress,
   StepLabel,
   TextField,
 } from "@mui/material";
@@ -28,54 +28,35 @@ import FilesMails from "../../mails/form/files";
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getData } from "../../../API/apiService";
+import { getData, patchData } from "../../../API/apiService";
 import { setTransactions } from "../../../reducer/transaction";
-import { BaseUrl, showAllTransactions } from "../../../API/api";
+import { BaseUrl, FORM, showAllTransactions, TOOGLE_STATUS } from "../../../API/api";
+import { fetchForm } from "../../../reducer/admin/forms";
 
-const transactions = [
-  { id: 1, name: "معاملة 1", status: "فعالة", date: "2025-06-27" },
-  { id: 2, name: "معاملة 2", status: "غير فعالة", date: "2025-05-15" },
-  { id: 3, name: "معاملة 3", status: "فعالة", date: "2025-04-01" },
-  { id: 4, name: "معاملة 4", status: "غير فعالة", date: "2025-02-10" },
-  { id: 5, name: "معاملة 5", status: "قيد الدراسة", date: "2025-03-10" },
-];
+
 
 const steps = ["المعلومات العامة", " استمارة المعاملة", "المرفقات", "معاينة"];
 
-const getCardColor = (status) => {
-  switch (status) {
-    case "فعالة":
-      return "rgb(14, 74, 35)"; // أخضر فاتح
-    case "غير فعالة":
-      return "rgb(102, 101, 101)"; // أحمر فاتح
-    case "قيد الدراسة":
-      return "#FFC107"; // أصفر فاتح
-    default:
-      return "#ffffff";
-  }
-};
+
 // const response = await getData(`${BaseUrl}${showAllTransactions}`);
 
 export default function Files() {
+   const [snackbar, setSnackbar] = useState({
+      open: false,
+      message: "",
+      color: "",
+    });
   const [showFile, setShowFile] = useState(false);
   const [showaddfile, setShowAddFile] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [completed, setCompleted] = useState({});
 
-  //   const dispatch = useDispatch();
-  //   const transactions = useSelector((state) => state.transactions.data);
-
-  //   useEffect(() => {
-  //     const fetchTransactions = async () => {
-  //       try {
-  //         dispatch(setTransactions(response.data[0]));
-  //       } catch (error) {
-  //         console.error("فشل في جلب المعاملات:", error);
-  //       }
-  //     };
-
-  //     fetchTransactions();
-  //   }, [dispatch]);
+const [loadingStatus, setLoadingStatus] = useState({});
+     const state=useSelector((state)=>state.fetchform)
+     console.log(state.data)
+  const dispatch=useDispatch()
+     useEffect(()=>{
+         dispatch(fetchForm())
+     },[dispatch])
 
   function handleBack() {
     if (activeStep > 0) {
@@ -90,9 +71,58 @@ export default function Files() {
       setActiveStep((prev) => prev + 1);
     }
   }
+async function handleToggleStatus(id) {
+  try {
+    setLoadingStatus((prev) => ({ ...prev, [id]: true }));
+
+    const res = await patchData(`${BaseUrl}${FORM}${TOOGLE_STATUS}${id}`);
+    console.log(res);
+
+    // تحديث البيانات مباشرة في الـ state المحلي
+      dispatch(fetchForm())
+
+    setSnackbar({
+      open: true,
+      message: res?.data?.message || "تم التحديث بنجاح",
+      color: "rgb(14,75,35)",
+    });
+  } catch (err) {
+    console.log(err);
+    setSnackbar({
+      open: true,
+      message: err?.response?.data?.message || "حدث خطأ أثناء تغيير الحالة",
+      color: "red",
+    });
+  } finally {
+    setLoadingStatus((prev) => ({ ...prev, [id]: false }));
+
+    setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+  }
+}
 
   return (
     <>
+    {snackbar.open && (
+ <Box
+  sx={{
+    position: "fixed",
+    top: 50, // المسافة من الأعلى
+    left: "50%", // ضع العنصر عند منتصف العرض
+    transform: "translateX(-50%)", // ضعه تمامًا في الوسط
+    p: 2,
+    backgroundColor: snackbar.color,
+    color: "white",
+    borderRadius: 2,
+    zIndex: 9999,
+    minWidth: 200,
+    textAlign: "center",
+  }}
+>
+  {snackbar.message}
+</Box>
+
+)}
+
       <Box
         sx={{
           direction: "rtl",
@@ -441,164 +471,136 @@ export default function Files() {
                 </label>
               </Grid>
               {/* أوراق المعاملات */}
-              {transactions.map((item) => (
-                <Grid item xs={12} sm={6} md={3} key={item.id}>
-                  <Paper
-                    onClick={() => {
-                      setShowFile(true);
-                    }}
-                    variant="outlined"
-                    elevation={3}
-                    sx={{
-                      height: 200,
-                      cursor: "pointer",
-                      width: "270px",
-                      p: 2,
-                      backgroundColor: "rgba(255, 255, 255, 0.02)",
-                      border:
-                        item.status === "فعالة"
-                          ? "3px solid rgb(1, 53, 19)"
-                          : item.status === "غير فعالة"
-                          ? "3px solid rgba(139, 2, 2, 1)"
-                          : item.status === "قيد الدراسة"
-                          ? "3px solid gray"
-                          : "gray",
-                      color:
-                        item.status === "فعالة"
-                          ? " rgb(1, 53, 19)"
-                          : item.status === "غير فعالة"
-                          ? " red"
-                          : item.status === "قيد الدراسة"
-                          ? " yellow"
-                          : "gray",
-                      position: "relative",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      borderRadius: "5%",
-                    }}
-                  >
-                    {/* الأيقونة - في الأعلى اليسار */}
-                    <NoteIcon
-                      sx={{
-                        position: "absolute",
-                        top: 8,
-                        left: 8,
-                        color:
-                          item.status === "فعالة"
-                            ? "rgb(1, 53, 19)"
-                            : item.status === "غير فعالة"
-                            ? "rgba(139, 2, 2, 1)"
-                            : "gray",
+               {state.isloading ?  <Box
+    sx={{
+      position: "fixed", // تثبيت اللودر بالنسبة للشاشة
+      top: "50%",        // منتصف ارتفاع الشاشة
+      left: "50%",       // منتصف عرض الشاشة
+      transform: "translate(-50%, -50%)", // تحريك العنصر إلى الوسط بالضبط
+      zIndex: 9999,      // ليكون فوق كل العناصر الأخرى
+    }}
+  >
+    <CircularProgress />
+  </Box> :
 
-                        fontSize: "64px",
-                      }}
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        mt: 2,
-                      }}
-                    >
-                      {/* التاريخ */}
-                      <Typography
-                        sx={{
-                          fontSize: "14px",
-                          fontWeight: "700",
-                          color:
-                            item.status === "فعالة"
-                              ? "rgb(1, 53, 19)"
-                              : item.status === "غير فعالة"
-                              ? "rgba(139, 2, 2, 1)"
-                              : item.status === "قيد الدراسة"
-                              ? "gray"
-                              : "gray",
-                        }}
-                        variant="body2"
-                      >
-                        {/* {item.date} */}
-                      </Typography>
+ state.data?.[0]?.map((item) => (
+    <Grid container spacing={2}>
 
-                      {/* الحالة */}
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color:
-                            item.status === ""
-                              ? "rgb(1, 53, 19)"
-                              : item.status === "غير فعالة"
-                              ? "rgba(139, 2, 2, 1)"
-                              : item.status === "قيد الدراسة"
-                              ? "gray"
-                              : "gray",
-                          fontWeight: 700,
-                          fontSize: "14px",
-                          mt: 0.5,
-                        }}
-                      >
-                        {item.status}
-                      </Typography>
+  <Grid  key={item.id}>
+    <Paper
+      elevation={3}
+      sx={{
+        height: 200,
+        width: "270px",
+        p: 2,backgroundColor:'rgba(233,232,232,0.5)',
+        border:
+          item.status === "فعالة"
+            ? "4px solid rgb(1, 53, 19)"
+            : item.status === "قيد الدراسة"
+            ? "4px solid orange"
+            : "4px solid #ca0b0bff",
+        borderRadius: "5%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      {/* المحتوى الأساسي */}
+      <Box sx={{ display: "flex", justifyContent:'space-between' }}>
+        {/* الأيقونة على أقصى اليسار */}
+       
 
-                      {/* الاسم */}
-                      <Typography
-                        variant="subtitle1"
-                        sx={{
-                          color:
-                            item.status === "فعالة"
-                              ? "rgb(1, 53, 19)"
-                              : item.status === "غير فعالة"
-                              ? "rgba(139, 2, 2, 1)"
-                              : item.status === "قيد الدراسة"
-                              ? "gray"
-                              : "gray",
-                          mt: 0.5,
-                          fontSize: "24px",
-                          fontWeight: 700,
-                        }}
-                      >
-                        {item.name}
-                      </Typography>
-                    </Box>
-                    {/* زر التفعيل / إلغاء */}
-                    {/* الزر يظهر فقط إذا ليست "قيد الدراسة" */}
-                    {item.status !== "قيد الدراسة" && (
-                      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                        <Button
-                          variant="contained"
-                          sx={{
-                            borderRadius: "20px",
-                            height: "34px",
-                            width: "40%",
-                            backgroundColor: "white",
-                            border:
-                              item.status === "فعالة"
-                                ? "3px solid rgb(1, 53, 19)"
-                                : item.status === "غير فعالة"
-                                ? "3px solid rgba(139, 2, 2, 1)"
-                                : item.status === "قيد الدراسة"
-                                ? "3px solid orange"
-                                : "gray",
-                            color:
-                              item.status === "فعالة"
-                                ? "rgb(14, 74, 35)"
-                                : "rgb(215, 34, 24)",
-                            textTransform: "none",
-                            fontSize: "16px",
-                            fontWeight: "700",
-                            px: 2,
-                            py: 0.5,
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {item.status === "فعالة" ? "  إلغاء تفعيل" : "تفعيل"}
-                        </Button>
-                      </Box>
-                    )}
-                  </Paper>
-                </Grid>
-              ))}
+        {/* النصوص على اليمين */}
+        <Box sx={{ textAlign: "right", display: "flex", flexDirection: "column" }}>
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontWeight: "700",
+              color:
+                item.status === "فعالة"
+                  ? "rgb(1, 53, 19)"
+                  : item.status === "قيد الدراسة"
+                  ? "orange"
+                  : "#ca0b0bff",
+            }}
+          >
+            {item.created_at}
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontWeight: "700",
+              color:
+                item.status === "فعالة"
+                  ? "rgb(1, 53, 19)"
+                  : item.status === "قيد الدراسة"
+                  ? "orange"
+                  : "#ca0b0bff",
+            }}
+          >
+            {item.status}
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: "24px",
+              fontWeight: "700",
+              color:
+                item.status === "فعالة"
+                  ? "rgb(1, 53, 19)"
+                  : item.status === "قيد الدراسة"
+                  ? "orange"
+                  : "#ca0b0bff",
+            }}
+          >
+            {item.name}
+          </Typography>
+          
+        </Box>
+         <NoteIcon
+          sx={{
+            fontSize: 64,
+            color:
+              item.status === "فعالة"
+                ? "rgb(1, 53, 19)"
+                : item.status === "قيد الدراسة"
+                ? "orange"
+                : "#ca0b0bff",
+            mr: 1,
+          }}
+        />
+      </Box>
+
+  {/* زر التفعيل/إلغاء التفعيل */}
+  {item.status !== "قيد الدراسة" && (
+  <Button
+  variant="contained"
+  onClick={() => handleToggleStatus(item.id)}
+  disabled={loadingStatus[item.id]} // تعطيل الزر أثناء التحميل
+  sx={{
+    mt: 1,
+    alignSelf: "flex-start",
+    fontSize: "12px",
+    padding: "4px 10px",
+    borderRadius: "12px",
+    backgroundColor: item.status === "فعالة" ? "#ca0b0bff" :"rgb(4,75,34)",
+    "&:hover": {
+      backgroundColor: item.status === "فعالة" ? "#ca0b0bff" : "rgb(4,75,34)",
+    },
+  }}
+>
+  {loadingStatus[item.id] ? <CircularProgress/> : item.status === "فعالة" ? "إلغاء التفعيل" : "تفعيل"}
+</Button>
+
+
+  )}
+</Paper>
+</Grid>
+  </Grid>
+))}
+
+
             </Grid>
           </Box>
         </Box>

@@ -9,9 +9,8 @@ export default function SmallBoxes() {
   const state = useSelector((state) => state.user);
   const isSub_Admin = state.roles?.[0]?.includes("نائب المدير");
 
-  // استخدم state محلي لو كان Sub_Admin
   const [localEmployees, setLocalEmployees] = useState([]);
-  const employeesFromRedux = useSelector((state) => state.employees.data) || [];
+const [employee,setEmployee] =useState([]) 
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -24,7 +23,9 @@ export default function SmallBoxes() {
         if (isSub_Admin) {
           console.log(response)
           setLocalEmployees(response );
-        } 
+        } else{
+           setEmployee(response.data)
+        }
         // لو مش Sub_Admin، البيانات مخزنة في Redux بواسطة مكان آخر
       } catch (error) {
         console.error("فشل في جلب الموظفين:", error);
@@ -35,7 +36,7 @@ export default function SmallBoxes() {
   }, [isSub_Admin]);
 
   // نستخدم الموظفين المناسبين حسب الحالة
-  const employeesToDisplay = isSub_Admin ? localEmployees : employeesFromRedux;
+  const employeesToDisplay = isSub_Admin ? localEmployees : employee;
 
   return (
     <Box

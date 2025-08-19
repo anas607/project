@@ -9,20 +9,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-   Modal,
-  Grid,
-  Button,
-  Checkbox,
+  
   IconButton,
-  TextField,
-  Menu,
-  MenuItem,
-  AppBar,
+ 
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import NoteIcon from '@mui/icons-material/Note';import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { SidBarComponent } from './SIDEBAR/sidbar';
 import Appar from './SIDEBAR/appar'
 import ArticleIcon from '@mui/icons-material/Article';
@@ -107,9 +99,6 @@ function handleEditeTransction(uuid,type ){
         >
         
 
-        
-
-          
         </Box>
  <Appar/>
       <Box

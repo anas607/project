@@ -124,7 +124,18 @@ const specliseToDisplay = searchTerm
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300, width: "100%" }}>
       <CircularProgress sx={{ color: "green" }} size={60} />
     </Box>
-  ) : specliseToDisplay.length > 0 ? (
+  ) : 
+    isloading ? (
+    // عرض اللودنغ أثناء البحث
+    <Grid item xs={12}>
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300 }}>
+        <CircularProgress sx={{ color: "green" }} size={60} />
+      </Box>
+    </Grid>
+  ) :
+  
+  
+  specliseToDisplay.length > 0 ? (
     specliseToDisplay.map((item) => (
       <Grid item xs={12} sm={6} md={3} key={item.id}>
         <Paper

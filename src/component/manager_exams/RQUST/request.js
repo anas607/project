@@ -56,6 +56,7 @@ export default function Request() {
   
   const [value, setValue] = React.useState(0);
     const[showRequest,setShowRequest]=useState(false)
+        const [searchTerm, setSearchTerm] = useState("");
   
  const state = useSelector((state) => state.user);
 const isSub_Admin=state.roles[0].includes("نائب المدير")
@@ -77,7 +78,7 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
       
 
       <Box sx={{ flex: 1, p: 2 }}>
-         <Appar/>
+         <Appar onSearch={setSearchTerm}/>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center",  }}>
          
           {/* التابات */}
@@ -172,11 +173,11 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
     setShowRequest={setShowRequest}
        setSelectedUuid={setSelectedUuid}
        selectedUuid={selectedUuid}
-            
+            searchTerm={searchTerm}
             />
       </Bank>
         <Bank value={value} index={1}>
-          <Finished/>  
+          <Finished searchTerm={searchTerm} />  
        </Bank>
         
       </Box>

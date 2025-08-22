@@ -24,6 +24,7 @@ import stepReducer from "../reducer/files/manual"
 import searchReducer from "../reducer/search/employeesSearch"
 import searchFormsReducer from "../reducer/search/formSearch"
 import searchspecliseReducer from "../reducer/search/spiclicet"
+import searchrequestReducer from "../reducer/search/requestSearch"
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -50,7 +51,8 @@ export default configureStore({
     step:stepReducer,
     search:searchReducer,
     searchForms:searchFormsReducer,
-    searchspeclise:searchspecliseReducer
+    searchspeclise:searchspecliseReducer,
+    searchrequest:searchrequestReducer
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

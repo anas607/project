@@ -1,7 +1,7 @@
 
 import {
   Box,
-  Typography,
+  CircularProgress,
   Avatar,
   Table,
   TableBody,
@@ -9,20 +9,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-   Modal,
-  Grid,
-  Button,
-  Checkbox,
+ Grid,
   IconButton,
-  TextField,
-  Menu,
-  MenuItem,
-  AppBar,
+ 
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -31,25 +22,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchEndExam } from "../../../reducer/managerexam/endingexam";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
-const outboxRows = [
-  {
-    id: "#789541",
-    mailTitle: "  98989",
-    officeName: "قسم الإحصاء",
-    receiverName: "د. سامي حسن",
-    receiverPhone: "+963993222111",
-    type:"شهادة ",
-    dateSubmitted: "1/5/2025",
-    dateSent: "2/5/2025",
-  }
-];
+import { SearchRequest } from "../../../reducer/search/requestSearch";
+import NOSERACH from "../../../wrong/search";
 
-export default function Finished(){
+
+export default function Finished({searchTerm}){
+   const { data: searchResults, isloading } = useSelector(
+      (state) => state.searchrequest
+    );
   const stateend=useSelector((state)=>state.endexam)
   const dispatch = useDispatch();
   useEffect(()=>{dispatch(fetchEndExam())
 },[dispatch
   ])
+  useEffect(() => {
+    if (searchTerm) {
+      dispatch(SearchRequest(searchTerm));
+    }
+  }, [searchTerm, dispatch]);
+  const specliseToDisplay = searchTerm 
+    ? Array.isArray(searchResults) ? searchResults : [searchResults] 
+    : stateend.data ?? [];
     return(
         <>
           
@@ -102,7 +95,18 @@ export default function Finished(){
                                                       </TableCell>
                                                     </TableRow></>) :
                                                     !stateend.isloading && stateend.data.length===0 ? <NoData/> :
-            stateend.data.map((row, index) => (
+
+
+             isloading ? (
+                                                                        // عرض اللودنغ أثناء البحث
+                                                                        <Grid item xs={12}>
+                                                                          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300 }}>
+                                                                            <CircularProgress sx={{ color: "green" }} size={60} />
+                                                                          </Box>
+                                                                        </Grid>
+                                                                      
+                         ) : specliseToDisplay.length > 0 ? (
+  specliseToDisplay.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center"> {row["رقم الطلب"]}</TableCell>
@@ -158,7 +162,14 @@ export default function Finished(){
                   </IconButton>
                 </TableCell>
               </TableRow>
-            ))}
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={8} align="center">
+                  <NOSERACH />
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
           
           

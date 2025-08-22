@@ -67,5 +67,6 @@ export const TOOGLE_STATUS = "toggle-status/"
 export const eMPLOYEE ="employee"
 export const Specialization ="Specialization/"
 export const NAME ="Name"
-
+export const EXAME ="Exam/"
+export const REQUEST ="request"
 

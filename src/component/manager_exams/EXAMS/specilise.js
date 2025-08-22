@@ -24,6 +24,7 @@ import { SearchSpeclise } from "../../../reducer/search/spiclicet";
 import NOSERACH from "../../../wrong/search";
 
 export default function Speclist({ searchTerm }){
+  
     const { data: searchResults, isloading } = useSelector(
     (state) => state.searchspeclise
   );

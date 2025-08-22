@@ -25,6 +25,7 @@ import searchReducer from "../reducer/search/employeesSearch"
 import searchFormsReducer from "../reducer/search/formSearch"
 import searchspecliseReducer from "../reducer/search/spiclicet"
 import searchrequestReducer from "../reducer/search/requestSearch"
+import SearchAnnouncementsReducer from "../reducer/search/Announcements"
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -52,7 +53,8 @@ export default configureStore({
     search:searchReducer,
     searchForms:searchFormsReducer,
     searchspeclise:searchspecliseReducer,
-    searchrequest:searchrequestReducer
+    searchrequest:searchrequestReducer,
+    SearchAnnouncements:SearchAnnouncementsReducer
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

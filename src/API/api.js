@@ -69,4 +69,5 @@ export const Specialization ="Specialization/"
 export const NAME ="Name"
 export const EXAME ="Exam/"
 export const REQUEST ="request"
+export const Announcements ="Announcements"
 

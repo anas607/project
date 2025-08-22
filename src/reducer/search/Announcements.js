@@ -1,14 +1,16 @@
 import { createSlice ,createAsyncThunk  } from '@reduxjs/toolkit'
-import { ALL, BaseUrl, ANNOUNCEMENT } from '../../API/api';
+import { BaseUrl, SEARCH, EMPLOYEE, Announcements } from '../../API/api';
 import { getData } from '../../API/apiService';
 
 
-export const fetchAdverstment = createAsyncThunk(
-  'program/fetchadverstment',
-  async (_, { rejectWithValue }) => {
+export const SearchAnnouncements = createAsyncThunk(
+  'program/searchEmployees',
+  async (searchTerm, { rejectWithValue }) => {
     try {
-      const response = await getData(`${BaseUrl}${ANNOUNCEMENT}${ALL}`) 
-      
+      // مرر الـ searchTerm كـ params بالـ API
+      const response = await getData(`${BaseUrl}${SEARCH}${Announcements}?search=${searchTerm}`);
+                        console.log(response.data) 
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error?.message);
@@ -16,8 +18,9 @@ export const fetchAdverstment = createAsyncThunk(
   }
 );
 
+
 export const counterSlice = createSlice({
-    name: 'fetchadversment',
+    name: 'SearchAnnouncements',
     initialState: {
        isloading:false,
        data:[],
@@ -27,15 +30,15 @@ export const counterSlice = createSlice({
     
     }, extraReducers: builder => {
         builder
-          .addCase(fetchAdverstment.pending, (state, action) => {
+          .addCase(SearchAnnouncements.pending, (state, action) => {
             state.isloading = true
           })
-          .addCase(fetchAdverstment.fulfilled, (state, action) => {
+          .addCase(SearchAnnouncements.fulfilled, (state, action) => {
             state.isloading = false
             state.data = action.payload
             
           })
-       .addCase(fetchAdverstment.rejected, (state, action) => {
+       .addCase(SearchAnnouncements.rejected, (state, action) => {
             state.isloading = false;
             state.error = action.payload; 
           })

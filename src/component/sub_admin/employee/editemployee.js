@@ -13,8 +13,11 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SatelliteIcon from "@mui/icons-material/Satellite";
 import { getData, patchData, postData } from "../../../API/apiService";
 import { BaseUrl, CONVERT_STATUS, EDIT_EMPLOYEE_INFORMATION, eMPLOYEE, EMPLOYEE, EMPLOYEES } from "../../../API/api";
+import { useSelector } from "react-redux";
 
 export default function EditEmployeeModal({ open, onClose ,id,employe, onUpdate}) {
+  
+ 
   const [loading, setLoading] = useState(false);
 
   const [loadingeditstatus, setloadingeditstatus] = useState(false);

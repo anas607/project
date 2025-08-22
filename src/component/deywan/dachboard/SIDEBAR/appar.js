@@ -20,6 +20,7 @@ import Cookies from "universal-cookie";
 import LogeOut from "../../logout";
 import { postData } from "../../../../API/apiService";
 import { BaseUrl, EMPLOYEE, SEARCH } from "../../../../API/api";
+import { useDispatch, useSelector } from "react-redux";
 
 const notifications = [
   { id: 1, avatar: "/user1.jpg", message: "تمت إضافة موظف جديد" },
@@ -27,37 +28,14 @@ const notifications = [
   { id: 3, avatar: "/user3.jpg", message: "لديك مهمة جديدة" },
 ];
 
-export default function Appar() {
+export default function Appar({ onSearch }) {
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showLogOut, setShowLogOut] = useState(false);
   const [search, setsearch] = useState("");
-  const [results, setResults] = useState([]);
 
-
-async function Search(){
-try{
-  const response =await postData(`${BaseUrl}${SEARCH}${EMPLOYEE}`,{
-    search:search
-  })
- setResults(response.data);
- console.log(response)
-}catch(err){
-  console.log(err)
-}
-
-
-}
-
-
-
+ 
   const notifBtnRef = useRef(null);
-  const navigate = useNavigate();
 
-  function handleLogout() {
-    const cookies = new Cookies();
-    cookies.remove("access_token", { path: "/" });
-    navigate("/login");
-  }
+ 
   const handleToggleNotifications = () => {
     setShowNotifications((prev) => !prev);
   };
@@ -78,8 +56,11 @@ try{
       >
         {/* البحث */}
       <TextField
-  value={search}
-  onChange={(e) => setsearch(e.target.value)}
+ value={search}
+      onChange={(e) => {
+        setsearch(e.target.value);
+        onSearch(e.target.value); // ارفع القيمة للأب
+      }}
   placeholder="ابحث"
   variant="outlined"
   sx={{
@@ -107,7 +88,7 @@ try{
   }}
   InputProps={{
     startAdornment: (
-      <IconButton onClick={Search}> {/* هنا ربطنا الضغط بدالة البحث */}
+      <IconButton> 
         <SearchIcon sx={{ color: "rgb(44, 44, 44)", fontSize: "45px" }} />
       </IconButton>
     ),

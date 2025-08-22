@@ -65,3 +65,7 @@ export const EMPLOYEE ="Employee"
 export const CONVERT_STATUS ="ConverStatus/"
 export const TOOGLE_STATUS = "toggle-status/"
 export const eMPLOYEE ="employee"
+export const Specialization ="Specialization/"
+export const NAME ="Name"
+
+

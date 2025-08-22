@@ -47,8 +47,6 @@ const Employyes = () => {
 const isSub_Admin=state.roles[0].includes("نائب المدير")
   const [searchResults, setSearchResults] = useState([]);
 
-const [message, setMessage] = useState(null);
-const [error, setError] = useState(null);
 const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const [showAddEmployee, setShowAddEmployee] = useState(false);
@@ -298,14 +296,11 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
           {new Date(row["date join"]).toLocaleDateString("ar-EG")}
         </TableCell>
         <TableCell align="center">
-          <IconButton
-         
+          {isSub_Admin ? <> <IconButton
+        
   onClick={() => {
-  console.log(row.uuid);
   handleEditEmployees(row);
 }}
-
-
 
             sx={{
               border: "1px solid rgba(212, 208, 212, 0.31)",
@@ -333,7 +328,8 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
                 border: "3px solid rgb(14, 74, 35)",
               }}
             />
-          </IconButton>
+          </IconButton></> :""}
+         
         </TableCell>
       </TableRow>
     ))

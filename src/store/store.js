@@ -21,6 +21,9 @@ import importexamReducer from "../reducer/managerexam/importingexam"
 import fetchformReducer from "../reducer/admin/forms"
 import fetchadversmentReducer from "../reducer/admin/adverstment"
 import stepReducer from "../reducer/files/manual"
+import searchReducer from "../reducer/search/employeesSearch"
+import searchFormsReducer from "../reducer/search/formSearch"
+import searchspecliseReducer from "../reducer/search/spiclicet"
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -44,7 +47,10 @@ export default configureStore({
     importexam:importexamReducer,
     fetchform:fetchformReducer,
     fetchadversment:fetchadversmentReducer,
-    step:stepReducer
+    step:stepReducer,
+    search:searchReducer,
+    searchForms:searchFormsReducer,
+    searchspeclise:searchspecliseReducer
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

@@ -1,10 +1,18 @@
 // formSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-
+export const FIELD_TYPES = {
+  TEXT: 1,
+  NUMBER: 2,
+  DATE: 3,
+  MULTI_CHOICE: 4,
+  IMAGE: 5,
+  CHECKBOX: 6,
+  EXCEL: 7
+};
 const initialState = {
-  transactionName: '',
+  name: '',
   transactionCost: '',
-  selectedOfficeId: '',
+  selectedOfficeId: [], // مصفوفة أسماء المكاتب
   elements: [],
   imageFile: null,
   excelFile: null,
@@ -27,8 +35,8 @@ const formSlice = createSlice({
       state.transactionCost = action.payload;
     },
     setSelectedOfficeId: (state, action) => {
-      state.selectedOfficeId = action.payload;
-    },
+  state.selectedOfficeId = action.payload; // array of office names
+},
     setElements: (state, action) => {
       state.elements = action.payload;
     },

@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
-import AddIcon from "@mui/icons-material/Add";
 import {
   Typography,
   Grid,
@@ -23,11 +22,13 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getData, patchData } from "../../../API/apiService";
 import { setTransactions } from "../../../reducer/transaction";
-import { BaseUrl, FORM, showAllTransactions, TOOGLE_STATUS } from "../../../API/api";
 import { fetchForm } from "../../../reducer/admin/forms";
 import DeatilsForm from "../../mails/form/detealsform";
 import Creat_Manaual from "./creatmanaual";
 import WORDFILE from "./wordFile";
+import { BaseUrl, FORM, TOOGLE_STATUS } from "../../../API/api";
+import { SearchForms } from "../../../reducer/search/formSearch";
+import NOSERACH from "../../../wrong/search";
 
 
 
@@ -37,14 +38,17 @@ const steps = ["المعلومات العامة", " استمارة المعام�
 // const response = await getData(`${BaseUrl}${showAllTransactions}`);
 
 export default function Files() {
+   const { data: searchResults, isloading } = useSelector(
+    (state) => state.searchForms
+  );
+    const [searchTerm, setSearchTerm] = useState("");
+
    const [snackbar, setSnackbar] = useState({
       open: false,
       message: "",
       color: "",
     });
-  const [showFile, setShowFile] = useState(false);
-  const [showaddfile, setShowAddFile] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
+
 const [selectedStatus, setSelectedStatus] = useState("");
 
     const[selectedid,setselectedid]=useState("")
@@ -52,19 +56,31 @@ const [selectedStatus, setSelectedStatus] = useState("");
   const[shoeDeatils,setShoeDeatils]=useState(false)
 const [loadingStatus, setLoadingStatus] = useState({});
      const state=useSelector((state)=>state.fetchform)
-     console.log(state.data)
+const formsToDisplay = searchTerm 
+  ? searchResults?.[0] ?? []   // فك المصفوفة الداخلية أو fallback لمصفوفة فارغة
+  : state.data?.[0] ?? [];
+console.log(searchResults)
+    //  console.log(state.data)
+     ///fetch
   const dispatch=useDispatch()
      useEffect(()=>{
          dispatch(fetchForm())
      },[dispatch])
+//===///
+///serch//
+  useEffect(() => {
+  if (searchTerm) {
+    dispatch(SearchForms(searchTerm));
+  }
+}, [searchTerm, dispatch]);
+////=////
 
-  
 async function handleToggleStatus(id) {
   try {
     setLoadingStatus((prev) => ({ ...prev, [id]: true }));
 
     const res = await patchData(`${BaseUrl}${FORM}${TOOGLE_STATUS}${id}`);
-    console.log(res);
+    // console.log(res);
 
     // تحديث البيانات مباشرة في الـ state المحلي
       dispatch(fetchForm())
@@ -135,7 +151,7 @@ setShoeDeatils(true)
           }}
         >
           {/*  صف العنوان + البحث + الإشعار */}
-          <Appar />
+          <Appar onSearch={setSearchTerm} />
 
           <Box
             sx={{
@@ -164,9 +180,9 @@ setShoeDeatils(true)
     }}
   >
     <CircularProgress />
-  </Box> :
-
- state.data?.[0]?.map((item) => (
+  </Box> 
+ : formsToDisplay.length > 0 ? (
+formsToDisplay.map((item) => (
     <Grid container spacing={2}>
 
   <Grid  key={item.id}>
@@ -282,7 +298,10 @@ setShoeDeatils(true)
 </Paper>
 </Grid>
   </Grid>
-))}
+   ))
+    ) : (
+<NOSERACH/>
+    )}
 
 
             </Grid>

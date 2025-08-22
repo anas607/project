@@ -21,10 +21,11 @@ import Step_1 from "./steps/step_1";
 import Step_2 from "./steps/step_2";
 import Step_3 from "./steps/step_3";
 import Step_4 from "./steps/step_4";
-import { getData } from "../../../API/apiService";
+import { getData, postData } from "../../../API/apiService";
 import { BaseUrl, FETCHOFFICE } from "../../../API/api";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { FIELD_TYPES } from "../../../reducer/files/manual";
 
 
 const steps = ["المعلومات العامة", " استمارة المعاملة", "المرفقات", "معاينة"];
@@ -52,38 +53,53 @@ export default function Creat_Manaual() {
     setActiveStep(step);
   }
 const handleNext = async () => {
-  if (activeStep === 3) { // آخر خطوة قبل الإضافة
-   
+  if (activeStep === 3) {
     try {
-      const formData = new FormData();
-      formData.append("transactionName", step1.transactionName);
-      formData.append("transactionCost", step1.transactionCost);
-      formData.append("selectedOfficeId", step1.selectedOfficeId);
+      const trimmedName = step1.name.trim();
 
-      formData.append("elements", JSON.stringify(step2)); // إرسال مصفوفة عناصر Step 2 كـ JSON
+      const mapTypeToNumber = {
+        [FIELD_TYPES.TEXT]: 1,
+        [FIELD_TYPES.NUMBER]: 2,
+        [FIELD_TYPES.DATE]: 3,
+        [FIELD_TYPES.EXCEL]: 5,
+        [FIELD_TYPES.IMAGE]: 5,
+        [FIELD_TYPES.CHECKBOX]: 6,
+        [FIELD_TYPES.MULTI_CHOICE]: 6
+      };
 
-      if (step3.imageFile) {
-        formData.append("imageFile", step3.imageFile);
+      const elementsForBackend = step2.map(el => ({
+        label: el.label.trim(),
+        type: mapTypeToNumber[el.type] || 1 // الافتراضي نص
+      }));
+
+      // تجهيز البودي للإرسال
+      const body = {
+        name: trimmedName,
+        cost: step1.transactionCost,
+        path_ids: step1.selectedOfficeId.length ? step1.selectedOfficeId : [],
+        elements: elementsForBackend
+      };
+
+      console.log("جسم الطلب للإرسال:", body);
+
+      const response = await postData(
+        "http://127.0.0.1:8000/api/form/manual",
+        body
+      );
+
+      if (response.data.success) {
+        alert(response.data.message);
       }
-      if (step3.excelFile) {
-        formData.append("excelFile", step3.excelFile);
-      }
-
-      const response = await axios.post("http://127.0.0.1:8000/api/form/manual", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      console.log("تم الإضافة بنجاح:", response.data);
     } catch (error) {
       console.error("خطأ أثناء الإرسال:", error);
     }
   } else {
-    // الانتقال للخطوة التالية
-    setActiveStep(prev => prev + 1);
+    setActiveStep((prev) => prev + 1);
   }
 };
+
+
+
 
  
   return (

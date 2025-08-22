@@ -1,208 +1,171 @@
-import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import { setElements } from '../../../../reducer/files/manual';
- // تأكد من المسار الصحيح
+import React from "react";
+import { Box, Typography, Button, TextField, IconButton } from "@mui/material";
+import { Add } from "@mui/icons-material";
+import { useSelector, useDispatch } from "react-redux";
+import { FIELD_TYPES, setElements } from "../../../../reducer/files/manual";
 
 export default function Step_2() {
   const dispatch = useDispatch();
-  const elements = useSelector((state) => state.step.elements); // استدعاء عناصر الريدوكس
+  const elements = useSelector((state) => state.step.elements);
 
-  // تحديث عنصر محدد
-  const handleChange = (index, value) => {
-    const newElements = [...elements];
-    newElements[index] = value;
+  const addField = (type, labelText = "") => {
+    if (type === FIELD_TYPES.TEXT || type === FIELD_TYPES.NUMBER || type === FIELD_TYPES.DATE) {
+      dispatch(setElements([...elements, { type, label: labelText, value: "" }]));
+    } else if (type === FIELD_TYPES.MULTI_CHOICE) {
+      dispatch(setElements([...elements, { type, label: labelText || "اختيار", options: ["", ""] }]));
+    } else if (type === FIELD_TYPES.CHECKBOX) {
+      dispatch(setElements([...elements, { type, label: labelText || "مربع اختيار", options: [""] }]));
+    }
+  };
+
+  const handleLabelChange = (index, value) => {
+    const newElements = elements.map((el, i) =>
+      i === index ? { ...el, label: value } : el
+    );
     dispatch(setElements(newElements));
   };
 
-  // التأكد من وجود 4 عناصر افتراضيًا
-  React.useEffect(() => {
-    if (elements.length === 0) {
-      dispatch(setElements(['', '', '', ['', '']])); // النص، الحقل الكتابي، الحقل التاريخي، متعدد الاختيارات
-    }
-  }, []);
+  const handleValueChange = (index, value) => {
+    const newElements = elements.map((el, i) =>
+      i === index ? { ...el, value } : el
+    );
+    dispatch(setElements(newElements));
+  };
+
+  const handleOptionChange = (elIndex, optIndex, value) => {
+    const newElements = elements.map((el, i) => {
+      if (i === elIndex) {
+        const newOptions = [...el.options];
+        newOptions[optIndex] = value;
+        return { ...el, options: newOptions };
+      }
+      return el;
+    });
+    dispatch(setElements(newElements));
+  };
+
+  const addOption = (elIndex) => {
+    const newElements = elements.map((el, i) => {
+      if (i === elIndex) {
+        return { ...el, options: [...el.options, ""] };
+      }
+      return el;
+    });
+    dispatch(setElements(newElements));
+  };
 
   return (
-    <Box sx={{ flex: 1, mt: 1 }}>
-      <Box sx={{ display: 'flex', gap: 4 }}>
+    <Box sx={{ mt: 2 }}>
+      {/* أزرار الإضافة */}
+      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
         <Button
-          sx={{
-            backgroundColor: 'rgb(14,74,35)',
-            color: 'white',
-            borderRadius: '5px',
-            mt: 2,
-            width: '20%',
-            height: '69px',
-            fontSize: '24px',
-            fontWeight: 700,
-          }}
+          onClick={() => addField(FIELD_TYPES.TEXT, "نص كتابي")}
+          variant="contained"
+          color="success"
         >
           نص كتابي
         </Button>
-
         <Button
-          sx={{
-            backgroundColor: 'rgb(14,74,35)',
-            color: 'white',
-            borderRadius: '5px',
-            mt: 2,
-            width: '20%',
-            height: '69px',
-            fontSize: '24px',
-            fontWeight: 700,
-          }}
+          onClick={() => addField(FIELD_TYPES.NUMBER, "رقم")}
+          variant="contained"
+          color="success"
         >
-          حقل كتابي
+          رقم
         </Button>
-
         <Button
-          sx={{
-            backgroundColor: 'rgb(14,74,35)',
-            color: 'white',
-            borderRadius: '5px',
-            mt: 2,
-            width: '20%',
-            height: '69px',
-            fontSize: '24px',
-            fontWeight: 700,
-          }}
+          onClick={() => addField(FIELD_TYPES.DATE, "تاريخ")}
+          variant="contained"
+          color="success"
         >
-          حقل تاريخ
+          تاريخ
         </Button>
-
+       
         <Button
-          sx={{
-            backgroundColor: 'rgb(14,74,35)',
-            color: 'white',
-            borderRadius: '5px',
-            mt: 2,
-            width: '30%',
-            height: '69px',
-            fontSize: '24px',
-            fontWeight: 700,
-          }}
+          onClick={() => addField(FIELD_TYPES.CHECKBOX, "خانة اختيار")}
+          variant="contained"
+          color="success"
         >
-          اختيار من متعدد
+          خانة اختيار
         </Button>
       </Box>
 
-      {/* نص كتابي */}
-      <Box sx={{ mt: 2 }}>
-        <Typography sx={{ fontSize: '24px', mb: 1, fontWeight: 700 }}>
-          نص كتابي:
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Typography sx={{ color: 'rgb(30,30,30)', fontSize: '24px', fontWeight: 700, mt: 0.9 }}>
-            النص
-          </Typography>
-          <input
-            value={elements[0] || ''}
-            onChange={(e) => handleChange(0, e.target.value)}
-            style={{
-              height: '40px',
-              width: '65%',
-              border: '2px solid rgba(71, 59, 68, 1)',
-              borderRadius: '5px',
+      {/* عرض الحقول */}
+      <Box sx={{ mt: 3 }}>
+        {elements.map((el, idx) => (
+          <Box
+            key={idx}
+            sx={{
+              mb: 2,
+              p: 2,
+              border: "1px solid #ccc",
+              borderRadius: 2
             }}
-          />
-        </Box>
-        <hr
-          style={{
-            height: '2px',
-            border: 'none',
-            marginRight: -9,
-            width: '100%',
-            background: 'rgba(206, 199, 199, 0.43)',
-          }}
-        />
-      </Box>
+          >
+            {/* نص / رقم / تاريخ */}
+            {(el.type === FIELD_TYPES.TEXT ||
+              el.type === FIELD_TYPES.NUMBER ||
+              el.type === FIELD_TYPES.DATE) && (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <TextField
+                  label="العنوان"
+                  value={el.label}
+                  onChange={(e) => handleLabelChange(idx, e.target.value)}
+                  sx={{ width: "200px" }}
+                />
+                <TextField
+                  fullWidth
+                  placeholder={el.label}
+                  value={el.value}
+                  onChange={(e) => handleValueChange(idx, e.target.value)}
+                />
+              </Box>
+            )}
 
-      {/* حقل كتابي */}
-      <Typography sx={{ fontSize: '24px', mb: 1, fontWeight: 700 }}>حقل كتابي:</Typography>
-      <Box sx={{ display: 'flex', gap: 2 }}>
-        <Typography sx={{ color: 'rgb(30,30,30)', fontSize: '24px', fontWeight: 700, mt: 0.5 }}>
-          العنوان
-        </Typography>
-        <input
-          value={elements[1] || ''}
-          onChange={(e) => handleChange(1, e.target.value)}
-          style={{
-            height: '40px',
-            width: '65%',
-            border: '2px solid rgba(71, 59, 68, 1)',
-            borderRadius: '5px',
-          }}
-        />
-      </Box>
-      <hr
-        style={{
-          height: '2px',
-          border: 'none',
-          marginRight: -9,
-          width: '100%',
-          background: 'rgba(206, 199, 199, 0.43)',
-        }}
-      />
+            {/* اختيار متعدد */}
+            {el.type === FIELD_TYPES.MULTI_CHOICE && (
+              <Box>
+                <TextField
+                  label="العنوان"
+                  value={el.label}
+                  onChange={(e) => handleLabelChange(idx, e.target.value)}
+                  sx={{ mb: 2 }}
+                />
+                {el.options.map((opt, optIdx) => (
+                  <Box
+                    key={optIdx}
+                    sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}
+                  >
+                    <Typography>خيار {optIdx + 1}</Typography>
+                    <TextField
+                      value={opt}
+                      onChange={(e) =>
+                        handleOptionChange(idx, optIdx, e.target.value)
+                      }
+                      fullWidth
+                    />
+                  </Box>
+                ))}
+                <IconButton onClick={() => addOption(idx)} color="primary">
+                  <Add />
+                </IconButton>
+              </Box>
+            )}
 
-      {/* حقل تاريخ */}
-      <Typography sx={{ fontSize: '24px', mb: 1, fontWeight: 700 }}>حقل تاريخ:</Typography>
-      <Box sx={{ display: 'flex', gap: 2 }}>
-        <Typography sx={{ color: 'rgb(30,30,30)', fontSize: '24px', fontWeight: 700, mt: 0.5 }}>
-          العنوان
-        </Typography>
-        <input
-          value={elements[2] || ''}
-          onChange={(e) => handleChange(2, e.target.value)}
-          style={{
-            height: '40px',
-            width: '65%',
-            border: '2px solid rgba(71, 59, 68, 1)',
-            borderRadius: '5px',
-          }}
-        />
+            {/* خانة اختيار */}
+            {el.type === FIELD_TYPES.CHECKBOX && (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <TextField
+                  label="العنوان"
+                  value={el.label}
+                  onChange={(e) => handleLabelChange(idx, e.target.value)}
+                  sx={{ width: "200px" }}
+                />
+                <Typography>✅ خانة اختيار</Typography>
+              </Box>
+            )}
+          </Box>
+        ))}
       </Box>
-      <hr
-        style={{
-          height: '2px',
-          border: 'none',
-          marginRight: -9,
-          width: '100%',
-          background: 'rgba(206, 199, 199, 0.43)',
-        }}
-      />
-
-      {/* اختيار من متعدد */}
-      <Typography sx={{ fontSize: '24px', mb: 1, fontWeight: 700 }}>اختيار من متعدد:</Typography>
-      {['الخيار1', 'الخيار2'].map((label, idx) => (
-        <Box sx={{ display: 'flex', gap: 2, mb: idx === 0 ? 2 : 0 }} key={idx}>
-          <Typography sx={{ color: 'rgb(30,30,30)', fontSize: '24px', fontWeight: 700, mt: 0.5 }}>
-            {label}
-          </Typography>
-          <input
-            value={elements[3]?.[idx] || ''}
-            onChange={(e) => {
-              const newMulti = [...(elements[3] || ['', ''])];
-              newMulti[idx] = e.target.value;
-              handleChange(3, newMulti);
-            }}
-            style={{
-              height: '40px',
-              width: '65%',
-              border: '2px solid rgba(71, 59, 68, 1)',
-              borderRadius: '5px',
-            }}
-          />
-        </Box>
-      ))}
-      <hr
-        style={{
-          height: '2px',
-          border: 'none',
-          marginRight: -9,
-          width: '100%',
-          background: 'rgba(206, 199, 199, 0.43)',
-        }}
-      />
     </Box>
   );
 }

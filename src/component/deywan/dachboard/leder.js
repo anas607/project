@@ -14,11 +14,13 @@ import TableBox from './box_content/table';
 import Appar from './SIDEBAR/appar';
 import { useSelector } from 'react-redux';
 import Colum from './SIDEBAR/Colum';
+import { useState } from 'react';
 
 
 export default function Leader(){
     const state = useSelector((state) => state.user);
 const isAdmin=state.roles?.some(role => role === "المدير")
+  const [searchTerm, setSearchTerm] = useState(""); // هنا نخزن قيمة البحث
 
 
     return(
@@ -37,13 +39,13 @@ const isAdmin=state.roles?.some(role => role === "المدير")
 
   <Box sx={{ flexGrow: 1, padding: '2%', display: 'flex', flexDirection: 'column' }}>
 
-    <Appar/>
+    <Appar onSearch={setSearchTerm}/>
 
    
   
         <Box sx={{ display: 'flex', height: '100%', flexGrow: 1, gap: 2 }}>
   {/* بوكس الموظفين (يسار الصفحة) */}
-  {isAdmin?<Colum/>:<SmallBoxes/>}
+  {isAdmin?<Colum/>:<SmallBoxes searchTerm={searchTerm} />}
      
   {/* البوكسين على اليمين */}
  <Box sx={{  display: 'flex', flexDirection: 'column', height: '1020px',width: 'auto', maxWidth: '1604px', }}>

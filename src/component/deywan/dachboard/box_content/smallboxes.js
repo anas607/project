@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
-import { Box, Avatar, Typography, List, ListItem, Container } from "@mui/material";
+import { Box, Avatar, Typography, List, ListItem, Container, CircularProgress } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { getData } from "../../../../API/apiService";
 import { BaseUrl, showEmployees } from "../../../../API/api";
 import { useSelector } from "react-redux";
+import NOSERACH from "../../../../wrong/search";
 
-export default function SmallBoxes() {
+export default function SmallBoxes({ searchTerm }) {
   const state = useSelector((state) => state.user);
   const isSub_Admin = state.roles?.[0]?.includes("نائب المدير");
 
   const [localEmployees, setLocalEmployees] = useState([]);
-const [employee,setEmployee] =useState([]) 
+  const [employee, setEmployee] = useState([]);
+  const [loading, setLoading] = useState(true); // حالة اللودر
 
   useEffect(() => {
     const fetchEmployees = async () => {
+      setLoading(true); // تفعيل اللودر عند بداية الفيتش
       try {
         let endpoint = isSub_Admin
           ? "show/employees/and/managers"
@@ -21,22 +24,24 @@ const [employee,setEmployee] =useState([])
 
         const response = await getData(`${BaseUrl}${endpoint}`);
         if (isSub_Admin) {
-          console.log(response)
-          setLocalEmployees(response );
-        } else{
-           setEmployee(response.data)
+          setLocalEmployees(response);
+        } else {
+          setEmployee(response.data);
         }
-        // لو مش Sub_Admin، البيانات مخزنة في Redux بواسطة مكان آخر
       } catch (error) {
         console.error("فشل في جلب الموظفين:", error);
+      } finally {
+        setLoading(false); // إخفاء اللودر بعد الانتهاء
       }
     };
 
     fetchEmployees();
   }, [isSub_Admin]);
 
-  // نستخدم الموظفين المناسبين حسب الحالة
   const employeesToDisplay = isSub_Admin ? localEmployees : employee;
+  const filteredEmployees = employeesToDisplay.filter(emp =>
+    emp.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <Box
@@ -45,8 +50,9 @@ const [employee,setEmployee] =useState([])
         height: "977px",
         flexShrink: 0,
         backgroundColor: "rgb(250,250,250)",
-        borderRadius: "2%",   mt:3,
-    overflowY: "auto",  
+        borderRadius: "2%",
+        mt: 3,
+        overflowY: "auto",
       }}
     >
       <Container maxWidth="bg">
@@ -62,70 +68,69 @@ const [employee,setEmployee] =useState([])
           <FilterListIcon sx={{ fontSize: "24px" }} />
         </Box>
 
-        <List sx={{ width: "100%" ,    maxHeight: "calc(100% - 120px)", // خصم مساحة العنوان والفلاتر
-    overflowY: "auto",  }}>
-          {employeesToDisplay.map((emp, index) => (
-            <ListItem
-              key={index}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                px: 0,
-                borderBottom: "1px solid #e0e0e0",
-                py: 1.5,
-              }}
-            >
-              <Avatar
+        {loading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "80%",
+            }}
+          >
+            <CircularProgress sx={{ color: "green" }} />
+          </Box>
+        ) : filteredEmployees.length > 0 ? (
+          <List
+            sx={{
+              width: "100%",
+              maxHeight: "calc(100% - 120px)",
+              overflowY: "auto",
+            }}
+          >
+            {filteredEmployees.map((emp, index) => (
+              <ListItem
+                key={index}
                 sx={{
-                  width: 64,
-                  height: 64,
-                  color: "black",
-                  fontWeight: "900",
-                  fontSize: "22px",
-                  borderBottom: "3px solid transparent",
-                  mr: 2,
-                }}
-                src={emp.avatar}
-              />
-
-              <Box sx={{ flexGrow: 1, textAlign: "right", pr: 1 }}>
-                <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
-                  {emp.name}
-                </Typography>
-
-                {isSub_Admin ? (
-                  <>
-                    <Typography sx={{ fontSize: "12px", fontWeight: "700", color: "gray" }}>
-                      {emp.role}
-                    </Typography>
-                    
-                  </>
-                ) : (
-                  <Typography sx={{ fontSize: "12px", fontWeight: "700", color: "gray" }}>
-                    {emp.phone}
-                  </Typography>
-                )}
-              </Box>
-
-              <Box
-                sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: "50%",
-                  backgroundColor: "red",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  color: "white",
-                  fontSize: "10px",
-                  fontWeight: "600",
+                  gap: 2,
+                  px: 0,
+                  borderBottom: "1px solid #e0e0e0",
+                  py: 1.5,
                 }}
               >
-{                emp.handled_transactions ?? "-"    }         </Box>
-            </ListItem>
-          ))}
-        </List>
+                <Avatar
+                  sx={{ width: 64, height: 64, fontWeight: "900", fontSize: "22px", mr: 2 }}
+                  src={emp.avatar}
+                />
+                <Box sx={{ flexGrow: 1, textAlign: "right", pr: 1 }}>
+                  <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>{emp.name}</Typography>
+                  <Typography sx={{ fontSize: "12px", fontWeight: "700", color: "gray" }}>
+                    {isSub_Admin ? emp.role : emp.phone}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: "50%",
+                    backgroundColor: "red",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: "10px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {emp.handled_transactions ?? "-"}
+                </Box>
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <NOSERACH />
+        )}
       </Container>
     </Box>
   );

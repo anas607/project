@@ -62,6 +62,7 @@ const [selectedUuid, setSelectedUuid] = useState(null);
 const isSub_Admin=state.roles[0].includes("نائب المدير")
 const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
 const isAdmin=state.roles[0].includes("المدير")
+      const [searchTerm, setSearchTerm] = useState("");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -89,7 +90,7 @@ const isAdmin=state.roles[0].includes("المدير")
      {isSub_exam || isSub_Admin ||isAdmin ?<SidBar /> :<SidBarComponent /> } 
 
       <Box sx={{ flex: 1, p: 2 }}>
-         <Appar/>
+         <Appar onSearch={setSearchTerm} />
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center",  }}>
          
           {/* التابات */}
@@ -109,7 +110,7 @@ const isAdmin=state.roles[0].includes("المدير")
             <Mark/>
       </Bank>
         <Bank value={value} index={1}>
-          <Speclist/>  
+          <Speclist searchTerm={searchTerm} />  
        </Bank>
         <Bank value={value} index={2}>
   <Program  addprogram={addprogram}

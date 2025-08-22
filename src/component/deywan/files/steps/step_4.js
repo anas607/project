@@ -1,266 +1,87 @@
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import NoteIcon from '@mui/icons-material/Note';import { Typography,Checkbox,TextField} from '@mui/material';
+import { Box, Typography, TextField, Grid } from "@mui/material";
+import { useSelector } from "react-redux";
+import { FIELD_TYPES } from "../../../../reducer/files/manual";
 
+export default function Step_4() {
+  const { transactionName, elements } = useSelector((state) => state.step);
 
-export default function Step_4(){
-return(
+  const renderField = (el, index) => {
+    switch (el.type) {
+      case FIELD_TYPES.TEXT:
+      case FIELD_TYPES.NUMBER:
+      case FIELD_TYPES.DATE:
+        return (
+          <Grid item xs={12} sm={6} key={index}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Typography sx={{ minWidth: "120px", fontWeight: 600 }}>
+                {el.label}
+              </Typography>
+              <TextField
+                fullWidth
+                placeholder={el.label}
+                variant="standard"
+                InputProps={{ disableUnderline: true }}
+                sx={{
+                  borderBottom: "2px dashed #444",
+                }}
+              />
+            </Box>
+          </Grid>
+        );
+      default:
+        return null;
+    }
+  };
 
+  const attachments = elements.filter(
+    (el) => el.type === FIELD_TYPES.IMAGE || el.type === FIELD_TYPES.EXCEL
+  );
 
-         
-          <>
-          <Box sx={{ flex: 1,mt:1}}>
-            
-             <Typography
-                  variant="h6"
-                  sx={{
-                    mb: 3,fontSize:"32px",
-                    fontWeight: '700',
-                    color: 'black',
-                    mr: 13,
-                    pb: 1,
-                  }}
-                >
-                  بيان برنامج تدريبي
-                </Typography>
-                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
-                            <Typography sx={{ minWidth: '120px' ,fontSize:"24px"
-,fontWeight:700,}}>الاسم الأول:</Typography>
-                             <TextField
-            variant="standard"
-            fullWidth
-            sx={{
-              width: '20%',
-              input: {
-                px: 1,
-                fontSize: "13px",
-                borderBottom: '1px dashed gray !important',
-              },
-            }}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                
-                px: 1,
-                minHeight: '28px',
-                mt: -2,
-                mr: 1,
-              }
-            }}
-          />
-                          </Box>
-           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
-                            <Typography sx={{ minWidth: '120px' ,fontSize:"24px"
-,fontWeight:700,}}>الاسم العائلة:</Typography>
-                             <TextField
-            variant="standard"
-            fullWidth
-            sx={{
-              width: '20%',
-              input: {
-                px: 1,
-                fontSize: "13px",
-                borderBottom: '1px dashed gray !important',
-              },
-            }}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                
-                px: 1,
-                minHeight: '28px',
-                mt: -2,
-                mr: 1,
-              }
-            }}
-          />
-                          </Box>
-                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
-                            <Typography sx={{ minWidth: '120px' ,fontSize:"24px"
-,fontWeight:700,}}>الاسم الاب:</Typography>
-                            <TextField
-            variant="standard"
-            fullWidth
-            sx={{
-              width: '20%',
-              input: {
-                px: 1,
-                fontSize: "13px",
-                borderBottom: '1px dashed gray !important',
-              },
-            }}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                
-                px: 1,
-                minHeight: '28px',
-                mt: -2,
-                mr: 1,
-              }
-            }}
-          />
-                          </Box>
-                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
-                            <Typography sx={{ minWidth: '120px' ,fontSize:"24px"
-,fontWeight:700,}}>الاختصاص :</Typography>
-                             <TextField
-            variant="standard"
-            fullWidth
-            sx={{
-              width: '20%',
-              input: {
-                px: 1,
-                fontSize: "13px",
-                borderBottom: '1px dashed gray !important',
-              },
-            }}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                
-                px: 1,
-                minHeight: '28px',
-                mt: -2,
-                mr: 1,
-              }
-            }}
-          />
-                                <Box sx={{ display: 'flex'}}>
- 
-<Typography sx={{mt:1, mr:2 ,fontSize:"20px"
-,fontWeight:700,}}> رئيسي </Typography>
-<Checkbox size="small"  sx={{mr:1 ,color: " rgb(14,74,35)"}}/>
+  return (
+    <Box sx={{ mt: 3 }}>
+      {/* عنوان المعاملة */}
+      <Typography
+        variant="h5"
+        sx={{ fontWeight: "bold", color: "rgb(14,74,35)", mb: 3 }}
+      >
+        اسم المعاملة: {transactionName || "—"}
+      </Typography>
+
+      {/* الحقول النصية */}
+      <Grid container spacing={3}>
+        {elements.map((el, idx) => renderField(el, idx))}
+      </Grid>
+
+      {/* المرفقات */}
+      {attachments.length > 0 && (
+        <Box sx={{ mt: 4 }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "bold", color: "rgb(14,74,35)", mb: 2 }}
+          >
+            المرفقات
+          </Typography>
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            {attachments.map((att, idx) => (
+              <Box
+                key={idx}
+                sx={{
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  background: "#fff",
+                  px: 2,
+                  py: 1,
+                  minWidth: "120px",
+                  textAlign: "center",
+                  fontWeight: 500,
+                }}
+              >
+                {att.label}
+              </Box>
+            ))}
+          </Box>
         </Box>
-      
-      
-       <Box sx={{ display: 'flex',mr:2}}>
- 
-<Typography sx={{mt:0.5 ,fontSize:"20px"
-,fontWeight:700}}> فرعي </Typography>
-<Checkbox size="small"  sx={{mr:1,color: " rgb(14,74,35)"}}/>
-        </Box>
-                          </Box>
-                           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
-                            <Typography sx={{ minWidth: '120px' ,fontSize:"20px"
-,fontWeight:700}}>مقبول في :</Typography>
-                           
-                                <Box sx={{ display: 'flex',mr:-2 }}>
- 
-<Typography sx={{mt:1.2, fontSize:"20px"
-,fontWeight:700}}> مفاضلة ترميمية </Typography>
-<Checkbox size="small"  sx={{mr:1 ,color: " rgb(14,74,35)",mt:0.5}}/>
-        </Box>
-      
-      
-       <Box sx={{ display: 'flex',mr:2}}>
- 
-<Typography sx={{mt:1.2 ,fontSize:"20px"
-,fontWeight:700}}> مفاضلة عامة </Typography>
-<Checkbox size="small"  sx={{mr:1,color: " rgb(14,74,35)"}}/>
-        </Box>
-                          </Box>
-                           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1}}>
-                            <Typography sx={{ minWidth: '120px' ,fontSize:"20px"
-,fontWeight:700}}>عدد سنوات الاختصاص حسب نظام الاقامة :</Typography>
-                            <TextField
-            variant="standard"
-            fullWidth
-            sx={{
-              width: '20%',
-              input: {
-                px: 1,
-                fontSize: "13px",
-                borderBottom: '1px dashed gray !important',
-              },
-            }}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                
-                px: 1,
-                minHeight: '28px',
-                mt: -2,
-                mr: 1,
-              }
-            }}
-          /></Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: -3 }}>
-                                      <Typography sx={{fontSize:"20px"
-,fontWeight:700}}>ناجح في الاختبار النهائي الكتابي دورة شهر :</Typography>
-                                     
-                                    <Box sx={{ display: 'flex'}}>
-                             
-                            <Typography sx={{mt:1.2 ,fontSize:"20px"
-,fontWeight:700}}> نيسان</Typography>
-                            <Checkbox size="small" sx={{color: " rgb(14,74,35)",mr:1}}/>
-                                    </Box>
-                                  
-                                  
-                                 
-                                     
-                                    </Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 6,mt:4}}>
-                                              <Typography sx={{fontSize:"20px"
-,fontWeight:700}}> المرفقات:
-                                             <label htmlFor="upload-image-file">
-                                          <input
-                                            id="upload-image-file"
-                                            type="file"
-                                           accept="image/*"
-                                            style={{ display: 'none' }}
-                                          />
-                                          <Button
-                                            component="span"
-                                            variant="outlined"
-                                            fullWidth
-                                            sx={{
-                                              height: 150,
-                                              width: 150,
-                                              borderStyle: 'dashed',
-                                              border: '4px dotted rgba(160, 154, 154, 0.79)',
-                                              display: 'flex',
-                                              flexDirection: 'column',    
-                                              alignItems: 'center',
-                                              justifyContent: 'center',
-                                              borderRadius: '8%',
-                                              textAlign: 'center',mr:13,mt:-2
-                                            }}
-                                          >
-                                            <NoteIcon sx={{ fontSize: 50, color: 'black', mb: 1 }} />
-                                          
-                                            <Typography   style={{fontSize:'20px',fontWeight:'700',mt:-2 ,color:'black'}}>صورة </Typography>
-                                                                                        <Typography   style={{fontSize:'20px',color:'black',fontWeight:'700',mt:-2 ,whiteSpace: 'nowrap'}}>مصدقة عن </Typography>
-
-                                                                                        <Typography   style={{fontSize:'20px',color:'black',fontWeight:'700',mt:-2 ,whiteSpace: 'nowrap'}}> شهادة البورد  </Typography>
-
-                                          </Button>
-                                        </label>
-                                     </Typography>
-                                    
-                                              
-                                            </Box>
-          </Box></>
-
-         
-           
-)}
-   
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-       
+      )}
+    </Box>
+  );
+}

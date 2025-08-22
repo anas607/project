@@ -25,7 +25,11 @@ export default function DeatilsForm({ open, onClose ,id ,onSuccess ,status }) {
     const isAdmin = state.roles?.some(role => role === "المدير")
 const[details,setDetails]=useState([])
 const[Loading,setLoading]=useState(false)
-
+const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
 
 useEffect(()=>{
 if (open && id) {
@@ -53,11 +57,20 @@ async function ReviewDetalis(status) {
     const response =await postData(`${BaseUrl}${FORM}${REVIEW}${id}`,{
       status
     })
-     alert(response.message)
-      
+     setSnackbar({
+        open: true,
+        message: response.message || "تم   بنجاح",
+        severity: "success", color: "green",
+      });
       if (onSuccess) onSuccess();
-  }catch(err){alert(err)}finally{
+  }catch(err){ setSnackbar({
+        open: true,
+        message: err?.message || "حدث خطأ أثناء الإرسال",
+        severity: "error", color: "red",
+      });}
+  finally{
     setLoading(false)
+    setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
   }
   
   
@@ -131,7 +144,27 @@ async function ReviewDetalis(status) {
 
   return (
     <>
-    
+     {snackbar.open && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 50,
+            left: "50%",
+            transform: "translateX(-50%)",
+            p: 2,
+            backgroundColor: snackbar.color,
+            color: "white",
+            borderRadius: 2,
+            zIndex: 9999,
+            minWidth: 200,
+            textAlign: "center",
+            fontWeight: "700",
+            boxShadow: 3,
+          }}
+        >
+          {snackbar.message}
+        </Box>
+      )}
     <Modal
  open={open}
   onClose={onClose}
@@ -221,7 +254,7 @@ async function ReviewDetalis(status) {
       gap: 2,
       justifyContent: "center",
       position: "absolute",
-      bottom: 90,
+      bottom: 80,
       left: -470,
       right: 0,
     }}
@@ -250,7 +283,7 @@ async function ReviewDetalis(status) {
     <Button
       onClick={async () => {
     try {
-   await ReviewDetalis  ( "غير فعالة");
+   await ReviewDetalis  ( "مرفوضة");
       onClose(); 
     } catch {
       alert("حدث خطأ أثناء قبول الطلب");

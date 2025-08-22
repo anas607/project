@@ -41,7 +41,7 @@ export default function AllFILES(){
   const [selectedStatus, setSelectedStatus] = useState("");
 
     const[selectedid,setselectedid]=useState("")
-
+ 
   const[shoeDeatils,setShoeDeatils]=useState(false)
     const state=useSelector((state)=>state.fetchform)
     const dispatch=useDispatch()
@@ -81,7 +81,8 @@ setShoeDeatils(true)
       
           
     
-         <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6}}>
+         <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6,  maxHeight: "600px",   // 👈 أقصى ارتفاع
+    overflowY: "auto",}}>
                <Table sx={{width:"1573px", height:'88px'}}>
                 <TableHead sx={{width:"1573px", height:'88px'}}>
                <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
@@ -130,12 +131,12 @@ setShoeDeatils(true)
           sx={{
             fontWeight: "700",
             fontSize: "16px",
-            color:
-              row.status === "فعالة"
-                ? "green"
-                : row.status === "غير فعالة"
-                ? "red"
-                : "orange",
+           color:
+  row.status === "فعالة" ? "green" :
+  row.status === "مرفوضة" ? "red" :
+  row.status === "غير فعالة" ? "red" :
+  "orange" // قيمة افتراضية لو ما انطبق أي شرط
+
           }}
         >
           {row.status ?? "ـ"}

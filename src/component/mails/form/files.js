@@ -48,86 +48,99 @@ async function showDetalis() {
   
   
 }
-async function ReviewDetalis(status) {
-  try{
-    const response =await postData(`${BaseUrl}${FORM}${REVIEW}${id}`,{
-      status
-    })
-     alert(response.message)
-      
-      if (onSuccess) onSuccess();
-  }catch(err){alert(err)}finally{
-    setLoading(false)
-  }
-  
-  
-}
+
 
  const renderField = (el) => {
-    switch (el.type) {
-      case 1: // نص
-      case 2: // رقم
-        return (
-          <Box display="flex" alignItems="center" gap={1}>
-            <Typography
-              variant="body2"
-              sx={{ whiteSpace: "nowrap", minWidth: "90px" }}
-            >
-              {el.label}:
-            </Typography>
-            <TextField
-              variant="standard"
-              size="small"
-              sx={{
-                flex: 1,
-                input: {
-                  fontSize: "13px",
-                  borderBottom: "1px dashed gray !important",
-                },
-              }}
-              InputProps={{
-                disableUnderline: true,
-              }}
-            />
-          </Box>
-        );
-
-      case 4: // صورة
-        return (
-          <Button
-            variant="outlined"
-            sx={{
-              height: 100,
-              width: "100%",
-              borderStyle: "dashed",
-              border: "2px dotted rgba(83, 79, 79, 0.79)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "5%",
-              textAlign: "center",
-            }}
+  switch (el.type) {
+    case 1: // نص
+    case 2: // رقم
+    case 3: // تاريخ
+      return (
+        <Box display="flex" alignItems="center" gap={1}>
+          <Typography
+            variant="body2"
+            sx={{ whiteSpace: "nowrap", minWidth: "90px" }}
           >
-            <NoteIcon sx={{ fontSize: 30, color: "black", mb: 1 }} />
-            <Typography sx={{ fontSize: "10px", textAlign: "center" }}>
-              {el.label}
-            </Typography>
-          </Button>
-        );
+            {el.label}:
+          </Typography>
+          <TextField
+            variant="standard"
+            size="small"
+            sx={{
+              flex: 1,
+              input: {
+                fontSize: "13px",
+                borderBottom: "1px dashed gray !important",
+              },
+            }}
+            InputProps={{
+              disableUnderline: true,
+            }}
+          />
+        </Box>
+      );
 
-      case 6: // اختيار (checkbox)
-        return (
-          <Box display="flex" alignItems="center" gap={1}>
-            <Checkbox size="small" />
-            <Typography variant="body2">{el.label}</Typography>
-          </Box>
-        );
+    case 4: // صورة
+      return (
+        <Button
+          variant="outlined"
+          sx={{
+            height: 100,
+            width: "100%",
+            borderStyle: "dashed",
+            border: "2px dotted rgba(83, 79, 79, 0.79)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "5%",
+            textAlign: "center",
+          }}
+        >
+          <NoteIcon sx={{ fontSize: 30, color: "black", mb: 1 }} />
+          <Typography sx={{ fontSize: "10px", textAlign: "center" }}>
+            {el.label}
+          </Typography>
+        </Button>
+      );
 
-      default:
-        return null;
-    }
-  };
+    case 5: // ملف Excel
+      return (
+        <Button
+          variant="outlined"
+          sx={{
+            height: 80,
+            width: "100%",
+            borderStyle: "dashed",
+            border: "2px dotted rgba(83, 79, 79, 0.79)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "5%",
+            textAlign: "center",
+          }}
+        >
+          <NoteIcon sx={{ fontSize: 30, color: "black", mb: 1 }} />
+          <Typography sx={{ fontSize: "10px", textAlign: "center" }}>
+            {el.label}
+          </Typography>
+        </Button>
+      );
+
+    case 6: // اختيار (Checkbox)
+      return (
+        <Box display="flex" alignItems="center" gap={1}>
+          <Checkbox size="small" />
+          <Typography variant="body2">{el.label}</Typography>
+        </Box>
+      );
+
+    default:
+      return null;
+  }
+};
+
 
   return (
     <>

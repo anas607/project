@@ -161,11 +161,13 @@ setShoeDeatils(true)
               maxWidth: "3000px",
               maxHeight: "2000px",
               width: "1600px",
-              alignSelf: "rtl",
+              alignSelf: "rtl",    overflow: "auto" 
+
             }}
           >
             <Grid container spacing={2}>
-             <Creat_Manaual/>
+             <Creat_Manaual      onSuccess={() => dispatch(fetchForm())}
+/>
               {/* add ============================file============================================= */}
               {/* زر word لتحميل ملف من الجهاز */}
              <WORDFILE/>
@@ -206,71 +208,89 @@ formsToDisplay.map((item) => (
       }}
     >
       {/* المحتوى الأساسي */}
-      <Box sx={{ display: "flex", justifyContent:'space-between' }}>
-        {/* الأيقونة على أقصى اليسار */}
-       
+     <Box 
+  sx={{ 
+    display: "flex", 
+    justifyContent: "space-between", 
+    alignItems: "center",
+    gap: 1,
+    overflow: "hidden" 
+  }}
+>
+  {/* النصوص على اليمين */}
+  <Box 
+    sx={{ 
+      textAlign: "right", 
+      display: "flex", 
+      flexDirection: "column", 
+      flex: 1, 
+      minWidth: 0  // مهم عشان ellipsis يشتغل
+    }}
+  >
+    <Typography
+      sx={{
+        fontSize: "14px",
+        fontWeight: "700",
+        color:
+          item.status === "فعالة"
+            ? "rgb(1, 53, 19)"
+            : item.status === "قيد الدراسة"
+            ? "orange"
+            : "#ca0b0bff",
+      }}
+    >
+      {item.created_at}
+    </Typography>
 
-        {/* النصوص على اليمين */}
-        <Box sx={{ textAlign: "right", display: "flex", flexDirection: "column" }}>
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontWeight: "700",
-              color:
-                item.status === "فعالة"
-                  ? "rgb(1, 53, 19)"
-                  : item.status === "قيد الدراسة"
-                  ? "orange"
-                  : "#ca0b0bff",
-            }}
-          >
-            {item.created_at}
-          </Typography>
+    <Typography
+      sx={{
+        fontSize: "14px",
+        fontWeight: "700",
+        color:
+          item.status === "فعالة"
+            ? "rgb(1, 53, 19)"
+            : item.status === "قيد الدراسة"
+            ? "orange"
+            : "#ca0b0bff",
+      }}
+    >
+      {item.status}
+    </Typography>
 
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontWeight: "700",
-              color:
-                item.status === "فعالة"
-                  ? "rgb(1, 53, 19)"
-                  : item.status === "قيد الدراسة"
-                  ? "orange"
-                  : "#ca0b0bff",
-            }}
-          >
-            {item.status}
-          </Typography>
+    <Typography
+      sx={{
+        fontSize: "20px",
+        fontWeight: "700",
+        color:
+          item.status === "فعالة"
+            ? "rgb(1, 53, 19)"
+            : item.status === "قيد الدراسة"
+            ? "orange"
+            : "#ca0b0bff",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis", // يضيف "..." إذا الاسم طويل
+      }}
+    >
+      {item.name}
+    </Typography>
+  </Box>
 
-          <Typography
-            sx={{
-              fontSize: "24px",
-              fontWeight: "700",
-              color:
-                item.status === "فعالة"
-                  ? "rgb(1, 53, 19)"
-                  : item.status === "قيد الدراسة"
-                  ? "orange"
-                  : "#ca0b0bff",
-            }}
-          >
-            {item.name}
-          </Typography>
-          
-        </Box>
-         <NoteIcon
-          sx={{
-            fontSize: 64,
-            color:
-              item.status === "فعالة"
-                ? "rgb(1, 53, 19)"
-                : item.status === "قيد الدراسة"
-                ? "orange"
-                : "#ca0b0bff",
-            mr: 1,
-          }}
-        />
-      </Box>
+  {/* الأيقونة */}
+  <NoteIcon
+    sx={{
+      fontSize: 50,
+      flexShrink: 0, // يمنعها من التصغير
+      color:
+        item.status === "فعالة"
+          ? "rgb(1, 53, 19)"
+          : item.status === "قيد الدراسة"
+          ? "orange"
+          : "#ca0b0bff",
+    }}
+  />
+</Box>
+
 
   {/* زر التفعيل/إلغاء التفعيل */}
   {item.status !== "قيد الدراسة" && (

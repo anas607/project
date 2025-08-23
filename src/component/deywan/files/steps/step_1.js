@@ -64,53 +64,99 @@ export default function Step_1() {
 
       <hr style={{ height: "2px", border: "none", background: "rgba(206, 199, 199, 0.43)" }} />
 
-      {/* مسار المعاملة */}
-      <Typography sx={{ fontSize: "24px", fontWeight: 700 }}>مسار المعاملة</Typography>
+     {/* مسار المعاملة */}
+<Box sx={{ display: "flex", alignItems: "center", mb: 2, gap: 0 }}>
+  {/* الزر الأول */}
+  <Button
+    variant="contained"
+    sx={{
+      backgroundColor: "rgb(14,75,34)",
+      color: "white",
+      borderRadius: 5,
+      fontWeight: 700,
+      "&:hover": { backgroundColor: "rgb(14,75,34)" },
+    }}
+  >
+    الديوان
+  </Button>
 
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <FormControl
-          sx={{
-            minWidth: 300,
-            border: "4px dashed rgb(14,74,35)",
-            borderRadius: "8px",
-            px: 1,
-            py: 0.5,
-          }}
-        >
-          <Select
-            multiple
-            value={selectedOfficeId} // رح تكون مصفوفة أسماء
-            onChange={(e) => dispatch(setSelectedOfficeId(e.target.value))}
-            renderValue={(selected) => {
-              if (!selected.length) {
-                return (
-                  <Box sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}>
-                    <SortIcon fontSize="32px" />
-                    <KeyboardBackspaceIcon
-                      sx={{
-                        fontSize: "32px",
-                        transform: "rotate(270deg)",
-                        color: "rgb(14,74,35)",
-                      }}
-                    />
-                    <h3 style={{ fontSize: "18px", fontWeight: "700", color: "rgb(14,74,35)" }}>
-                      إضافة مسار
-                    </h3>
-                  </Box>
-                );
-              }
-              return selected.join(" , ");
-            }}
-            fullWidth
-          >
-            {offices.map((office) => (
-              <MenuItem key={office.id} value={office.name}>
-                {office.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
+  {/* السهم بين الزرين */}
+  <Typography
+    sx={{
+      fontSize: 24,
+      fontWeight: 700,
+      color: "rgb(14,75,34)",
+      px: 1,
+    }}
+  >
+    ←
+  </Typography>
+
+  {/* الزر الثاني */}
+  <Button
+    variant="contained"
+    sx={{
+      backgroundColor: "rgb(14,75,34)",
+      color: "white",
+      borderRadius: 5,
+      textTransform: "none",
+      fontWeight: 700,
+      "&:hover": { backgroundColor: "rgb(14,75,34)" },
+      px: 2,
+    }}
+  >
+    المالية
+  </Button>
+
+  {/* السهم قبل السيلكت */}
+  <Typography
+    sx={{
+      fontSize: 24,
+      fontWeight: 700,
+      color: "rgb(14,75,34)",
+      px: 1,
+    }}
+  >
+    ←
+  </Typography>
+
+  {/* زر السيلكت */}
+  <FormControl
+    sx={{
+      minWidth: 180,
+      borderRadius: "0 20px 20px 0",
+      overflow: "hidden",
+      border: "4px dashed rgb(14,74,35)",
+      px: 1,
+      py: 0.5,
+      backgroundColor: "white",
+    }}
+  >
+    <Select
+      multiple
+      value={selectedOfficeId}
+      onChange={(e) => dispatch(setSelectedOfficeId(e.target.value))}
+      displayEmpty
+      renderValue={(selected) => {
+        if (!selected.length) {
+          return <Typography sx={{ fontWeight: 700 }}>مسار المعاملة</Typography>;
+        }
+        return selected
+          .map((id) => offices.find((o) => o.id === id)?.name)
+          .filter(Boolean)
+          .join(" , ");
+      }}
+      fullWidth
+    >
+      {offices.map((office) => (
+        <MenuItem key={office.id} value={office.id}>
+          {office.name}
+        </MenuItem>
+      ))}
+    </Select>
+  </FormControl>
+</Box>
+
 
       <hr style={{ height: "2px", border: "none", background: "rgba(206, 199, 199, 0.43)" }} />
     </Box>

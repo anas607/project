@@ -4,15 +4,15 @@ export const FIELD_TYPES = {
   TEXT: 1,
   NUMBER: 2,
   DATE: 3,
-  MULTI_CHOICE: 4,
-  IMAGE: 5,
-  CHECKBOX: 6,
-  EXCEL: 7
+  IMAGE: 4,     // صورة
+  EXCEL: 5,     // ملف
+  CHECKBOX: 6
 };
+
 const initialState = {
   name: '',
   transactionCost: '',
-  selectedOfficeId: [], // مصفوفة أسماء المكاتب
+  selectedOfficeId: [], // مصفوفة IDs للمكاتب
   elements: [],
   imageFile: null,
   excelFile: null,
@@ -28,14 +28,15 @@ const formSlice = createSlice({
   name: 'step',
   initialState,
   reducers: {
-    setTransactionName: (state, action) => {
-      state.transactionName = action.payload;
-    },
+   setTransactionName: (state, action) => {
+  state.name = action.payload;  // صح
+},
+
     setTransactionCost: (state, action) => {
       state.transactionCost = action.payload;
     },
-    setSelectedOfficeId: (state, action) => {
-  state.selectedOfficeId = action.payload; // array of office names
+  setSelectedOfficeId: (state, action) => {
+  state.selectedOfficeId = action.payload; // array of office IDs
 },
     setElements: (state, action) => {
       state.elements = action.payload;
@@ -48,7 +49,9 @@ const formSlice = createSlice({
     },
     setTrainingInfo: (state, action) => {
       state.trainingInfo = { ...state.trainingInfo, ...action.payload };
-    }
+    },
+        resetForm: () => initialState,
+
   }
 });
 
@@ -59,7 +62,8 @@ export const {
   setElements,
   setImageFile,
   setExcelFile,
-  setTrainingInfo
+  setTrainingInfo,    resetForm
+
 } = formSlice.actions;
 
 export default formSlice.reducer;

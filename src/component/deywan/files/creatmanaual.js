@@ -24,26 +24,30 @@ import Step_4 from "./steps/step_4";
 import { getData, postData } from "../../../API/apiService";
 import { BaseUrl, FETCHOFFICE } from "../../../API/api";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { FIELD_TYPES } from "../../../reducer/files/manual";
+import { useDispatch, useSelector } from "react-redux";
+import { FIELD_TYPES, resetForm } from "../../../reducer/files/manual";
 
 
 const steps = ["المعلومات العامة", " استمارة المعاملة", "المرفقات", "معاينة"];
 
 
 
-export default function Creat_Manaual() {
+export default function Creat_Manaual({onSuccess}) {
     
    
   const [showaddfile, setShowAddFile] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-
-
+const [loading,setLoadig]=useState(false)
+ const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
 
  const step1 = useSelector(state => state.step); // transactionName, transactionCost, selectedOfficeId
     const step2 = useSelector(state => state.step.elements); // عناصر Step 2
     const step3 = useSelector(state => state.step); // imageFile, excelFile
-
+const dispatch = useDispatch()
   function handleBack() {
     if (activeStep > 0) {
       setActiveStep((prev) => prev - 1);
@@ -54,23 +58,17 @@ export default function Creat_Manaual() {
   }
 const handleNext = async () => {
   if (activeStep === 3) {
+    setLoadig(true)
     try {
       const trimmedName = step1.name.trim();
 
-      const mapTypeToNumber = {
-        [FIELD_TYPES.TEXT]: 1,
-        [FIELD_TYPES.NUMBER]: 2,
-        [FIELD_TYPES.DATE]: 3,
-        [FIELD_TYPES.EXCEL]: 5,
-        [FIELD_TYPES.IMAGE]: 5,
-        [FIELD_TYPES.CHECKBOX]: 6,
-        [FIELD_TYPES.MULTI_CHOICE]: 6
-      };
 
-      const elementsForBackend = step2.map(el => ({
-        label: el.label.trim(),
-        type: mapTypeToNumber[el.type] || 1 // الافتراضي نص
-      }));
+
+     const elementsForBackend = step2.map(el => ({
+  label: el.label.trim(),
+  type: el.type   // صار يطابق backend مباشرة
+}));
+
 
       // تجهيز البودي للإرسال
       const body = {
@@ -86,12 +84,24 @@ const handleNext = async () => {
         "http://127.0.0.1:8000/api/form/manual",
         body
       );
-
-      if (response.data.success) {
-        alert(response.data.message);
-      }
-    } catch (error) {
-      console.error("خطأ أثناء الإرسال:", error);
+      if (onSuccess) onSuccess();
+setSnackbar({
+        open: true,
+        message: response.message || "تم إنشاء الاختصاص بنجاح",
+        severity: "success", color: "green",
+      });
+      setShowAddFile(false);
+       dispatch(resetForm());
+      setActiveStep(0);
+    } catch (err) {
+      console.error("خطأ أثناء الإرسال:", err);
+      setSnackbar({
+        open: true,
+        message: err?.message || "حدث خطأ أثناء الإرسال",
+        severity: "error", color: "red",
+      });
+    }finally{
+      setLoadig(false);    setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
     }
   } else {
     setActiveStep((prev) => prev + 1);
@@ -106,9 +116,27 @@ const handleNext = async () => {
     <>
  
 
-     
+      {snackbar.open && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 50,
+            left: "50%",
+            transform: "translateX(-50%)",
+            p: 2,
+            backgroundColor: snackbar.color,
+            color: "white",
+            borderRadius: 2,
+            zIndex: 9999,
+            minWidth: 200,
+            textAlign: "center",
+            fontWeight: "700",
+            boxShadow: 3,
+          }}
+        >
+          {snackbar.message}
         
-       
+       </Box>)}
             <Grid container spacing={2}>
               {/* زر رفع ملف */}
               <Grid item xs={12} sm={6} md={3}>
@@ -161,6 +189,22 @@ const handleNext = async () => {
                 </Button>
               </Grid>
               {/* add file */}
+               {loading && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 1300,
+            backgroundColor: "rgba(255,255,255,0.7)",
+            borderRadius: 3,
+            p: 4,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
               <Modal
                 open={showaddfile}
                 aria-labelledby="add-employee-modal"
@@ -358,7 +402,7 @@ const handleNext = async () => {
                           },
                         }}
                       >
-                        {activeStep == 3 ? "اضافة" : "التالي"}
+                        {activeStep == 3 ? "اضافة"  : "التالي"}
                       </Button>
                     </Box>
                   </Box>

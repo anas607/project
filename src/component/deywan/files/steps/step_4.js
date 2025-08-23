@@ -34,8 +34,9 @@ export default function Step_4() {
   };
 
   const attachments = elements.filter(
-    (el) => el.type === FIELD_TYPES.IMAGE || el.type === FIELD_TYPES.EXCEL
-  );
+  (el) => el.type === FIELD_TYPES.IMAGE || el.type === FIELD_TYPES.EXCEL
+);
+
 
   return (
     <Box sx={{ mt: 3 }}>
@@ -63,21 +64,22 @@ export default function Step_4() {
           </Typography>
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
             {attachments.map((att, idx) => (
-              <Box
-                key={idx}
-                sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "8px",
-                  background: "#fff",
-                  px: 2,
-                  py: 1,
-                  minWidth: "120px",
-                  textAlign: "center",
-                  fontWeight: 500,
-                }}
-              >
-                {att.label}
-              </Box>
+            <Box
+  key={idx}
+  sx={{
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    background: "#fff",
+    px: 2,
+    py: 1,
+    minWidth: "120px",
+    textAlign: "center",
+    fontWeight: 500,
+  }}
+>
+  {att.label}
+</Box>
+
             ))}
           </Box>
         </Box>

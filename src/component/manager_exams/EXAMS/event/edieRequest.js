@@ -35,7 +35,9 @@ const mockDoctorData = {
   sessionYear: "2025",
 };
 
-export default function EditRequest({ open, onClose }) {
+export default function EditRequest({ open, onClose,status }) {
+    const shouldShowButtons = !["مرسلة", "مرفوضة"].includes(status)
+
   return (
     <>
       <Modal

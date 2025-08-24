@@ -57,7 +57,8 @@ export default function Request() {
   const [value, setValue] = React.useState(0);
     const[showRequest,setShowRequest]=useState(false)
         const [searchTerm, setSearchTerm] = useState("");
-  
+       const [selectedStatus, setSelectedStatus] = useState(null);
+
  const state = useSelector((state) => state.user);
 const isSub_Admin=state.roles[0].includes("نائب المدير")
 const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
@@ -68,7 +69,8 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
   if (showRequest) {
   
 
-      return < DoctorRequestDetails  setShowRequest={setShowRequest} uuid={selectedUuid}  />;
+      return < DoctorRequestDetails     status={selectedStatus}
+ setShowRequest={setShowRequest} uuid={selectedUuid}  />;
     }
 
   return (
@@ -177,7 +179,15 @@ const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
             />
       </Bank>
         <Bank value={value} index={1}>
-          <Finished searchTerm={searchTerm} />  
+          <Finished 
+          
+          setShowRequest={setShowRequest}
+       setSelectedUuid={setSelectedUuid}
+       selectedUuid={selectedUuid}
+  setSelectedStatus= {setSelectedStatus}  
+
+
+          searchTerm={searchTerm} />  
        </Bank>
         
       </Box>

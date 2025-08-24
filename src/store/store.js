@@ -26,6 +26,7 @@ import searchFormsReducer from "../reducer/search/formSearch"
 import searchspecliseReducer from "../reducer/search/spiclicet"
 import searchrequestReducer from "../reducer/search/requestSearch"
 import SearchAnnouncementsReducer from "../reducer/search/Announcements"
+import wordReducer from "../reducer/files/word"
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -50,6 +51,7 @@ export default configureStore({
     fetchform:fetchformReducer,
     fetchadversment:fetchadversmentReducer,
     step:stepReducer,
+    word:wordReducer,
     search:searchReducer,
     searchForms:searchFormsReducer,
     searchspeclise:searchspecliseReducer,

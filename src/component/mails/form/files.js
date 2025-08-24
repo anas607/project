@@ -37,6 +37,7 @@ async function showDetalis() {
   setLoading(true)
   try{
     const response =await getData(`${BaseUrl}${FORM}${id}`)
+    console.log(response)
      if (response.success && response.data?.length) {
       const formElements = response.data[0].elements;
       setDetails(formElements);

@@ -70,4 +70,4 @@ export const NAME ="Name"
 export const EXAME ="Exam/"
 export const REQUEST ="request"
 export const Announcements ="Announcements"
-
+export const UPLOUD_WORD ="upload-word"

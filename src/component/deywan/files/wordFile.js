@@ -14,19 +14,22 @@ import {
 } from "@mui/material";
 
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { useState } from "react";
+import AddWord from "./AddWord";
 
-export default function WORDFILE(){
+export default function WORDFILE({onSuccess}){
+    const [showWord, setShowWord] = useState(false);
+
+  function handleAddWord() {
+    setShowWord(true);
+  }
     return(
         <>
          <Grid item xs={12} sm={6} md={3}>
                 <label htmlFor="upload-word-file">
-                  <input
-                    id="upload-word-file"
-                    type="file"
-                    accept=".doc,.docx"
-                    style={{ display: "none" }}
-                  />
+                 
                   <Button
+                   onClick={handleAddWord}  // يفتح المودال
                     component="span"
                     variant="outlined"
                     fullWidth
@@ -75,7 +78,11 @@ export default function WORDFILE(){
                   </Button>
                 </label>
               </Grid>
-        
+         <AddWord 
+        open={showWord} 
+        onClose={() => setShowWord(false)} 
+        onSuccess={onSuccess}
+      />
         </>
     )
 }

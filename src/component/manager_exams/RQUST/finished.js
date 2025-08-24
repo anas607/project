@@ -24,9 +24,12 @@ import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import { SearchRequest } from "../../../reducer/search/requestSearch";
 import NOSERACH from "../../../wrong/search";
+import EditRequest from "../EXAMS/event/edieRequest";
 
 
-export default function Finished({searchTerm}){
+export default function Finished({setShowRequest,setSelectedUuid,searchTerm,setSelectedStatus}){
+    const [open,setOpen]=useState(false)
+  
    const { data: searchResults, isloading } = useSelector(
       (state) => state.searchrequest
     );
@@ -35,6 +38,13 @@ export default function Finished({searchTerm}){
   useEffect(()=>{dispatch(fetchEndExam())
 },[dispatch
   ])
+   function handleEditRequst(uuid,status){
+  
+    setSelectedStatus(status);
+
+  setSelectedUuid(uuid);
+  setShowRequest(true);
+}
   useEffect(() => {
     if (searchTerm) {
       dispatch(SearchRequest(searchTerm));
@@ -109,7 +119,7 @@ export default function Finished({searchTerm}){
   specliseToDisplay.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
-                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center"> {row["رقم الطلب"]}</TableCell>
+                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center"> {index+1}</TableCell>
                 <TableCell align="center">
                   <Avatar  sx={{margin:'auto'}} src={row[" صورة الطبيب"]} />
                 </TableCell>
@@ -128,13 +138,16 @@ export default function Finished({searchTerm}){
                 </TableCell>
                 <TableCell  sx={{color: row["حالة الطلب"]==='مقبول'? 'green' :"red", fontWeight: "700" ,fontSize:'16px'  }}align="center"> { row["حالة الطلب"]}</TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                   { row["تاريخ الامتحان"].toLocaleDateString('EG')??"-"}
+                   { new Date(row["تاريخ الامتحان"]).toLocaleDateString('EG')??"-"}
                 </TableCell>
                  <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
                   {new Date(row["تاريخ التقديم"]).toLocaleDateString('EG') }
                 </TableCell>
                 <TableCell align="center">
                   <IconButton
+                  onClick={() => {
+            handleEditRequst(row["رقم الطلب"],row["حالة الطلب"]);
+          }}
                     sx={{
                       border: "1px solid rgba(212, 208, 212, 0.31)",
                       borderRadius: "50px",ml:-3,

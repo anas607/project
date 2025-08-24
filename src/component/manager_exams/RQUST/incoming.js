@@ -59,9 +59,12 @@ export default function Incoming({setShowRequest,setSelectedUuid, searchTerm }){
     dispatch(SearchRequest(searchTerm));
   }
 }, [searchTerm, dispatch]);
-const specliseToDisplay = searchTerm 
-  ? Array.isArray(searchResults) ? searchResults : [searchResults] 
+const specliseToDisplay = searchTerm
+  ? Array.isArray(searchResults) ? searchResults : [searchResults]
   : stateimport.data ?? [];
+  
+const isEmpty = !specliseToDisplay || specliseToDisplay.length === 0;
+
 
     return(
         <>
@@ -102,21 +105,30 @@ const specliseToDisplay = searchTerm
           
           
           <TableBody>
-             {stateimport.data.error ? (<h2 sx={{color:"red"}}>خدث خطا في جلب المعلومات</h2>): 
-                                                 stateimport.isloading ?  (<>
-                                                                <TableRow>
-                                                                  <TableCell sx={{color:"green"}}>
-                                                                    <Loading />
-                                                                  </TableCell>
-                                                                </TableRow></>) : Array.isArray(stateimport.data?.[0]) && stateimport.data[0].length === 0 ? (
-                                                                    <NoData />):
-                                                                        isloading ? (
-                                                                        // عرض اللودنغ أثناء البحث
-                                                                        <Grid item xs={12}>
-                                                                          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300 }}>
-                                                                            <CircularProgress sx={{ color: "green" }} size={60} />
-                                                                          </Box>
-                                                                        </Grid>
+           {stateimport.error ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center" sx={{color:"red"}}>
+        حدث خطأ في جلب المعلومات
+      </TableCell>
+    </TableRow>
+  ) : stateimport.isloading ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <Loading />
+      </TableCell>
+    </TableRow>
+  ) : searchTerm && isEmpty ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <NOSERACH />
+      </TableCell>
+    </TableRow>
+  ) : !searchTerm && isEmpty ? (
+    <TableRow>
+  <TableCell colSpan={8} align="center">
+    <NoData />
+  </TableCell>
+</TableRow>
                                                                       
                          ) : specliseToDisplay.length > 0 ? (
   specliseToDisplay.map((row, index) => (
@@ -192,11 +204,11 @@ const specliseToDisplay = searchTerm
             </Table>
           </TableContainer>
          
-{<EditRequest open={open}
+{/* {<EditRequest open={open}
 onClose={()=>{setOpen(false)}}
 
 />
-}
+} */}
 
 
     </>)}

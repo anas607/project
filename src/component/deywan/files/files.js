@@ -31,12 +31,6 @@ import { SearchForms } from "../../../reducer/search/formSearch";
 import NOSERACH from "../../../wrong/search";
 
 
-
-const steps = ["المعلومات العامة", " استمارة المعاملة", "المرفقات", "معاينة"];
-
-
-// const response = await getData(`${BaseUrl}${showAllTransactions}`);
-
 export default function Files() {
    const { data: searchResults, isloading } = useSelector(
     (state) => state.searchForms
@@ -59,7 +53,7 @@ const [loadingStatus, setLoadingStatus] = useState({});
 const formsToDisplay = searchTerm 
   ? searchResults?.[0] ?? []   // فك المصفوفة الداخلية أو fallback لمصفوفة فارغة
   : state.data?.[0] ?? [];
-console.log(searchResults)
+// console.log(searchResults)
     //  console.log(state.data)
      ///fetch
   const dispatch=useDispatch()
@@ -170,7 +164,9 @@ setShoeDeatils(true)
 />
               {/* add ============================file============================================= */}
               {/* زر word لتحميل ملف من الجهاز */}
-             <WORDFILE/>
+             <WORDFILE                      onSuccess={() => dispatch(fetchForm())}
+             
+/>
               {/* أوراق المعاملات */}
                {state.isloading ?  <Box
     sx={{
@@ -336,6 +332,7 @@ formsToDisplay.map((item) => (
            
            /> }
       </Box>
+     
     </>
   );
 }

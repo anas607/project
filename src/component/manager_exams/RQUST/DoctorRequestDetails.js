@@ -27,9 +27,13 @@ import { getData, postData } from "../../../API/apiService";
 import { BaseUrl, EDIT_FORM_CONTENT_EXAM, SHOW_FORM_CONTENT } from "../../../API/api";
 
 
-export default function DoctorRequestDetails({  setShowRequest,uuid }) {
+export default function DoctorRequestDetails({  setShowRequest,uuid,status }) {
+const forbiddenStatuses = ["مقبول", "مرفوض", "مرفوضة"];
+const shouldShowButtons = !forbiddenStatuses.includes(status?.trim());
+
    const state = useSelector((state) => state.user);
-   
+   console.log("Status from props:", status);
+
   const isSub_exam=state.roles[0].includes("رئيس الامتحانات")
   const ismanger_exam=state.roles[0].includes("موظف الامتحانات")
 const [formData, setFormData] = useState({});
@@ -72,7 +76,7 @@ const handleAttachmentClick = (url) => {
   async function fetchRequest(){
     try{
 const response = await getData(`${BaseUrl}${SHOW_FORM_CONTENT}?uuid=${uuid}`)
-console.log(response.data.Doctor_image); 
+console.log(response); 
 
 setData(response.data)
   const elementsArray = response.data.elements;
@@ -470,7 +474,7 @@ onClick={() => handleAttachmentClick(attachment.url)}
 
 
                 
-                {ismanger_exam ? <>        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mt: 6 }}>
+                {(ismanger_exam && shouldShowButtons) ? <>        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mt: 6 }}>
   <Button
     variant="contained"
     color="success"

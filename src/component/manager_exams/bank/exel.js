@@ -23,6 +23,11 @@ export default function Exel(){
   const {  data: specializations } = useSelector((state) => state.fetchall);
    const dispatch=useDispatch()
    const [excelFile, setExcelFile] = useState(null);
+   const [snackbar, setSnackbar] = useState({
+       open: false,
+       message: "",
+       color: "",
+     });
 const handleFileChange = (e) => {
   setExcelFile(e.target.files[0]);
 };
@@ -38,10 +43,10 @@ useEffect(()=>{
     fileInputRef.current.click();
   };
   async function handleADDEXEL() {
-     if (!excelFile || !add.specialization_id) {
-    alert("يرجى اختيار التخصص وملف Excel");
-    return;
-  }
+  //    if (!excelFile || !add.specialization_id) {
+  //   alert("يرجى اختيار التخصص وملف Excel");
+  //   return;
+  // }
     
       const formData = new FormData();
   formData.append("specialization_id", add.specialization_id);
@@ -49,20 +54,56 @@ useEffect(()=>{
   setLoading(true)
     try{
     const response= await postData(`${BaseUrl}${ADDEXELQUESTIONS}`,formData)
-    alert(response.data)
+    setSnackbar({
+        open: true,
+        message: response.data || "تم اضافة السؤال الامتحاني بنجاح ",
+        color: "rgb(14,75,35)",
+      });
   
   }catch(err){
-        alert( err.response?.data || err.message);
+        // alert( err.response?.data || err.message);
   
+     setSnackbar({
+        open: true,
+        message:
+          err.message || "حدث خطأ أثناء تغيير ",
+        color: "red",
+      });
   }finally{
-    setLoading(false)
+        setLoading(false)
+
+        setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+
   }
+  
   
   
     
   }
     return(
         <>
+         {snackbar.open && (
+                      <Box
+                        sx={{
+                          position: "fixed",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: snackbar.color,
+                          color: "white",
+                          padding: "24px 36px",
+                          borderRadius: "10px",
+                          fontSize: "22px",
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          zIndex: 2000,
+                          boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                          minWidth: "300px",
+                        }}
+                      >
+                        {snackbar.message}
+                      </Box>
+                    )}
          <Box
       sx={{
         display: "flex",

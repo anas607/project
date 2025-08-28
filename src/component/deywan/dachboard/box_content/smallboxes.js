@@ -5,6 +5,7 @@ import { getData } from "../../../../API/apiService";
 import { BaseUrl, showEmployees } from "../../../../API/api";
 import { useSelector } from "react-redux";
 import NOSERACH from "../../../../wrong/search";
+import NOEMPLOYEE from "../../../../wrong/search/noEmployyesearch";
 
 export default function SmallBoxes({ searchTerm }) {
   const state = useSelector((state) => state.user);
@@ -129,7 +130,7 @@ export default function SmallBoxes({ searchTerm }) {
             ))}
           </List>
         ) : (
-          <NOSERACH />
+         <NOEMPLOYEE/>
         )}
       </Container>
     </Box>

@@ -21,15 +21,16 @@ import { CircularProgress } from "@mui/material";
 export default function EnternalMails({open,onClose,uuid,status}){
   const [mailStatus, setMailStatus] = useState(status);
   const shouldShowButtons = !["مرسلة", "مرفوضة"].includes(mailStatus)
-const stateMalea=useSelector((state)=>state.user.roles[0])
 
-// const shouldShowButtons =  !["مرسلة", "مرفوضة"].includes(mailStatus);
-  const isAdmin = stateMalea.roles?.some(role => role === "المدير")
 // const disableButtons = isEmployee || isAdmin;
 
     const [mailData, setMailData] = useState({subject:"",body:"",updated_at:"",from:""});
         const [isLoading, setIsLoading] = useState(false);
-    
+    const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    color: "",
+  });
     useEffect(() => {
     if (open) {
       setMailStatus(status);
@@ -63,24 +64,54 @@ const response = await postData(`${BaseUrl}${EDIT_STATUS_MAIL}`,{
     // setMailStatus(newStatus);
     // await fetchMail(); 
     console.log( response)
-
-alert( response.message)
+ setSnackbar({
+        open: true,
+        message: response?.message || "تم تحديث البريد بنجاح",
+        color: "rgb(14,75,35)",
+      });
  if (response.mail && response.mail.status) {
       setMailStatus(response.mail.status);
     }
 return response.data
 
     }catch(err){
-    alert( err.response?.data || err.message);
-
+setSnackbar({
+        open: true,
+        message:
+           err?.message || "حدث خطأ أثناء تغيير الحالة",
+        color: "red",
+      });
     }finally{
        setIsLoading(false);
+                 setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+
     }
   }
   if (!open) return null;
     return(
 <>
-
+ {snackbar.open && (
+            <Box
+              sx={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: snackbar.color,
+                color: "white",
+                padding: "24px 36px",
+                borderRadius: "10px",
+                fontSize: "22px",
+                fontWeight: "bold",
+                textAlign: "center",
+                zIndex: 2000,
+                boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                minWidth: "300px",
+              }}
+            >
+              {snackbar.message}
+            </Box>
+          )}
 <Modal
   open={open}
   

@@ -22,7 +22,11 @@ const options = ["اختيار 1", "اختيار 2", "اختيار 3", "اختي
 export default function ADDQUSTION() {
   const [loading, setLoading] = useState(false);
     const[errorMessage,seterrorMessage]=useState("")
-
+const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    color: "",
+  });
  const {  data: specializations } = useSelector((state) => state.fetchall);
  const dispatch=useDispatch() 
   const [selectedOption, setSelectedOption] = useState("1");
@@ -50,14 +54,28 @@ async function handleADDManual() {
   setLoading(true)
   try{
   const response= await postData(`${BaseUrl}${ADD_QUESTION_MANUAL}`,add)
-  alert(response.data)
+  setSnackbar({
+        open: true,
+        message: response.data || "تم اضافة البرنامج الامتحاني بنجاح ",
+        color: "rgb(14,75,35)",
+      });
 
-}catch(err){
-      alert( err.response?.data || err.message);
-seterrorMessage(errorMessage)
-// alert(errorMessage)
-}finally {
-    setLoading(false); 
+
+    }
+   catch(err){
+        // alert( err.response?.data || err.message);
+  
+     setSnackbar({
+        open: true,
+        message:
+          err.message || "حدث خطأ أثناء اضافة السؤال ",
+        color: "red",
+      });
+  }finally{
+        setLoading(false)
+
+        setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+
   }
 
 
@@ -69,6 +87,31 @@ seterrorMessage(errorMessage)
 
 
   return (
+    <>
+    
+     {snackbar.open && (
+                  <Box
+                    sx={{
+                      position: "fixed",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      backgroundColor: snackbar.color,
+                      color: "white",
+                      padding: "24px 36px",
+                      borderRadius: "10px",
+                      fontSize: "22px",
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      zIndex: 2000,
+                      boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                      minWidth: "300px",
+                    }}
+                  >
+                    {snackbar.message}
+                  </Box>
+                )}
+   
     <Box
       sx={{
         display: "flex",
@@ -183,5 +226,6 @@ seterrorMessage(errorMessage)
                 )}
                           </Button>
     </Box>
+     </>
   );
 }

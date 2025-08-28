@@ -73,7 +73,7 @@ async function handleCreat(){
        // alert(response?.message || "تم إنشاء البريد بنجاح");
  setSnackbar({
         open: true,
-        message: response?.message || "تم التحديث بنجاح",
+        message: response?.message || "تم إنشاء البريد بنجاح",
         color: "rgb(14,75,35)",
       });
 

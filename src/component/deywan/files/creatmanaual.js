@@ -363,7 +363,7 @@ setSnackbar({
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
-                        mt: 2,
+                        mt: 42,
                       }}
                     >
                       {activeStep !== 0 && (

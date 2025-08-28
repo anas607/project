@@ -31,7 +31,7 @@ export default function Step_1() {
   return (
     <Box sx={{ flex: 1, mt: 2 }}>
       {/* اسم المعاملة */}
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box sx={{ display: "flex", gap: 2 ,mb:3 }}>
         <Typography sx={{ fontSize: "24px", fontWeight: 700 }}>اسم المعاملة</Typography>
         <input
           value={name}
@@ -45,10 +45,10 @@ export default function Step_1() {
         />
       </Box>
 
-      <hr style={{ height: "2px", border: "none", background: "rgba(206, 199, 199, 0.43)" }} />
+      <hr style={{ height: "5px", mb:3 ,border: "none", background: "rgba(206, 199, 199, 0.43)" }} />
 
       {/* رسوم المعاملة */}
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box sx={{ display: "flex", gap: 2 ,mb:3 ,mt:3}}>
         <Typography sx={{ fontSize: "24px", fontWeight: 700 }}>رسوم المعاملة</Typography>
         <input
           value={transactionCost}
@@ -62,7 +62,7 @@ export default function Step_1() {
         />
       </Box>
 
-      <hr style={{ height: "2px", border: "none", background: "rgba(206, 199, 199, 0.43)" }} />
+      <hr style={{ height: "5px", border: "none", background: "rgba(206, 199, 199, 0.43)" }} />
 
      {/* مسار المعاملة */}
 <Box sx={{ display: "flex", alignItems: "center", mb: 2, gap: 0 }}>
@@ -73,7 +73,7 @@ export default function Step_1() {
       backgroundColor: "rgb(14,75,34)",
       color: "white",
       borderRadius: 5,
-      fontWeight: 700,
+      fontWeight: 700,width:'30%',fontSize:'24px',
       "&:hover": { backgroundColor: "rgb(14,75,34)" },
     }}
   >
@@ -100,7 +100,7 @@ export default function Step_1() {
       color: "white",
       borderRadius: 5,
       textTransform: "none",
-      fontWeight: 700,
+      fontWeight: 700,width:'30%',fontSize:'24px',
       "&:hover": { backgroundColor: "rgb(14,75,34)" },
       px: 2,
     }}

@@ -32,7 +32,7 @@ export default function EXPORTMAILS({ open, onClose, uuid,type }) {
   const state = useSelector((state) => state.user);
 
 // التحقق إذا كان أي دور يحتوي على كلمة "رئيس"
-const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
+const hasRole = state.roles.some(role => role.includes("موظف"));
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(null);
@@ -369,7 +369,7 @@ const hasRaeesRole = state.roles.some(role => role.includes("رئيس"));
 
               {/* أزرار الرفض والتحويل في آخر المودال */}
             {/* أزرار الرفض والتحويل في آخر المودال */}
-{statusValue !== "مرفوض" && statusValue !== "مرسلة" && (
+{hasRole &&(statusValue !== "مرفوض" && statusValue !== "مرسلة") && (
   <Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
     <Box
       component="button"

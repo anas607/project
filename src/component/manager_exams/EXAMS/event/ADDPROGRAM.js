@@ -28,7 +28,11 @@ export default function AddProgramForm({ setAddProgram }) {
   const [selectedMonth, setSelectedMonth] = useState("");
 const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const[errorMessage,seterrorMessage]=useState("")
-
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    color: "",
+  });
   const [exams, setExams] = useState([
   {
     specialization_id: "",
@@ -41,9 +45,18 @@ const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     end_time: "",
   }
 ]);
+const getDayName = (dateString) => {
+  const days = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+  const date = new Date(dateString);
+  return days[date.getDay()];
+};
 const handleExamChange = (index, field, value) => {
   const updatedExams = [...exams];
   updatedExams[index][field] = value;
+   if (field === "date") {
+    const dayName = getDayName(value);
+    updatedExams[index].day = dayName; // تعبئة اليوم تلقائياً
+  }
   setExams(updatedExams);
 };
 const handleAddRow = () => {
@@ -61,6 +74,8 @@ const handleAddRow = () => {
     },
   ]);
 };
+
+
 const handleSubmitProgram = async () => {
   if (!selectedMonth || !selectedYear) {
     alert("يرجى اختيار الشهر والسنة");
@@ -80,10 +95,22 @@ const handleSubmitProgram = async () => {
     };
 
     const res = await postData(`${BaseUrl}${PROGRAM}${ADD}`, payload);
-    alert("تمت الإضافة بنجاح");
+    setSnackbar({
+        open: true,
+        message: res?.message || "تم اضافة البرنامج الامتحاني بنجاح ",
+        color: "rgb(14,75,35)",
+      });
     setExams([]);
   } catch (err) {
-    seterrorMessage(err.message || "فشل في إرسال البيانات");
+     setSnackbar({
+        open: true,
+        message:
+          err.message || "حدث خطأ أثناء تغيير ",
+        color: "red",
+      });
+  }finally{
+        setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+
   }
 };
 useEffect(() => {
@@ -207,7 +234,31 @@ useEffect(() => {
 
       {/* جدول أو محتوى آخر */}
       <Box>
-      
+      {/* رسالة النجاح أو الخطأ */}
+      {snackbar.open && (
+              <Box
+                sx={{
+                  position: "fixed",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: snackbar.color,
+                  color: "white",
+                  padding: "24px 36px",
+                  borderRadius: "10px",
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  zIndex: 2000,
+                  boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                  minWidth: "300px",
+                }}
+              >
+                {snackbar.message}
+              </Box>
+            )}
+
+
                <TableContainer sx={{ mr: -1, backgroundColor: "transparent", boxShadow: "none" , width: "2000px",mt:2}}>
             <Table  sx={{Width: '100%'}}>
              <TableHead sx={{width:"2000px", height:'88px'}}>
@@ -262,22 +313,16 @@ useEffect(() => {
         </Select>
       </TableCell>
 
-      <TableCell align="center">
-  <Select
+     <TableCell align="center">
+  <TextField
     value={exam.day}
-    onChange={(e) => handleExamChange(index, "day", e.target.value)}
     fullWidth
-    displayEmpty
-  >
-    <MenuItem value="" disabled>اختر اليوم</MenuItem>
-    <MenuItem value="السبت">السبت</MenuItem>
-    <MenuItem value="الأحد">الأحد</MenuItem>
-    <MenuItem value="الاثنين">الاثنين</MenuItem>
-    <MenuItem value="الثلاثاء">الثلاثاء</MenuItem>
-    <MenuItem value="الأربعاء">الأربعاء</MenuItem>
-    <MenuItem value="الخميس">الخميس</MenuItem>
-  </Select>
+    InputProps={{
+      readOnly: true,
+    }}
+  />
 </TableCell>
+
 
       <TableCell align="center">
         <TextField

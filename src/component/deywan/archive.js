@@ -59,6 +59,7 @@ const [openInternalModal, setOpenInternalModal] = useState(false);
 
 const [selectedUuid, setSelectedUuid] = useState(null);
 const [showrecipit,setShowRecipit]=  useState(false)
+   const [selectedStatus, setSelectedStatus] = useState(null);
 
 function handleEditeTransction(uuid,type ){
   setuuid(uuid)
@@ -78,7 +79,12 @@ setShowRecipit(true)
     const [openModal, setOpenModal] = useState(false);
     // console.log(exporintearnalmail)
   const mailTypes = ["البريد الصادر الخارجي", "البريد الداخلي الوارد", "البريد الداخلي الصادر"];
+const handleOpenModal = (uuid,status) => {
+  setSelectedUuid(uuid ,status);
+    setSelectedStatus(status);
 
+setSelectedUuid(uuid);
+      setOpenInternalModal(true);};
 const [mailStep, setMailStep] = useState(0);  
 const selectedType = mailTypes[mailStep];
 useEffect(() => {
@@ -406,8 +412,7 @@ useEffect(() => {
        handleEditeTransction({ id: row.uuid, type: selectedType ? 'البريد الصادر الخارجي' : '' }) 
       }
     } else {
-      setSelectedUuid(row.uuid);
-      setOpenInternalModal(true);
+     handleOpenModal(row.uuid ,row.status)
     }
   }}
 
@@ -461,6 +466,10 @@ useEffect(() => {
   <EnternalMails
     open={openInternalModal}
     onClose={() => setOpenInternalModal(false)}
+uuid={selectedUuid}
+      status={selectedStatus}
+
+
   />
 )}
   {<ShowReicipet   open={showrecipit}

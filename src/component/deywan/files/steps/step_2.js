@@ -43,16 +43,16 @@ export default function Step_2() {
     <Box sx={{ mt: 2 }}>
       {/* أزرار الإضافة */}
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-        <Button onClick={() => addField(FIELD_TYPES.TEXT)} variant="contained" color="success">
+        <Button sx={{backgroundColor:"rgb(14,74,35)" ,borderRadius:'8%',width:'25%',height:'45px',fontSize:'24px',fontWeight:'700'}} onClick={() => addField(FIELD_TYPES.TEXT)} variant="contained" color="success">
           نص كتابي
         </Button>
-        <Button onClick={() => addField(FIELD_TYPES.NUMBER)} variant="contained" color="success">
+        <Button  sx={{backgroundColor:"rgb(14,74,35)" ,borderRadius:'8%',width:'15%',height:'45px',fontSize:'24px',fontWeight:'700'}} onClick={() => addField(FIELD_TYPES.NUMBER)} variant="contained" color="success">
           رقم
         </Button>
-        <Button onClick={() => addField(FIELD_TYPES.DATE)} variant="contained" color="success">
+        <Button sx={{backgroundColor:"rgb(14,74,35)" ,borderRadius:'8%',width:'15%',height:'45px',fontSize:'24px',fontWeight:'700'}}  onClick={() => addField(FIELD_TYPES.DATE)} variant="contained" color="success">
           تاريخ
         </Button>
-        <Button onClick={() => addField(FIELD_TYPES.MULTI_CHOICE)} variant="contained" color="success">
+        <Button  sx={{backgroundColor:"rgb(14,74,35)" ,borderRadius:'8%',width:'25%',height:'45px',fontSize:'24px',fontWeight:'700'}} onClick={() => addField(FIELD_TYPES.MULTI_CHOICE)} variant="contained" color="success">
           اختيار متعدد
         </Button>
       </Box>

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { FIELD_TYPES } from "../../../../reducer/files/manual";
 
 export default function Step_4() {
-  const { transactionName, elements } = useSelector((state) => state.step);
+  const { name, elements } = useSelector((state) => state.step);
 
   const renderField = (el, index) => {
     switch (el.type) {
@@ -45,7 +45,7 @@ export default function Step_4() {
         variant="h5"
         sx={{ fontWeight: "bold", color: "rgb(14,74,35)", mb: 3 }}
       >
-        اسم المعاملة: {transactionName || "—"}
+        اسم المعاملة: {name  || "—"}
       </Typography>
 
       {/* الحقول النصية */}

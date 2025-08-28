@@ -118,8 +118,7 @@ if (userRoles.some(role => managerRoles.includes(role))) {
             // backgroundPosition: "center",
           }}
         >
-          <img src="hello.png" style={{       width: { xs: "100%", sm: "90%", md: "40%", lg: "23%" }
-, height: "100%",              objectFit: "cover"
+          <img src="hello.png" style={{ width: "100%", height: "100%",              objectFit: "cover"
  }} />
         </Box>
         <ErrorAlert

@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useTheme, useMediaQuery } from '@mui/material';
 
 import { useState } from "react";
 import axios from "axios";
@@ -19,6 +20,9 @@ import { setUserData } from "../reducer/user";
 import Cookies from "universal-cookie";
 import { postData } from "../API/apiService";
 export default function Login() {
+  const theme=useTheme()
+   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'lg'));
   const state_user = useSelector((state) => state.user);
     const Role_user = useSelector((state) => state.user.roles);
 
@@ -100,16 +104,23 @@ if (userRoles.some(role => managerRoles.includes(role))) {
     <>
       <LoadingOverlay open={loading} />
 
-      <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      <Box sx={{ display: "flex", height: "100vh", overflow: "hidden",
+
+                flexDirection: { xs: "column", md: "row" }
+
+       }}>
         {/* قسم الصورة */}
         <Box
           sx={{
-            flex: 3,
+            flex: 3,            display: { xs: "none", md: "block" }
+
             // backgroundSize: "cover",
             // backgroundPosition: "center",
           }}
         >
-          <img src="hello.png" style={{ width: "100%", height: "100%" }} />
+          <img src="hello.png" style={{       width: { xs: "100%", sm: "90%", md: "40%", lg: "23%" }
+, height: "100%",              objectFit: "cover"
+ }} />
         </Box>
         <ErrorAlert
           open={openAlert}
@@ -119,34 +130,53 @@ if (userRoles.some(role => managerRoles.includes(role))) {
 
         {/* قسم الكارد */}
         <Card
-          sx={{
-            width: "23%",
-            height: "100%",
-            px: 3,
-            pt: 4,
-            pb: 4,
+         sx={{
+            width: { 
+              xs: "100%", 
+              sm: "70%", 
+              md: "40%", 
+              lg: "23%" 
+            },
+            height: { xs: "100%", md: "100%" },
+            px: { xs: 2, sm: 3, md: 3 },
+            pt: { xs: 2, sm: 3, md: 4 },
+            pb: { xs: 2, sm: 3, md: 4 }
+            ,
             backgroundColor: (theme) => theme.palette.primary.main,
-            boxShadow: "-10px 0px 30px rgb(70, 80, 72)",
-          }}
+ boxShadow: { 
+              xs: "none", 
+              md: "-10px 0px 30px rgb(70, 80, 72)" 
+            },
+            borderRadius: { xs: 0, md: "initial" },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: { xs: "center", md: "flex-start" },
+            margin: { xs: "0 auto", md: "0" }          }}
         >
           <form onSubmit={handleSubmit}>
             <CardContent>
               <img
                 src="logo.png"
-                style={{
-                  width: "180px",
-                  height: "160px",
-                  marginTop: "15%",
+                 style={{
+                  width: isMobile ? "120px" : "180px",
+                  height: isMobile ? "100px" : "160px",
+                  marginTop: isMobile ? "5%" : "15%",
                   filter: "brightness(0) invert(1)",
                 }}
+              
               />
               <Typography
                 variant="h1"
                 sx={{
                   color: (theme) => theme.palette.secondary.main,
-                  mt: "10%",
+                 mt: isMobile ? "5%" : "10%",
                   mb: "2",
-                  fontSize: "40px",
+                  fontSize: { 
+                    xs: "28px", 
+                    sm: "32px", 
+                    md: "40px" 
+                  },
+                 
                   fontWeight: "700",
                 }}
               >
@@ -155,7 +185,9 @@ if (userRoles.some(role => managerRoles.includes(role))) {
 
               <Typography
                 variant="h5"
-                sx={{ mt: 5,mb:14, color: (theme) => theme.palette.secondary.main }}
+                 sx={{ 
+                  mt: isMobile ? 3 : 5, 
+                  mb: isMobile ? 8 : 14,  color: (theme) => theme.palette.secondary.main }}
               >
                 مرحبا بعودتك
               </Typography>
@@ -170,13 +202,17 @@ if (userRoles.some(role => managerRoles.includes(role))) {
                   dir="rtl"
                   variant="outlined"
                   sx={{
-                    width: "90%",
+                    width: { 
+                      xs: "100%", 
+                      sm: "90%", 
+                      md: "90%" 
+                    },
                     borderRadius: "10px",
                     backgroundColor: (theme) => theme.palette.secondary.main,
                     mb: 4,
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "10px",
-                      height: "70px",
+                      height: { xs: "55px", sm: "60px", md: "70px" },
                       boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
                       paddingRight: "8px",
                       "& fieldset": {
@@ -202,13 +238,16 @@ if (userRoles.some(role => managerRoles.includes(role))) {
                   dir="rtl"
                   variant="outlined"
                   sx={{
-                    width: "90%",
-                    borderRadius: "10px",
+width: { 
+                      xs: "100%", 
+                      sm: "90%", 
+                      md: "90%" 
+                    },                    borderRadius: "10px",
                     backgroundColor: (theme) => theme.palette.secondary.main,
                     mb: 2,
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "10px",
-                      height: "70px",
+                      height: { xs: "55px", sm: "60px", md: "70px" },
                       boxShadow: "4px 3px 4px rgba(0, 0, 0, 0.3)",
                       paddingRight: "8px", // يعطي مسافة صغيرة بين النص والأيقونة
                       "& fieldset": {
@@ -253,24 +292,34 @@ if (userRoles.some(role => managerRoles.includes(role))) {
               </Box>
 
               <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                sx={{
-                  borderRadius: "23px",
-                  backgroundColor: (theme) => theme.palette.secondary.main,
-                  color: (theme) => theme.palette.primary.main,
-                  fontSize: "24px",
-                  fontWeight: "700",
-                  mt: "25%",
-                  width: "35%",
-                  mb: 2,
-                  direction: "rtl",
-                  textTransform: "none",
-                }}
-              >
-                تسجيل الدخول
-              </Button>
+  type="submit"
+  variant="contained"
+  sx={{
+    borderRadius: "23px",
+    backgroundColor: (theme) => theme.palette.secondary.main,
+    color: (theme) => theme.palette.primary.main,
+    fontSize: { xs: "18px", sm: "20px", md: "24px" },
+    fontWeight: "700",
+    mt: { xs: "15%", sm: "20%", md: "25%" },
+    width: { xs: "50%", sm: "40%", md: "35%" },
+    mb: 2,
+    textTransform: "none",
+    // إضافة تأثيرات تفاعلية
+    '&:hover': {
+      backgroundColor: (theme) => theme.palette.secondary.dark,
+      transform: "translateY(-2px)",
+      boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+    },
+    '&:active': {
+      transform: "translateY(0)",
+    },
+    // تأكد من أن الزر يمكن النقر عليه
+    position: "relative",
+    zIndex: 1,
+  }}
+>
+  تسجيل الدخول
+</Button>
             </CardContent>
           </form>
         </Card>

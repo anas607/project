@@ -6,7 +6,7 @@ import GroupIcon from "@mui/icons-material/Group";
 
 import { NavLink } from "react-router-dom";
 
-export default function Sub_Admin() {
+export default function Sub_Admin({ device}) {
   const currentPath = window.location.pathname;
 
 

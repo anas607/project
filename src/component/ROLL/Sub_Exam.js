@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 
 import { NavLink } from "react-router-dom";
 
-export default function Sub_Sxam() {
+export default function Sub_Sxam({ device}) {
   const currentPath = window.location.pathname;
 
 

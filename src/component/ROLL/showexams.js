@@ -6,7 +6,7 @@ import ThirteenMpIcon from '@mui/icons-material/ThirteenMp';
 
 import { NavLink } from "react-router-dom";
 
-export default function ShowExams() {
+export default function ShowExams({ device}) {
   const currentPath = window.location.pathname;
 
 
@@ -22,12 +22,12 @@ export default function ShowExams() {
               currentPath === "/exams" ? "rgb(14, 74, 35)" : "transparent",
             color: currentPath === "/exams" ? "white" : "black",
             fontWeight: "600",
-            fontSize: "16px",
+          fontSize: device.isMobile ? "14px" : "16px",
             marginBottom: "2%",
             transition: "1%",
             width: "381px",
-            height: "78px",
-            "&:hover": {
+height: device.isMobile ? "60px" : "78px",
+          padding: device.isMobile ? "8px" : "16px",            "&:hover": {
               backgroundColor: "rgb(14, 74, 35)",
               color: "white",
               width: "140%",
@@ -44,9 +44,15 @@ export default function ShowExams() {
   }}
 >
   {/* <EditIcon sx={{ fontSize: 28, cursor: 'pointer' }} /> */}
-  <ThirteenMpIcon sx={{ fontSize: 28,marginRight: "3%" }} />
+  <ThirteenMpIcon sx={{   marginRight: device.isMobile ? 2 : 7, 
+          fontSize: device.isMobile ? 24 : 32  }} />
 </Box>          <h2
-            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}>
+            
+ style={{ fontSize: device.isMobile ? "18px" : "24px", 
+          fontWeight: "700", 
+          marginRight: device.isMobile ? "2%" : "3%", whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'              }}>
           
             {" "}
             الامتحانات{" "}

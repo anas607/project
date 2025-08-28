@@ -1,5 +1,4 @@
 
-import Box from '@mui/material/Box';
 
 
 
@@ -7,7 +6,8 @@ import Box from '@mui/material/Box';
 // component
 import SidBar from './SIDEBAR/sidbar';
 import SmallBoxes from './box_content/smallboxes'
-;
+;import { IconButton, Box } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import Peaper from './box_content/peaper';
 import PeaperOut from './box_content/peaperout';
 import TableBox from './box_content/table';
@@ -21,11 +21,12 @@ export default function Leader(){
     const state = useSelector((state) => state.user);
 const isAdmin=state.roles?.some(role => role === "المدير")
   const [searchTerm, setSearchTerm] = useState(""); // هنا نخزن قيمة البحث
-
+  const [open, setOpen] = useState(false);
+  
 
     return(
         <>
-        
+      
        
     <Box
   sx={{
@@ -35,7 +36,8 @@ const isAdmin=state.roles?.some(role => role === "المدير")
     display: "flex"
   }}
 >
-  <SidBar />
+   
+  <SidBar  />
 
   <Box sx={{ flexGrow: 1, padding: '2%', display: 'flex', flexDirection: 'column' }}>
 

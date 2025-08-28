@@ -1,33 +1,12 @@
-import Card from '@mui/material/Card';
+import { Card, Drawer, Box } from "@mui/material";
 import Navgation from './navgation';
 import useDevice from '../../../screen/screensize';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 
-export default function SidBar(){
+export default function SidBar({ open, onClose }){
   const device=useDevice();
-  const getCardStyles = () => {
-    if (device === 'mobile') {
-      return {
-        width: '100%',
-        height: 'auto',
-        borderRadius: '0',
-        display: 'none', // إخفاء الـ sidebar في الجوال
-      };
-    } else if (device === 'tablet') {
-      return {
-        width: '250px',
-        height: '100vh',
-        borderRadius: '2px',
-      };
-    } else {
-      // desktop
-      return {
-        width: '381px',
-        height: '955px',
-        borderRadius: '2px',
-      };
-    }
-  };
+ 
     return(
 
         <>

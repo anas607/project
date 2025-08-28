@@ -13,109 +13,61 @@ import { NavLink } from "react-router-dom";
 export default function ALL() {
   const currentPath = window.location.pathname;
 
+ const buttonStyles = (path) => ({
+    justifyContent: "flex-start",
+    backgroundColor: currentPath === path ? "rgb(14, 74, 35)" : "transparent",
+    color: currentPath === path ? "white" : "black",
+    fontWeight: "600",
+    fontSize: { xs: "12px", sm: "14px", md: "16px" }, // ✅ Responsive
+    marginBottom: "2%",
+    width: { xs: "100%", sm: "300px", md: "381px" },  // ✅ Responsive
+    height: { xs: "50px", sm: "65px", md: "78px" },   // ✅ Responsive
+    "&:hover": {
+      backgroundColor: "rgb(14, 74, 35)",
+      color: "white",
+      width: { xs: "100%", sm: "110%", md: "140%" },
+    },
+  });
+  const iconStyles = {
+    marginRight: { xs: 2, sm: 4, md: 7 },
+    fontSize: { xs: 20, sm: 26, md: 32 }, // ✅ Responsive
+  };
 
+  const textStyles = {
+    fontSize: { xs: "14px", sm: "18px", md: "24px" }, // ✅ Responsive
+    fontWeight: "700",
+    marginRight: "3%",
+  };
 
   return (
     <>
       <NavLink to="/dachbord" style={{ textDecoration: "none", width: "100%" }}>
-        <Button
-          sx={{
-            justifyContent: "flex-start",
-            backgroundColor:
-              currentPath === "/dachbord" ? "rgb(14, 74, 35)" : "transparent",
-            color: currentPath === "/dachbord" ? "white" : "black",
-            fontWeight: "600",
-            fontSize: "16px",
-            mt: "-1%",
-            transition: "1%",
-            marginBottom: "2%",
-            marginTop: "13%",
-            width: "381px",
-            height: "78px",
-            "&:hover": {
-              backgroundColor: "rgb(14, 74, 35)",
-              color: "white",
-              width: "140%",
-            },
-          }}
-        >
-          <DashboardIcon sx={{ marginRight: 7, fontSize: 32 }} />
-          <h2
-            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
-          >
-            {" "}
+        <Button sx={buttonStyles("/dachbord")}>
+          <DashboardIcon sx={iconStyles} />
+          <Typography component="span" sx={textStyles}>
             لوحة التحكم
-          </h2>
+          </Typography>
         </Button>
       </NavLink>
-      <NavLink to="/outer" style={{ textDecoration: "none", width: "100%" }}>
-        <Button
-          sx={{
-            justifyContent: "flex-start",
-            backgroundColor:
-              currentPath === "/outer" ? "rgb(14, 74, 35)" : "transparent",
-            color: currentPath === "/outer" ? "white" : "black",
-            fontWeight: "600",
-            fontSize: "16px",
-            marginBottom: "2%",
-            width: "381px",
-            height: "78px",
-            transition: "1%",
-            position: "relative",
-            "&:hover": {
-              backgroundColor: "rgb(14, 74, 35)",
-              color: "white",
-              width: "140%",
-              "& .back-icon": {
-                color: "black",
-                opacity: 1,
-              },
-            },
-          }}
-        >
-         
-
-            {/* الدائرة على يمين الأيقونة مباشرة */}
-           <OutgoingMailIcon sx={{ marginRight: 7, fontSize: 35 }}/>
-         
-
-          <h2
-            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
-          >
-            {" "}
+       <NavLink to="/outer" style={{ textDecoration: "none", width: "100%" }}>
+        <Button sx={buttonStyles("/outer")}>
+          <OutgoingMailIcon sx={{ ...iconStyles, fontSize: { xs: 22, sm: 28, md: 35 } }} />
+          <Typography component="span" sx={textStyles}>
             البريد الخارجي
-          </h2>
+          </Typography>
         </Button>
       </NavLink>
-      <NavLink to="/enter" style={{ textDecoration: "none", width: "100%" }}>
-        <Button
-          sx={{
-            justifyContent: "flex-start", 
-            backgroundColor:
-              currentPath === "/enter" ? "rgb(14, 74, 35)" : "transparent",
-            color: currentPath === "/enter" ? "white" : "black",
-            fontWeight: "600",
-            fontSize: "16px",
-            marginBottom: "2%",
-            transition: "1%",
-            width: "381px",
-            height: "78px",
-            "&:hover": {
-              backgroundColor: "rgb(14, 74, 35)",
-              color: "white",
-              width: "140%",
-            },
-          }}
-        >
-          <div className="relative w-fit inline-block">
-            <MailIcon sx={{ marginRight: 7, fontSize: 32 }} />
+     <NavLink to="/enter" style={{ textDecoration: "none", width: "100%" }}>
+        <Button sx={buttonStyles("/enter")}>
+          <Box className="relative w-fit inline-block">
+            <MailIcon sx={iconStyles} />
             <Box
               sx={{
                 position: "absolute",
                 top: "30%",
-                right: 45,
-                width: 22,
-                height: 22,
+                right: 35,
+                width: { xs: 16, sm: 20, md: 22 }, // ✅ Responsive
+                height: { xs: 16, sm: 20, md: 22 }, // ✅ Responsive
                 borderRadius: "50%",
                 bgcolor: currentPath === "/enter" ? "rgb(14, 74, 35)" : "white",
                 border:
@@ -125,37 +77,20 @@ export default function ALL() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                zIndex: 10,
                 transition: "all 0.2s ease-in-out",
-
-                "&:hover": {
-                  bgcolor: "rgb(14, 74, 35)", // الأخضر عند الهوفر
-                  border: "2px solid rgb(14, 74, 35)",
-
-                  "& svg": {
-                    color: "white", // يخلي السهم أبيض وقت الهوفر
-                  },
-                },
               }}
             >
               <KeyboardBackspaceIcon
-                style={{
-                  position: "absolute",
-                  right: "10",
-                  strokeWidth: 0.1,
-                  fontSize: "16px",
-
+                sx={{
+                  fontSize: { xs: "10px", sm: "12px", md: "16px" }, // ✅ Responsive
                   opacity: currentPath === "/enter" ? 1 : 0.9,
                   color: currentPath === "/enter" ? "white" : "black",
                 }}
               />
             </Box>
-          </div>
-          <h2
-            style={{ fontSize: "24px", fontWeight: "700", marginRight: "3%" }}
-          >
-            {" "}
+          </Box>
+          <Typography component="span" sx={textStyles}>
             البريد الداخلي
-          </h2>
+          </Typography>
         </Button>
       </NavLink></>)}

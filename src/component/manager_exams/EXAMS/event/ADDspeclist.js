@@ -60,7 +60,7 @@ export default function AddSpeclist({ open, onClose, onSuccess }) {
       };
 
       const response = await postData(`${BaseUrl}${Specializations}${ADD}`, payload);
-
+console.log(response)
       onClose();
       if (onSuccess) onSuccess();
 

@@ -27,24 +27,23 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import EmailIcon from "@mui/icons-material/MarkEmailUnread";
-import CloseIcon from "@mui/icons-material/Close";
+
 import { SidBarComponent } from './SIDEBAR/sidbar';
 import Appar from './SIDEBAR/appar'
 import ArticleIcon from '@mui/icons-material/Article';
 import EnternalMails from "../../mails/form/enternalimportmodal";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchimportenter } from "../../../reducer/deywan/managerenter/imort";
-import { fetchexporttenter } from "../../../reducer/deywan/managerenter/export";
+
 import NoData from "../../../wrong/mails/noData";
 import Loading from "../../../wrong/mails/loading";
 import CreatMails from "../../mails/form/creatform";
 import { getData } from "../../../API/apiService";
 import { BaseUrl, show_import_internal_mails, show_internal_mails_export } from "../../../API/api";
+import NoTRANSECTION from "../../../wrong/notransiction";
 
 const headStyle = {
   color: "white",
- fontWeight: "700" ,fontSize:'20px',
+ fontWeight: "700" ,fontSize:{xs:'14px',sm:'16px',md:'20px'},
   py: 1.5,
 };
 
@@ -160,9 +159,9 @@ useEffect(() => {
     }
               </Box>
     
-         <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6}}>
-               <Table sx={{width:"1573px", height:'88px'}}>
-                <TableHead sx={{width:"1573px", height:'88px'}}>
+         <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none", mt:6 ,overflowY: 'auto',maxHeight: '700px',}}>
+               <Table sx={{width:"2000px", height:'88px'}}>
+        <TableHead sx={{width:"2000px", height:'88px'}}>
                <TableRow sx={{ backgroundColor: "rgb(14, 74, 35)" }}>
         <TableCell align="center" sx={headStyle}>رقم البريد</TableCell>
     
@@ -200,7 +199,9 @@ useEffect(() => {
                         <Loading />
                       </TableCell> : ""}
     {rows.length === 0 && !loading && (
-     <NoData/>
+      <TableCell colSpan={8} align="center">
+         <NoTRANSECTION/>
+       </TableCell>
     )}
        <TableBody>
       {rows.map((row, index) => (

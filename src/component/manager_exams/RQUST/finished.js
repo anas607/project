@@ -23,7 +23,7 @@ import { fetchEndExam } from "../../../reducer/managerexam/endingexam";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import { SearchRequest } from "../../../reducer/search/requestSearch";
-import NOSERACH from "../../../wrong/search";
+import NOSERACH from "../../../wrong/search/search";
 import EditRequest from "../EXAMS/event/edieRequest";
 
 

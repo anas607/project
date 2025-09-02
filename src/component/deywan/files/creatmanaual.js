@@ -217,8 +217,8 @@ setSnackbar({
                 <Paper
                   elevation={4}
                   sx={{
-                    width: "850px",
-                    height: "800px",
+                    width: "1050px",
+                    height: "1000px",
                     p: 4,
                     borderRadius: 3,
                     direction: "rtl",

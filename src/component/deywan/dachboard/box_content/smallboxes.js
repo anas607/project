@@ -4,7 +4,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { getData } from "../../../../API/apiService";
 import { BaseUrl, showEmployees } from "../../../../API/api";
 import { useSelector } from "react-redux";
-import NOSERACH from "../../../../wrong/search";
+import NOSERACH from "../../../../wrong/search/search";
 import NOEMPLOYEE from "../../../../wrong/search/noEmployyesearch";
 
 export default function SmallBoxes({ searchTerm }) {

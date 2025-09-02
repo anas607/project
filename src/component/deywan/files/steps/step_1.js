@@ -37,7 +37,7 @@ export default function Step_1() {
           value={name}
           onChange={(e) => dispatch(setTransactionName(e.target.value))}
           style={{
-            height: "40px",
+            height: "70px",
             width: "65%",
             border: "2px solid rgba(71, 59, 68, 1)",
             borderRadius: "5px",
@@ -54,7 +54,7 @@ export default function Step_1() {
           value={transactionCost}
           onChange={(e) => dispatch(setTransactionCost(e.target.value))}
           style={{
-            height: "40px",
+            height: "70px",
             width: "65%",
             border: "2px solid rgba(71, 59, 68, 1)",
             borderRadius: "5px",

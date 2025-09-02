@@ -21,7 +21,10 @@ import { CircularProgress } from "@mui/material";
 export default function EnternalMails({open,onClose,uuid,status}){
   const [mailStatus, setMailStatus] = useState(status);
   const shouldShowButtons = !["مرسلة", "مرفوضة"].includes(mailStatus)
-
+      const stateRole=useSelector((state)=>state.user.roles[0])
+  
+ const allowedRoles = ["رئيس الإقامة", "رئيس الشهادات","رئيس المجالس","رئيس المفاضلة","رئيس الديوان","رئيس المالية"];
+const ishead = allowedRoles.some(role => stateRole.includes(role));
 // const disableButtons = isEmployee || isAdmin;
 
     const [mailData, setMailData] = useState({subject:"",body:"",updated_at:"",from:""});
@@ -190,7 +193,7 @@ setSnackbar({
 
     </Typography>
     {/* زر الإرسال */}
-    {shouldShowButtons  && (
+    {ishead && shouldShowButtons  && (
   <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start', mt: 55 ,ml:'-50' }}>
   <Button
    

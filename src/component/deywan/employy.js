@@ -5,12 +5,12 @@ import {
   Paper,
   Avatar,
   Box,
-  Popper,
+  TableRow,
   Modal,
   ListItem,
 } from "@mui/material";
 import SidBar from "./dachboard/SIDEBAR/sidbar";
-import SatelliteIcon from "@mui/icons-material/Satellite";
+import TableCell from "@mui/icons-material/Satellite";
 import Appar from "./dachboard/SIDEBAR/appar";
 import { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,7 +24,8 @@ import { SearchEmployees } from "../../reducer/search/employeesSearch";
 
 
 import { CircularProgress } from "@mui/material";
-import NOSERACH from "../../wrong/search";
+import NOSERACH from "../../wrong/search/search";
+import NoEmployees from "../../wrong/noEmployyess";
 
 export default function Employee() {
   const dispatch = useDispatch();
@@ -63,6 +64,8 @@ export default function Employee() {
   const employessToDisplay = searchTerm
     ? searchResults?.[0] ?? [] // فك المصفوفة الداخلية أو fallback لمصفوفة فارغة
     : employee ?? [];
+        const isEmpty = !employessToDisplay || employessToDisplay.length === 0;
+
 
   return (
     <>
@@ -109,7 +112,14 @@ export default function Employee() {
               </Box>
             ) : employessToDisplay.length === 0 ? (
               <NOSERACH/>
-            ) : (
+            ) :!searchTerm && isEmpty ? (
+                <TableRow>
+              <TableCell colSpan={8} align="center">
+                <NoEmployees/>
+              </TableCell>
+            </TableRow>
+                                                                                  
+                                     ):(
               <Grid container spacing={2}>
                 {employessToDisplay.map((emp) => (
                   <Grid item xs={12} sm={6} md={3} key={emp.id}>

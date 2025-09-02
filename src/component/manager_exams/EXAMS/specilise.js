@@ -7,8 +7,8 @@ import AddToQueueIcon from '@mui/icons-material/AddToQueue';import {
   Typography,
   Grid,
   Paper,
-  Modal,
-  Checkbox,
+  TableCell,
+  TableRow,
   StepLabel,
   TextField,
 } from "@mui/material";
@@ -21,7 +21,8 @@ import EDITSpeclist from "./event/editspeclist";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { SearchSpeclise } from "../../../reducer/search/spiclicet";
-import NOSERACH from "../../../wrong/search";
+import NOSERACH from "../../../wrong/search/search";
+import NoANNOUNVEMTS from "../../../wrong/Announcements";
 
 export default function Speclist({ searchTerm }){
   
@@ -46,6 +47,7 @@ function handleedit(id) {
   setSelectedid(id); // تخزين ID
   setEditspeclist(true);
 }
+
  useEffect(() => {
   if (searchTerm) {
     dispatch(SearchSpeclise(searchTerm));
@@ -56,6 +58,8 @@ function handleedit(id) {
 const specliseToDisplay = searchTerm 
   ? searchResults?.[0] ?? []   // فك المصفوفة الداخلية أو fallback لمصفوفة فارغة
   : state.data ?? [];
+      const isEmpty = !specliseToDisplay || specliseToDisplay.length === 0;
+
     return(
         <>
         <Box
@@ -176,9 +180,14 @@ const specliseToDisplay = searchTerm
         </Paper>
       </Grid>
     ))
-  ) : (
-    <NOSERACH />
-  )}
+  ) : !searchTerm && isEmpty ? (
+      <TableRow>
+    <TableCell colSpan={8} align="center">
+      <NoANNOUNVEMTS/>
+    </TableCell>
+  </TableRow>
+    
+  ):(<NOSERACH />)}
 </Grid>
 
           </Box>

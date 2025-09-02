@@ -26,6 +26,7 @@ import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import EXPORTMAILS from "../../mails/form/exportmails";
 import ShowReicipet from "../../mails/form/showRecipiet";
+import { SearchTransction } from "../../../reducer/search/transection";
 
 
 // بيانات البريد الوارد (وارد)
@@ -51,6 +52,10 @@ const headStyle = {
 };
 
 const Outer_EDeywan = () => {
+  const { data: searchResults, isloading: searchLoading } = useSelector(
+      (state) => state.searchtransction
+    );
+          const [searchTerm, setSearchTerm] = useState("");
   const[uuid,setuuid]=useState(false)
   const [showrecipit,setShowRecipit]=  useState(false)
      const [id, setid] = useState(null);
@@ -86,6 +91,20 @@ function handleEditeTransction(uuid,type ){
   setuuid(uuid)
   setOpenModal(true)
 }
+  useEffect(() => {
+    if (searchTerm) {
+      dispatch(SearchTransction(searchTerm));
+    }
+  }, [searchTerm, dispatch]);
+  const transctionToDisplay = searchTerm
+  ? Array.isArray(searchResults)
+    ? Array.isArray(searchResults[0])
+      ? searchResults[0]   // حالة nested array مثل اللي عندك
+      : searchResults
+    : []
+  : Array.isArray(stateexport.data)
+    ? stateexport.data
+    : [];
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
       <SidBarComponent />
@@ -100,7 +119,7 @@ function handleEditeTransction(uuid,type ){
         
 
         </Box>
- <Appar/>
+ <Appar onSearch={setSearchTerm}/>
       <Box
                 
                   display="flex"

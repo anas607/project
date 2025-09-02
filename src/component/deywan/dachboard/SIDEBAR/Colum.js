@@ -28,6 +28,11 @@ export default function Colum() {
     startMinute: "",
     endMinute: "",
   });
+const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    color: "",
+  });
 
   // الحالة الجديدة لإدارة نافذة التأكيد
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -111,13 +116,17 @@ export default function Colum() {
     const end_time = convertTo(pendingTime.endHour, pendingTime.endMinute, pendingTime.endPeriod);
 
     try {
-      await putData(`${BaseUrl}${WEEKLY_HOURS}`, {
+    const response=  await putData(`${BaseUrl}${WEEKLY_HOURS}`, {
         start_time,
         end_time,
         day_off: pendingDayOff,
       });
-
-      alert("تم تغيير بيانات الدوام بنجاح");
+setSnackbar({
+        open: true,
+        message: response.message || "تم تغيير بيانات الدوام بنجاح",
+        severity: "success", color: "green",
+      });
+      // alert("تم تغيير بيانات الدوام بنجاح");
 
       setOriginalData({
         start_time,
@@ -133,6 +142,9 @@ export default function Colum() {
     } catch (err) {
       alert("حدث خطأ أثناء الحفظ");
       console.error(err);
+    }finally{
+          setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 2500);
+
     }
   };
 
@@ -203,9 +215,32 @@ export default function Colum() {
   };
 
   return (
+    <>
+    {snackbar.open && (
+                <Box
+                  sx={{
+                    position: "fixed",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    backgroundColor: snackbar.color,
+                    color: "white",
+                    padding: "24px 36px",
+                    borderRadius: "10px",
+                    fontSize: "22px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    zIndex: 2000,
+                    boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                    minWidth: "300px",
+                  }}
+                >
+                  {snackbar.message}
+                </Box>
+              )}
     <Box
       sx={{
-        width: "400px",
+        width: "600px",
         height: "1072px",
         backgroundColor: "rgb(232, 232, 232)",
         borderRadius: "8px",
@@ -245,8 +280,8 @@ export default function Colum() {
               key={index}
               onClick={() => handleDayOffClick(item.day)}
               sx={{
-                width: 35,
-                height: 35,
+                width: 70,
+                height: 70,fontSize:'18px',
                 borderRadius: "50%",
                 backgroundColor: dayOff.includes(item.day) ? "#aaa" : "rgb(14, 75, 35)",
                 display: "flex",
@@ -254,7 +289,7 @@ export default function Colum() {
                 justifyContent: "center",
               }}
             >
-              <Typography fontSize={12} color="#fff">
+              <Typography fontSize={18} color="#fff">
                 {item.day}
               </Typography>
             </Box>
@@ -397,5 +432,6 @@ export default function Colum() {
                                                           </Dialog>
      
     </Box>
+    </>
   );
 }

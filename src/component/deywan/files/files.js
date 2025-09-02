@@ -28,7 +28,7 @@ import Creat_Manaual from "./creatmanaual";
 import WORDFILE from "./wordFile";
 import { BaseUrl, FORM, TOOGLE_STATUS } from "../../../API/api";
 import { SearchForms } from "../../../reducer/search/formSearch";
-import NOSERACH from "../../../wrong/search";
+import NOSERACH from "../../../wrong/search/search";
 
 
 export default function Files() {

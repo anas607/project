@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchprogram } from "../../../reducer/managerexam/showallprograms";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
+import NoPROGRAM from "../../../wrong/no_program";
 const outboxRows = [
   {
     id: "#789541",
@@ -175,7 +176,10 @@ function handleOpenModal(id){
                                 <Loading />
                               </TableCell>
                             </TableRow></>) :
-                            !stateprogram.isloading && stateprogram.data.length===0 ? <NoData/> : ( stateprogram.data.map((row, index) => (
+                            !stateprogram.isloading && stateprogram.data.length===0 ? 
+                                                          <TableCell colSpan={8}>
+
+                            <NoPROGRAM/></TableCell> : ( stateprogram.data.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.الشهر}</TableCell>

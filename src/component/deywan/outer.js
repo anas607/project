@@ -29,6 +29,10 @@ import { fetchimportouter } from "../../reducer/deywan/outer/importouter";
 import Loading from "../../wrong/mails/loading";
 import NoData from "../../wrong/mails/noData";
 import ShowReicipet from "../mails/form/showRecipiet";
+import { SearchTransction } from "../../reducer/search/transection";
+import NOEMPLOYEE from "../../wrong/search/noEmployyesearch";
+import NOSERACH from "../../wrong/search/search";
+import NoTRANSECTION from "../../wrong/notransiction";
 // بيانات البريد الوارد (وارد)
 
 
@@ -83,6 +87,26 @@ function handleRecipit(uuid){
 setid(uuid)
 setShowRecipit(true)
 }
+  const { data: searchResults, isloading: searchLoading } = useSelector(
+      (state) => state.searchtransction
+    );
+          const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    if (searchTerm) {
+      dispatch(SearchTransction(searchTerm));
+    }
+  }, [searchTerm, dispatch]);
+  const transctionToDisplay = searchTerm
+  ? Array.isArray(searchResults)
+    ? Array.isArray(searchResults[0])
+      ? searchResults[0]   // حالة nested array مثل اللي عندك
+      : searchResults
+    : []
+  
+    
+    : rows; 
+    const isEmpty = !transctionToDisplay || transctionToDisplay.length === 0;
+
   return (
     <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
       <SidBar />
@@ -100,7 +124,7 @@ setShowRecipit(true)
 
           
         </Box>
- <Appar/>
+ <Appar onSearch={setSearchTerm}/>
       <Box
           
             display="flex"
@@ -201,12 +225,29 @@ setShowRecipit(true)
                     {(isInbox ? stateimport.error : stateexport.error)}
                   </TableCell>
                 </TableRow>
-              ) : rows.length === 0 ? (
-                
-<NoData/>                 
-              ) :(
+              )
+: searchTerm && isEmpty ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <NOSERACH />
+      </TableCell>
+    </TableRow>
+  ) : !searchTerm && isEmpty ? (
+    <TableRow>
+  <TableCell colSpan={8} align="center">
+    <NoTRANSECTION/>
+  </TableCell>
+</TableRow>
+                                                                      
+                         ) :(
+
+
+
+
+
+
               isMaleaManager ? (
-  rows.map((row, index) => (
+  transctionToDisplay.map((row, index) => (
     <TableRow key={index}>
       <TableCell sx={headStyle} align="center">{index+1}</TableCell>
       <TableCell sx={headStyle} align="center">{row.doctor_name}</TableCell>
@@ -262,7 +303,13 @@ new Date(row.sent_at).toLocaleDateString()}
       </TableCell>
     </TableRow>
   ))
-) : isManager ? (
+) :
+
+
+
+
+
+isManager ? (
   rows.map((row, index) => (
     <TableRow key={index}>
       <TableCell sx={headStyle} align="center">{row.transactionNumber}</TableCell>

@@ -26,13 +26,14 @@ import Loading from "../../wrong/mails/loading";
 import NoData from "../../wrong/mails/noData";
 import ShowDeatiels from "./showDeatiels";
 import { SearchAnnouncements } from "../../reducer/search/Announcements";
-import NOSERACH from "../../wrong/search";
+import NOSERACH from "../../wrong/search/search";
+import NoANNOUNVEMTS from "../../wrong/Announcements";
 
 // تنسيق رأس الجدول
 const headStyle = {
   color: "white",
   fontWeight: "bold",
-  fontSize: "16px",
+  fontSize: "24px",
   py: 1.5
 };
 
@@ -40,9 +41,9 @@ export default function Advertisments() {
   const { data: searchResults, isloading: searchLoading } = useSelector(
     (state) => state.SearchAnnouncements
   );
-  const state = useSelector((state) => state.fetchadversment);
   const dispatch = useDispatch();
         const [searchTerm, setSearchTerm] = useState("");
+  const state = useSelector((state) => state.fetchadversment);
 
   const [create, setCreate] = useState(false);
   const [selectedid, setSelectedid] = useState(null);
@@ -73,6 +74,7 @@ const specliseToDisplay = searchTerm
   : Array.isArray(state.data)
     ? state.data
     : [];
+    const isEmpty = !specliseToDisplay || specliseToDisplay.length === 0;
 
 
   return (
@@ -93,13 +95,13 @@ const specliseToDisplay = searchTerm
           variant="contained"
           sx={{
             borderRadius: "30px",
-            width: "15%",
-            height: "50px",
+            width: "175px",
+            height: "70px",
             backgroundColor: "rgb(14,74,35)",
             color: "white",
-            fontSize: "16px",
+            fontSize: "24px",
             fontWeight: "700",
-            mr: 120
+            mr: 190
           }}
         >
           اضافة اعلان
@@ -224,10 +226,24 @@ const specliseToDisplay = searchTerm
          <NOSERACH />
        </TableCell>
      </TableRow>
-  ) : (
+  ) : 
     // انتهى الفيتش ومافي بيانات
-    <NoData />
-  )}
+    
+    
+ !searchTerm && isEmpty ? (
+    <TableRow>
+  <TableCell colSpan={8} align="center">
+    <NoANNOUNVEMTS/>
+  </TableCell>
+</TableRow>
+                                                                      
+                         
+
+
+
+
+
+  ):""}
 </TableBody>
 
           </Table>

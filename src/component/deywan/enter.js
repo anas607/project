@@ -26,6 +26,7 @@ import NoData from "../../wrong/mails/noData";
 import EnternalMails from "../mails/form/enternalimportmodal";
 import { useSelector } from "react-redux";
 import CreatMails from "../mails/form/creatform";
+import NoTRANSECTION from "../../wrong/notransiction";
 
 
 
@@ -208,7 +209,9 @@ const handleOpenModal = (uuid,status) => {
                 </TableRow>
               ) : ""}
 {rows.length === 0 && !loading && (
- <NoData/>
+ <TableCell colSpan={8} align="center">
+    <NoTRANSECTION/>
+  </TableCell>
 )}
    <TableBody>
   {rows.map((row, index) => (

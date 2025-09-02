@@ -43,10 +43,10 @@ export default function Polar() {
       ];
 
   return (
-    <Box sx={{ width: 188, height: 188, mt: 2, position: 'relative' }}>
+    <Box sx={{ width: 300, height: 300, mt: 2, position: 'relative' }}>
       <VictoryPie
         data={polarData}
-        colorScale={hasData ? COLORS : ["#e0e0e0"]}
+        colorScale={hasData ? COLORS : ["#7e6e6e54"]}
         innerRadius={50}
         padAngle={0}
         startAngle={90}
@@ -60,21 +60,6 @@ export default function Polar() {
         }}
       />
 
-      {!hasData && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center'
-          }}
-        >
-          <InfoOutlinedIcon sx={{ fontSize: 32, color: '#32065cff' }} />
-          <Typography variant="caption" sx={{ fontSize: 20,fontWeight: "700", color: '#32065cff' }}>
-بريدك الداخلي فارغ          </Typography>
-        </Box>
-      )}
     </Box>
   );
 }

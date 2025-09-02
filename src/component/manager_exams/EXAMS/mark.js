@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMark } from "../../../reducer/managerexam/mark";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
+import NoMARK from "../../../wrong/no_mark";
 const outboxRows = [
   {
     id: "#789541",
@@ -138,7 +139,12 @@ export default function Mark({addprogram, setAddProgram }){
                                             <Loading />
                                           </TableCell>
                                         </TableRow></>) :
-                                        !statemark.isloading && statemark.data.length===0 ? <NoData/> :
+                                        !statemark.isloading && statemark.data.length===0 ? 
+                                                                                  <TableCell colSpan={8}>
+
+                                        <NoMARK/>                                           </TableCell>
+
+                                        :
             statemark.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           

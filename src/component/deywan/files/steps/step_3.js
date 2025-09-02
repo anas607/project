@@ -17,15 +17,25 @@ export default function Step_3() {
     <Box sx={{ mt: 1 }}>
      <Button
   onClick={() => addCustomField(FIELD_TYPES.IMAGE)}
-  sx={{ background: "rgb(14,74,35)", color: "white", m: 1 }}
->
-  إضافة شرط: صورة
+ sx={{
+      backgroundColor: "rgb(14,75,34)",
+      color: "white",
+      borderRadius: 5,
+      fontWeight: 700,width:'30%',fontSize:'24px',
+      "&:hover": { backgroundColor: "rgb(14,75,34)" },
+    }}>
+  إضافة : صورة
 </Button>
 <Button
   onClick={() => addCustomField(FIELD_TYPES.EXCEL)}
-  sx={{ background: "rgb(14,74,35)", color: "white", m: 1 }}
->
-  إضافة شرط: Excel
+ sx={{
+      backgroundColor: "rgb(14,75,34)",
+      color: "white",
+      borderRadius: 5,
+      fontWeight: 700,width:'30%',fontSize:'24px',
+      "&:hover": { backgroundColor: "rgb(14,75,34)" },
+    }}>
+  إضافة : Excel
 </Button>
 
     </Box>

@@ -1,4 +1,4 @@
-export const BaseUrl = `http://127.0.0.1:8000/api/`;
+export const BaseUrl = `https://152cb7311714.ngrok-free.app/api/`;
 
 export const LOGIN = "login";
 export const showEmployees = "show_employees";
@@ -71,3 +71,5 @@ export const EXAME ="Exam/"
 export const REQUEST ="request"
 export const Announcements ="Announcements"
 export const UPLOUD_WORD ="upload-word"
+export const ARCHIVED ="archived"
+export const TRANSACTIONN = "transaction";

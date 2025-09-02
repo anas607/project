@@ -33,7 +33,8 @@ import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import EditRequest from "../EXAMS/event/edieRequest"
 import { SearchRequest } from "../../../reducer/search/requestSearch";
-import NOSERACH from "../../../wrong/search";
+import NOSERACH from "../../../wrong/search/search";
+import NoENCOMING from "../../../wrong/noencoming";
 
 export default function Incoming({setShowRequest,setSelectedUuid, searchTerm }){
    const { data: searchResults, isloading } = useSelector(
@@ -126,7 +127,7 @@ const isEmpty = !specliseToDisplay || specliseToDisplay.length === 0;
   ) : !searchTerm && isEmpty ? (
     <TableRow>
   <TableCell colSpan={8} align="center">
-    <NoData />
+    <NoENCOMING/>
   </TableCell>
 </TableRow>
                                                                       

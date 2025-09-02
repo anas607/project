@@ -2,7 +2,6 @@ import logo from "./logo.svg";
 import "./App.css";
 
 //image
-import as from "./imageshow/hello.png";
 import { Routes, Route } from "react-router-dom";
 import Login from "./component/Login";
 import Leader from "./component/deywan/dachboard/leder";
@@ -13,13 +12,8 @@ import Archiv from "./component/deywan/archive";
 import Employee from "./component/deywan/employy";
 import Enter_EDeywan from "./component/deywan/manger_deywan/enter"
 import Outer_EDeywan from "./component/deywan/manger_deywan/outer"
-
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { orange, green, white } from "@mui/material/colors";
-
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { setScreenSize } from "./reducer/screenSlice ";
 import NotFound from "./component/protected/NOTFOUND";
 import ProtectedRoute from "./component/protected/ProtectedRoute";
 import Employyes from "./component/sub_admin/employee/employees";
@@ -30,6 +24,7 @@ import ExamRequestForm from "./component/manager_exams/RQUST/talab/ExamRequestFo
 import EXPORTMAILS from "./component/mails/form/exportmails";
 import AllFILES from "./component/deywan/files/AllFiles";
 import Advertisments from "./component/Admin/Advertisments";
+import NetworkStatus from "./wrong/network/no_Connention";
 
 const theme = createTheme({
   palette: {
@@ -47,21 +42,18 @@ const theme = createTheme({
 });
 
 function App() {
-  const despath = useDispatch();
+ 
 
-  useEffect(() => {
-    const handleresize = () => {
-      despath(setScreenSize(window.innerWidth));
-    };
-    window.addEventListener("resize", handleresize);
-    handleresize();
-    return () => window.removeEventListener("resize", handleresize);
-  }, [despath]);
+
+ 
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         {/* <ExamRequestForm/> */}
-       
+       {/* //wifi// */}
+       {/* <NetworkStatus/> */}
+    
+        {/* //wifi// */}
         <Routes>
           {/* <Login /> */}
           <Route path="/" element={<Login />} />

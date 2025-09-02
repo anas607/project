@@ -56,25 +56,16 @@ export default function ProtectedRoute({ allowedRole }) {
 // جديدة
 useEffect(() => {
   const checkSession = async () => {
+    setLoading(true);
     try {
       const data = await getData(`${BaseUrl}${CHECK_SESSION}`);
-            console.log("RESPONSE:", data.user.avatar);
-
-      dispatch(
-        setUserData({
-          user: data.user,
-          roles: data.user.roles || [],
-        })
-      );
-
-      console.log("Allowed:", allowedRole);
-console.log("User roles:", roles);
-
-     // console.log(data);
+      dispatch(setUserData({
+        user: data.user,
+        roles: data.user.roles,
+      }));
       setAuthorized(true);
     } catch (err) {
-      console.log(err)
-      cookies.remove("access_token");
+      console.log(err);
       dispatch(clearUserData());
       setAuthorized(false);
     } finally {
@@ -84,6 +75,8 @@ console.log("User roles:", roles);
 
   checkSession();
 }, [dispatch]);
+
+
 
   if (loading) return <APPLoading />;
   if (!authorized) return <Navigate to="/login" replace />;

@@ -60,38 +60,45 @@ export default function Appar() {
         }}
       >
         {/* البحث */}
-        <TextField
-          placeholder="ابحث"
-          variant="outlined"
-          sx={{
-            fontSize: "24px",
-            fontWeight: "700",
-            marginTop: "1.9%",
-            mr: 0.3,
-            width: "1257px",
-            direction: "rtl",
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "7px",
-              fontSize: "24px",
-              fontWeight: "700",
-              backgroundColor: "white",
-              "& fieldset": { borderColor: "rgb(250,250,250)" },
-              "&:hover fieldset": { borderColor: "rgb(250,250,250)" },
-              "&.Mui-focused fieldset": { borderColor: "rgb(250,250,250)" },
-            },
-            "& input": {
-              paddingRight: "5px",
-              color: "rgb(105, 105, 102)",
-              fontSize: "100%",
-              height: "64px",
-            },
-          }}
-          InputProps={{
-            startAdornment: (
-              <SearchIcon sx={{ color: "rgb(44, 44, 44)", fontSize: "45px" }} />
-            ),
-          }}
-        />
+       <TextField
+//  value={search}
+//       onChange={(e) => {
+//         setsearch(e.target.value);
+//         onSearch(e.target.value); // ارفع القيمة للأب
+//       }}
+  placeholder="ابحث"
+  variant="outlined"
+  sx={{
+    fontSize: "24px",
+    fontWeight: "700",
+    marginTop: "1.9%",
+    mr: 0.3,
+    width: "100%", // اضبط حسب احتياجك
+    direction: "rtl",
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "7px",
+      fontSize: "24px",
+      fontWeight: "700",
+      backgroundColor: "white",
+      "& fieldset": { borderColor: "rgb(250,250,250)" },
+      "&:hover fieldset": { borderColor: "rgb(250,250,250)" },
+      "&.Mui-focused fieldset": { borderColor: "rgb(250,250,250)" },
+    },
+    "& input": {
+      paddingRight: "5px",
+      color: "rgb(105, 105, 102)",
+      fontSize: "100%",
+      height: "64px",
+    },
+  }}
+  InputProps={{
+    startAdornment: (
+      <IconButton> 
+        <SearchIcon sx={{ color: "rgb(44, 44, 44)", fontSize: "45px" }} />
+      </IconButton>
+    ),
+  }}
+/>
 
         {/* زر الإشعارات */}
         <Box
@@ -110,14 +117,14 @@ export default function Appar() {
               border: "1px solid rgba(212, 208, 212, 0.31)",
               position: "relative",
               borderRadius: "50px",
-              width: "64px",
-              height: "64px",
+              width: "84px",
+              height: "84px",
               padding: "8px",
               backgroundColor: (theme) => theme.palette.primary.main,
               color: (theme) => theme.palette.secondary.main,
             }}
           >
-            <NotificationsIcon sx={{ fontSize: "30px" }} />{" "}
+            <NotificationsIcon sx={{ fontSize: "45px" }} />{" "}
             <Box
               sx={(theme) => ({
                 position: "absolute",
@@ -139,14 +146,14 @@ export default function Appar() {
               border: "1px solid rgba(212, 208, 212, 0.31)",
               borderRadius: "50px",
               padding: "8px",
-              width: "64px",
-              height: "64px",
+              width: "84px",
+              height: "84px",
               backgroundColor: "rgb(71, 59, 68)",
 
               color: (theme) => theme.palette.secondary.main,
             }}
           >
-            <PowerSettingsNewIcon sx={{ fontSize: "30px" }} />
+            <PowerSettingsNewIcon sx={{ fontSize: "45px" }} />
           </IconButton>
         </Box>
       </Box>

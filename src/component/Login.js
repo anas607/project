@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../reducer/user";
 import Cookies from "universal-cookie";
 import { postData } from "../API/apiService";
+import { requestForToken } from "./notifay/forToken";
 export default function Login() {
   const theme=useTheme()
    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -41,65 +42,72 @@ export default function Login() {
   const [openAlert, setOpenAlert] = useState(false);
   const [loading, setLoading] = useState(false);
   //console.log(form);
+  
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
+ async function handleSubmit(e) {
+  e.preventDefault();
+  setLoading(true);
 
+  try {
+    const fcmToken = await requestForToken();
+    
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("password", form.password);
+    // إذا حاب ترسل device token
+    // formData.append("device_token", fcmToken || "");
 
-    try {
-      const response = await postData(`${BaseUrl}${LOGIN}`, formData ,true,true );
+    // إرسال الطلب
+    const response = await postData(`${BaseUrl}${LOGIN}`, formData);
 
-      const token = response.data?.access_token;
+    if (response.success) {
+      // تحديث بيانات المستخدم في Redux
+      dispatch(setUserData({
+        user: response.data.user,
+        roles: response.data.roles,
+      }));
 
-      if (response.success) {
-        dispatch(
-          setUserData({
-            user: response.data.user,
-            roles: response.data.roles,
-          })
-        );
+      // تحديد مسار التنقل بناءً على الأدوار
+      const userRoles = response.data.roles || [];
+      const employeeRoles = [
+        "موظف الديوان","موظف الإقامة","موظف المجالس","موظف المالية",
+        "موظف المفاضلة","موظف الشهادات","موظف الامتحانات"
+      ];
+      const managerRoles = [
+        "رئيس الديوان","رئيس الإقامة","رئيس المجالس","رئيس المالية",
+        "رئيس المفاضلة","رئيس الشهادات","رئيس الامتحانات",
+        "المدير","نائب المدير"
+      ];
 
-        const cookies = new Cookies();
-        cookies.set("access_token", token, {
-          path: "/",
-          maxAge: 86400,
-        });
-        
-const userRoles = response.data.roles || [];
-
-const employeeRoles = ["موظف الديوان", "موظف الإقامة", "موظف المجالس", "موظف المالية", "موظف المفاضلة", "موظف الشهادات","موظف الامتحانات"];
-const managerRoles = ["رئيس الديوان", "رئيس الإقامة", "رئيس المجالس", "رئيس المالية", "رئيس المفاضلة", "رئيس الشهادات","رئيس الامتحانات","المدير" ,"نائب المدير"];
-
-if (userRoles.some(role => managerRoles.includes(role))) {
-  navigate("/dachbord");
-} else if (userRoles.some(role => employeeRoles.includes(role))) {
-  navigate("/enter_emdewan");}
-
-      } else {
-        setError("بيانات الدخول غير صحيحة");
-        setOpenAlert(true);
-        setTimeout(() => {
-          setOpenAlert(false);
-          setError("");
-        }, 2000);
+      if (userRoles.some(role => managerRoles.includes(role))) {
+        navigate("/dachbord");
+      } else if (userRoles.some(role => employeeRoles.includes(role))) {
+        navigate("/enter_emdewan");
       }
-    } catch (error) {
-      setError(error.message || "حدث خطأ أثناء تسجيل الدخول");
+
+    } else {
+      setError("بيانات الدخول غير صحيحة");
       setOpenAlert(true);
       setTimeout(() => {
         setOpenAlert(false);
         setError("");
       }, 2000);
-    } finally {
-      setLoading(false);
     }
+
+  } catch (error) {
+    setError(error.message || "حدث خطأ أثناء تسجيل الدخول");
+    setOpenAlert(true);
+    setTimeout(() => {
+      setOpenAlert(false);
+      setError("");
+    }, 2000);
+  } finally {
+    setLoading(false);
   }
+}
+
 
   return (
     <>

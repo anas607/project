@@ -84,7 +84,7 @@ async function ReviewDetalis(status) {
           <Box display="flex" alignItems="center" gap={1}>
             <Typography
               variant="body2"
-              sx={{ whiteSpace: "nowrap", minWidth: "90px" }}
+              sx={{ whiteSpace: "nowrap", minWidth: "90px" , fontSize: "20px",fontWeight:'700'}}
             >
               {el.label}:
             </Typography>
@@ -94,7 +94,7 @@ async function ReviewDetalis(status) {
               sx={{
                 flex: 1,
                 input: {
-                  fontSize: "13px",
+                  fontSize: "20px",
                   borderBottom: "1px dashed gray !important",
                 },
               }}
@@ -123,7 +123,7 @@ async function ReviewDetalis(status) {
             }}
           >
             <NoteIcon sx={{ fontSize: 30, color: "black", mb: 1 }} />
-            <Typography sx={{ fontSize: "10px", textAlign: "center" }}>
+            <Typography sx={{ fontSize: "20px", textAlign: "center" }}>
               {el.label}
             </Typography>
           </Button>
@@ -133,7 +133,7 @@ async function ReviewDetalis(status) {
         return (
           <Box display="flex" alignItems="center" gap={1}>
             <Checkbox size="small" />
-            <Typography variant="body2">{el.label}</Typography>
+            <Typography sx={{ fontSize: "20px",}}variant="body2">{el.label}</Typography>
           </Box>
         );
 

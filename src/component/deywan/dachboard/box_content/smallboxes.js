@@ -69,8 +69,8 @@ export default function SmallBoxes({ searchTerm }) {
   return (
     <Box
       sx={{
-        width: "400px",
-        height: "977px",
+        width: "600px",
+        height: "987px",
         flexShrink: 0,
         backgroundColor: "rgb(250,250,250)",
         borderRadius: "2%",

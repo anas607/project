@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { getData } from '../../../../API/apiService';
 import { BaseUrl, FETCHOFFICE, STATISTICS, WEEKLY_DONE, WEEKLYPATH } from '../../../../API/api';
 import { useSelector } from 'react-redux';
+import LoaderColum from '../../../../wrong/loading/loaderColum';
 
 export default function TableBox() {
   const state = useSelector((state) => state.user);
@@ -57,6 +58,7 @@ fetchweeklyByOfficeName(defaultOffice.id);
   };
 
   async function fetchWeekly() {
+    setloading(true)
     try {
       const response = await getData(`${BaseUrl}${STATISTICS}${WEEKLY_DONE}`);
       if (response.success && Array.isArray(response.data)) {
@@ -80,7 +82,7 @@ fetchweeklyByOfficeName(defaultOffice.id);
   setloading(true);
   console.log("Fetching data for office ID:", officeid);
   try {
-    const response = await getData(`http://127.0.0.1:8000/api/statistics/weekly/path/${officeid}`);
+    const response = await getData(`${BaseUrl}statistics/weekly/path/${officeid}`);
     
     const weeklyData = response.data?.["الانجاز الاسبوعي"] || [];
 
@@ -183,8 +185,7 @@ fetchweeklyByOfficeName(defaultOffice.id);
 
       {loading ? (
         <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 10 }}>
-          <CircularProgress sx={{ color: 'green' }} />
-        </Box>
+<LoaderColum/>        </Box>
       ) : (
        
         

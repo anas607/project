@@ -3,7 +3,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import { Box, Typography } from "@mui/material";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
-const LoaderExam= () => {
+const LoaderColum= () => {
   return (
     <Box
       display="flex"
@@ -12,7 +12,7 @@ const LoaderExam= () => {
       justifyContent="center"
       sx={{ py: 4 }}
     >
-      <ModeEditOutlineIcon
+      <InsertChartIcon
         sx={{
           fontSize: 100,
           color: "rgb(14, 74, 35)",
@@ -28,4 +28,4 @@ const LoaderExam= () => {
   );
 };
 
-export default LoaderExam;
+export default LoaderColum;

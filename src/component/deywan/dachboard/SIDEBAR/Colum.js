@@ -269,7 +269,7 @@ setSnackbar({
             alignItems: "center",
           }}
         >
-          <Typography fontWeight="bold">أيام عمل النظام</Typography>
+          <Typography sx={{fontSize:'24px'}} fontWeight="bold">أيام عمل النظام</Typography>
           <CalendarMonthIcon sx={{ color: "rgb(14, 75, 35)" }} />
         </Box>
 
@@ -305,8 +305,8 @@ setSnackbar({
             marginTop: 2,
           }}
         >
-          <Typography fontWeight="bold">أوقات عمل النظام</Typography>
-          <AccessTimeIcon sx={{ color: "rgb(14, 75, 35)" }} />
+          <Typography sx={{fontSize:'24px'}} fontWeight="700">أوقات عمل النظام</Typography>
+          <AccessTimeIcon sx={{fontSize:'24px', color: "rgb(14, 75, 35)" }} />
         </Box>
 
         {/* الورقتين */}
@@ -315,11 +315,12 @@ setSnackbar({
           <Grid item xs={6}>
             <TextField
               type="time"
-              fullWidth
               value={time.startHour && time.startMinute ? `${convertTo(time.startHour, time.startMinute, time.startPeriod)}` : ""}
               onChange={handleStartTimeChange}
               label="بدء العمل"
               sx={{
+                                width:"250px",
+
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
                     borderColor: "rgb(14, 75, 35)",
@@ -342,11 +343,12 @@ setSnackbar({
           <Grid item xs={6}>
             <TextField
               type="time"
-              fullWidth
+              
               value={time.endHour && time.endMinute ? `${convertTo(time.endHour, time.endMinute, time.endPeriod)}` : ""}
               onChange={handleEndTimeChange}
               label="انتهاء العمل"
               sx={{
+                width:"250px",
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
                     borderColor: "rgb(14, 75, 35)",

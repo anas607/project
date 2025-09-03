@@ -2,18 +2,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const getDeviceType = (width) => {
-  if (width < 768) return 'mobile';
-  if (width < 1024) return 'tablet';
-  return 'desktop';
+  if (width < 768) return "mobile";
+  if (width < 1024) return "tablet";
+  return "desktop";
 };
 
 const initialState = {
-  width: window.innerWidth,
-  device: getDeviceType(window.innerWidth),
+  width: typeof window !== "undefined" ? window.innerWidth : 1200,
+  device: typeof window !== "undefined" ? getDeviceType(window.innerWidth) : "desktop",
 };
 
 const screenSlice = createSlice({
-  name: 'screen',
+  name: "screen",
   initialState,
   reducers: {
     setScreenSize(state, action) {

@@ -5,6 +5,7 @@ import {
 import { getData } from "../../../../API/apiService";
 import { ACHIEVEMENT, BaseUrl, PATHS, STATISTICS } from "../../../../API/api";
 import { CircularProgress, Box } from '@mui/material';
+import LoaderColum from "../../../../wrong/loading/loaderColum";
 
 export default function ColumnChart() {
   const [loading, setLoading] = useState(false);
@@ -35,8 +36,7 @@ export default function ColumnChart() {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
-        <CircularProgress sx={{ color: 'green' }} />
-      </Box>
+<LoaderColum/>      </Box>
     );
   }
 

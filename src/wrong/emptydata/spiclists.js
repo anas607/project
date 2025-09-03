@@ -1,7 +1,7 @@
 import { TableCell, TableRow, Typography, Box } from "@mui/material";
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';import { keyframes } from '@mui/system';
-import ArchiveIcon from '@mui/icons-material/Archive';
-export default function NoARCHIVE() {
+import ScreenSearchDesktopIcon from '@mui/icons-material/ScreenSearchDesktop';import { keyframes } from '@mui/system';
+import EditSquareIcon from '@mui/icons-material/EditSquare';
+export default function NoSpeclists() {
 
   // أنميشن للأيقونة تتحرك لأعلى ولأسفل
   const bounce = keyframes`
@@ -20,7 +20,7 @@ export default function NoARCHIVE() {
         color: 'gray'
       }}
     >
-      <CloudDownloadIcon 
+      <ScreenSearchDesktopIcon 
         sx={{
           fontSize:'105px',
           animation: `${bounce} 1.5s ease-in-out infinite`
@@ -31,9 +31,10 @@ export default function NoARCHIVE() {
         لا توجد بيانات حالياً
       </Typography>
       <Typography variant="body2" sx={{ mt: 1 ,fontSize:'24px', fontWeight: 'bold'}}>
-        لا يوجد ارشيف لعرضها في الوقت الحالي
+        لا يوجد اعلانات لعرضها في الوقت الحالي
       </Typography>
-      
+      <Typography variant="body2" sx={{  color: 'green',mt: 1 ,fontSize:'24px', fontWeight: 'bold'}}>
+قم باضافة المزيد من الاعلانات من الزر اعلاه      </Typography>
     </Box>
   );
 }

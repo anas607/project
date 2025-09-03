@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Box, Avatar, Typography, List, ListItem, Container, CircularProgress } from "@mui/material";
+import { Box, Avatar, Typography, List, ListItem, Container } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { getData } from "../../../../API/apiService";
 import { BaseUrl, showEmployees } from "../../../../API/api";
 import { useSelector } from "react-redux";
-import NOSERACH from "../../../../wrong/search/search";
 import NOEMPLOYEE from "../../../../wrong/search/noEmployyesearch";
+import SearchingEmployees from "../../../../wrong/loading/searchEmployees";
 
 export default function SmallBoxes({ searchTerm }) {
   const state = useSelector((state) => state.user);
@@ -13,11 +13,13 @@ export default function SmallBoxes({ searchTerm }) {
 
   const [localEmployees, setLocalEmployees] = useState([]);
   const [employee, setEmployee] = useState([]);
-  const [loading, setLoading] = useState(true); // حالة اللودر
+  const [loading, setLoading] = useState(true); // للبيانات
+  const [searchLoading, setSearchLoading] = useState(false); // للبحث
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      setLoading(true); // تفعيل اللودر عند بداية الفيتش
+      setLoading(true);
       try {
         let endpoint = isSub_Admin
           ? "show/employees/and/managers"
@@ -26,13 +28,15 @@ export default function SmallBoxes({ searchTerm }) {
         const response = await getData(`${BaseUrl}${endpoint}`);
         if (isSub_Admin) {
           setLocalEmployees(response);
+          setFilteredEmployees(response);
         } else {
           setEmployee(response.data);
+          setFilteredEmployees(response.data);
         }
       } catch (error) {
         console.error("فشل في جلب الموظفين:", error);
       } finally {
-        setLoading(false); // إخفاء اللودر بعد الانتهاء
+        setLoading(false);
       }
     };
 
@@ -40,9 +44,27 @@ export default function SmallBoxes({ searchTerm }) {
   }, [isSub_Admin]);
 
   const employeesToDisplay = isSub_Admin ? localEmployees : employee;
-  const filteredEmployees = employeesToDisplay.filter(emp =>
-    emp.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
+  // عند البحث: تفعيل لودر مؤقت
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredEmployees(employeesToDisplay);
+      setSearchLoading(false);
+      return;
+    }
+
+    setSearchLoading(true);
+
+    const timer = setTimeout(() => {
+      const filtered = employeesToDisplay.filter(emp =>
+        emp.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredEmployees(filtered);
+      setSearchLoading(false);
+    }, 300); // تأخير بسيط لمحاكاة البحث
+
+    return () => clearTimeout(timer);
+  }, [searchTerm, employeesToDisplay]);
 
   return (
     <Box
@@ -78,8 +100,10 @@ export default function SmallBoxes({ searchTerm }) {
               height: "80%",
             }}
           >
-            <CircularProgress sx={{ color: "green" }} />
+            <SearchingEmployees term="تحميل البيانات..." />
           </Box>
+        ) : searchLoading ? (
+          <SearchingEmployees term={searchTerm} />
         ) : filteredEmployees.length > 0 ? (
           <List
             sx={{
@@ -130,7 +154,7 @@ export default function SmallBoxes({ searchTerm }) {
             ))}
           </List>
         ) : (
-         <NOEMPLOYEE/>
+          <NOEMPLOYEE />
         )}
       </Container>
     </Box>

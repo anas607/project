@@ -9,16 +9,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-   Modal,
-  Grid,
-  Button,
-  Checkbox,
+
   IconButton,
-  CircularProgress,
-  Menu,
-  MenuItem,
-  AppBar,
+  
 } from "@mui/material";
 
 
@@ -32,13 +25,15 @@ import Loading from "../../../wrong/mails/loading";
 import { SearchRequest } from "../../../reducer/search/requestSearch";
 import NOSERACH from "../../../wrong/search/search";
 import NoENCOMING from "../../../wrong/emptydata/noencoming";
+import Searchincomming from "../../../wrong/loading/incoming";
+import NOSearchincomming from "../../../wrong/search/noincommingsearch";
+import LoaderExam from "../../../wrong/loading/examloader";
 
 export default function Incoming({setShowRequest,setSelectedUuid, searchTerm }){
    const { data: searchResults, isloading } = useSelector(
       (state) => state.searchrequest
     );
   const stateimport=useSelector((state)=>state.importexam)
-  const [open,setOpen]=useState(false)
 
   // console.log(stateimport)
     const dispatch = useDispatch();
@@ -112,13 +107,18 @@ const isEmpty = !specliseToDisplay || specliseToDisplay.length === 0;
   ) : stateimport.isloading ? (
     <TableRow>
       <TableCell colSpan={8} align="center">
-        <Loading />
-      </TableCell>
+<LoaderExam/>      </TableCell>
     </TableRow>
-  ) : searchTerm && isEmpty ? (
+  )  : searchTerm && isloading ? (
     <TableRow>
       <TableCell colSpan={8} align="center">
-        <NOSERACH />
+        <Searchincomming term={searchTerm}/>
+      </TableCell>
+    </TableRow>
+  ): searchTerm && isEmpty ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <NOSearchincomming  />
       </TableCell>
     </TableRow>
   ) : !searchTerm && isEmpty ? (
@@ -128,7 +128,7 @@ const isEmpty = !specliseToDisplay || specliseToDisplay.length === 0;
   </TableCell>
 </TableRow>
                                                                       
-                         ) : specliseToDisplay.length > 0 ? (
+                         ) :specliseToDisplay.length > 0 ? (
   specliseToDisplay.map((row, index) => (
     <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)" }}>
       <TableCell sx={{ fontWeight: "700", fontSize: "16px" }} align="center">

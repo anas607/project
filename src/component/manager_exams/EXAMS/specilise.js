@@ -18,7 +18,11 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { SearchSpeclise } from "../../../reducer/search/spiclicet";
 import NOSERACH from "../../../wrong/search/search";
-import NoANNOUNVEMTS from "../../../wrong/emptydata/Announcements";
+import NoSpeclists from "../../../wrong/emptydata/spiclists";
+import NOSearchingMark from "../../../wrong/search/noSearchMark";
+import NOSearchispecliste from "../../../wrong/search/nosearchspeclise";
+import Searchinmark from "../../../wrong/loading/marks";
+import LoaderExam from "../../../wrong/loading/examloader";
 
 export default function Speclist({ searchTerm }){
   
@@ -122,15 +126,13 @@ const specliseToDisplay = searchTerm
 
   {state.isloading ? (
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300, width: "100%" }}>
-      <CircularProgress sx={{ color: "green" }} size={60} />
-    </Box>
+<LoaderExam/>    </Box>
   ) : 
     isloading ? (
     // عرض اللودنغ أثناء البحث
     <Grid item xs={12}>
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300 }}>
-        <CircularProgress sx={{ color: "green" }} size={60} />
-      </Box>
+ <Searchinmark term={searchTerm}/>      </Box>
     </Grid>
   ) :
   
@@ -179,11 +181,11 @@ const specliseToDisplay = searchTerm
   ) : !searchTerm && isEmpty ? (
       <TableRow>
     <TableCell colSpan={8} align="center">
-      <NoANNOUNVEMTS/>
+      <NoSpeclists/>
     </TableCell>
   </TableRow>
     
-  ):(<NOSERACH />)}
+  ):(<NOSearchispecliste />)}
 </Grid>
 
           </Box>

@@ -52,6 +52,7 @@ function a11yProps(index) {
 }
 
 export default function Exam() {
+  
     const[addprogram,setAddProgram]=useState(false)
         const[showdetials,setShowDetials]=useState(false)
 const [selectedUuid, setSelectedUuid] = useState(null);
@@ -107,7 +108,8 @@ const isAdmin=state.roles[0].includes("المدير")
 
         {/* محتوى التابات */}
         <Bank value={value} index={0}>
-            <Mark/>
+            <Mark             searchTerm={searchTerm}
+/>
       </Bank>
         <Bank value={value} index={1}>
           <Speclist searchTerm={searchTerm} />  

@@ -21,10 +21,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEndExam } from "../../../reducer/managerexam/endingexam";
 import Loading from "../../../wrong/mails/loading";
-import NoData from "../../../wrong/mails/noData";
 import { SearchRequest } from "../../../reducer/search/requestSearch";
 import NOSERACH from "../../../wrong/search/search";
 import EditRequest from "../EXAMS/event/edieRequest";
+import LoaderExam from "../../../wrong/loading/examloader";
+import NoFinished from "../../../wrong/emptydata/nofinished";
+import Searchincomming from "../../../wrong/loading/incoming";
+import NOSearchincomming from "../../../wrong/search/noincommingsearch";
 
 
 export default function Finished({setShowRequest,setSelectedUuid,searchTerm,setSelectedStatus}){
@@ -53,6 +56,8 @@ export default function Finished({setShowRequest,setSelectedUuid,searchTerm,setS
   const specliseToDisplay = searchTerm 
     ? Array.isArray(searchResults) ? searchResults : [searchResults] 
     : stateend.data ?? [];
+    const isEmpty = !specliseToDisplay || specliseToDisplay.length === 0;
+
     return(
         <>
           
@@ -101,21 +106,31 @@ export default function Finished({setShowRequest,setSelectedUuid,searchTerm,setS
                                      stateend.isloading ?  (<>
                                                     <TableRow>
                                                       <TableCell sx={{color:"green"}}>
-                                                        <Loading />
+                                                       <LoaderExam/>
                                                       </TableCell>
-                                                    </TableRow></>) :
-                                                    !stateend.isloading && stateend.data.length===0 ? <NoData/> :
-
-
-             isloading ? (
-                                                                        // عرض اللودنغ أثناء البحث
-                                                                        <Grid item xs={12}>
-                                                                          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300 }}>
-                                                                            <CircularProgress sx={{ color: "green" }} size={60} />
-                                                                          </Box>
-                                                                        </Grid>
-                                                                      
-                         ) : specliseToDisplay.length > 0 ? (
+                                                    </TableRow></>)   
+                                                    
+                                                     : searchTerm && isloading ? (
+                                                        <TableRow>
+                                                          <TableCell colSpan={8} align="center">
+                                                            <Searchincomming term={searchTerm}/>
+                                                          </TableCell>
+                                                        </TableRow>
+                                                      ): searchTerm && isEmpty ? (
+                                                        <TableRow>
+                                                          <TableCell colSpan={8} align="center">
+                                                            <NOSearchincomming  />
+                                                          </TableCell>
+                                                        </TableRow>
+                                                      ) : !searchTerm && isEmpty ? (
+                                                        <TableRow>
+                                                      <TableCell colSpan={8} align="center">
+                                                        <NoFinished/>
+                                                      </TableCell>
+                                                    </TableRow>
+                                                                                                                          
+                                                                             )
+                         : specliseToDisplay.length > 0 ? (
   specliseToDisplay.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           

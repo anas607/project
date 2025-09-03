@@ -32,6 +32,7 @@ import { fetchprogram } from "../../../reducer/managerexam/showallprograms";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import NoPROGRAM from "../../../wrong/emptydata/no_program";
+import LoaderExam from "../../../wrong/loading/examloader";
 const outboxRows = [
   {
     id: "#789541",
@@ -173,7 +174,7 @@ function handleOpenModal(id){
              stateprogram.isloading ?  (<>
                             <TableRow>
                               <TableCell sx={{color:"green"}}>
-                                <Loading />
+                                <LoaderExam/> 
                               </TableCell>
                             </TableRow></>) :
                             !stateprogram.isloading && stateprogram.data.length===0 ? 

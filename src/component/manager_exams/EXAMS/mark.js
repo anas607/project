@@ -20,6 +20,7 @@ import {
   MenuItem,
   AppBar,
 } from "@mui/material";
+
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
@@ -31,70 +32,44 @@ import { fetchMark } from "../../../reducer/managerexam/mark";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import NoMARK from "../../../wrong/emptydata/no_mark";
-const outboxRows = [
-  {
-    id: "#789541",
-    mailTitle: "  98989",
-    officeName: "قسم الإحصاء",
-    receiverName: "د. سامي حسن",
-    receiverPhone: "+963993222111",
-    type:"شهادة ",
-    dateSubmitted: "1/5/2025",
-    dateSent: "2/5/2025",
-  }
-];
+import { SearchMarks } from "../../../reducer/search/marks";
+import Searchincomming from "../../../wrong/loading/incoming";
+import NOSearchincomming from "../../../wrong/search/noincommingsearch";
+import Searchinmark from "../../../wrong/loading/marks";
+import NOSearchingMark from "../../../wrong/search/noSearchMark";
+import LoaderExam from "../../../wrong/loading/examloader";
 
-export default function Mark({addprogram, setAddProgram }){
-  const statemark=useSelector((state)=>state.fetchmark)
+export default function Mark({addprogram, setAddProgram ,searchTerm}){
+  const { data: searchResults, isloading } = useSelector(
+        (state) => state.searchrequest
+      );
+        const statemark=useSelector((state)=>state.fetchmark)
   const dispatch=useDispatch()
   useEffect(()=>{
     dispatch(fetchMark())
   },[dispatch])
+      useEffect(() => {
+        if (searchTerm) {
+          dispatch(SearchMarks(searchTerm));
+        }
+      }, [searchTerm, dispatch]);
+      const normalizedResults = Array.isArray(searchResults)
+  ? searchResults.flat() // بيفتح أي arrays جوه بعض
+  : (searchResults ? [searchResults] : []);
+
+const markToDisplay = searchTerm
+  ? normalizedResults
+  : statemark.data ?? [];
+
+const isEmpty = !markToDisplay || markToDisplay.length === 0;
+
+        
+
     return(
         <>
           
   
- 
-
   
-
-    {/*  صف العنوان + البحث + الإشعار */}
-  
-
-  
-
-    
-  {/* ///////////////////////////////// */}
-   
-  
-   
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-          
                <TableContainer sx={{ mr: -3, backgroundColor: "transparent", boxShadow: "none" , width: "1583px",mt:2}}>
             <Table  sx={{Width: '100%'}}>
              <TableHead sx={{width:"1503px", height:'88px'}}>
@@ -135,17 +110,30 @@ export default function Mark({addprogram, setAddProgram }){
              {statemark.error ? (<h2 sx={{color:"red"}}>خدث خطا في جلب المعلومات</h2>): 
                          statemark.isloading ?  (<>
                                         <TableRow>
-                                          <TableCell sx={{color:"green"}}>
-                                            <Loading />
-                                          </TableCell>
-                                        </TableRow></>) :
-                                        !statemark.isloading && statemark.data.length===0 ? 
-                                                                                  <TableCell colSpan={8}>
+                                          <TableCell  sx={{color:"green"}}>
+<LoaderExam />                                       </TableCell>
+                                        </TableRow></>) 
+                                
 
-                                        <NoMARK/>                                           </TableCell>
-
-                                        :
-            statemark.map((row, index) => (
+                                        : searchTerm && isloading ? (
+                                            <TableRow>
+                                              <TableCell colSpan={8} align="center">
+                                                <Searchinmark term={searchTerm}/>
+                                              </TableCell>
+                                            </TableRow>
+                                          ): searchTerm && isEmpty ? (
+                                            <TableRow>
+                                              <TableCell colSpan={8} align="center">
+                                                <NOSearchingMark  />
+                                              </TableCell>
+                                            </TableRow>
+                                          ) :!searchTerm && isEmpty ? (
+                                            <TableRow>
+                                              <TableCell colSpan={8} align="center">
+                                                <NoMARK  />
+                                              </TableCell>
+                                            </TableRow>):
+            markToDisplay.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.exam_number }</TableCell>

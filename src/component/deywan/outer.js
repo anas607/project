@@ -16,23 +16,21 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import NoteIcon from '@mui/icons-material/Note';import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import SidBar from "./dachboard/SIDEBAR/sidbar";
 import Appar from "./dachboard/SIDEBAR/appar";
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
  import {useDispatch,useSelector }  from "react-redux"
 import EXPORTMAILS from "../mails/form/exportmails";
-import { getData } from "../../API/apiService";
 import { fetchexportouter } from "../../reducer/deywan/outer/outer";
 import { fetchimportouter } from "../../reducer/deywan/outer/importouter";
 import Loading from "../../wrong/mails/loading";
-import NoData from "../../wrong/mails/noData";
 import ShowReicipet from "../mails/form/showRecipiet";
 import { SearchTransction } from "../../reducer/search/transection";
-import NOEMPLOYEE from "../../wrong/search/noEmployyesearch";
-import NOSERACH from "../../wrong/search/search";
+
 import NoTRANSECTION from "../../wrong/emptydata/notransiction";
+import SearchingTransection from "../../wrong/loading/searchTransection";
+import NOSearchTransection from "../../wrong/search/noTransectionSearch";
 // بيانات البريد الوارد (وارد)
 
 
@@ -61,8 +59,7 @@ const isManager = allowedRoles.some(role => stateRole.includes(role));
   const stateexport=useSelector((state)=>state.outerexport)
   const dispatch = useDispatch()
     const stateimport=useSelector((state)=>state.outereimport)
-console.log(stateexport.data)
-console.log(stateimport.data)
+
 
 const [showrecipit,setShowRecipit]=  useState(false)
      const [id, setid] = useState(null);
@@ -213,7 +210,18 @@ setShowRecipit(true)
 
 
  <TableBody>
-              {(isInbox ? stateimport.isloading : stateexport.isloading) ? (
+               {searchTerm && searchLoading ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <SearchingTransection term={searchTerm}/>
+      </TableCell>
+    </TableRow>
+  ) 
+              
+              
+              :
+              
+              (isInbox ? stateimport.isloading : stateexport.isloading) ? (
                 <TableRow>
                   <TableCell sx={{color:"green"}} colSpan={8} align="center">
                     <Loading />
@@ -229,10 +237,10 @@ setShowRecipit(true)
 : searchTerm && isEmpty ? (
     <TableRow>
       <TableCell colSpan={8} align="center">
-        <NOSERACH />
+        <NOSearchTransection />
       </TableCell>
     </TableRow>
-  ) : !searchTerm && isEmpty ? (
+  ) : (!stateimport.isloading || !stateexport.isloading) && isEmpty ? (
     <TableRow>
   <TableCell colSpan={8} align="center">
     <NoTRANSECTION/>
@@ -310,7 +318,7 @@ new Date(row.sent_at).toLocaleDateString()}
 
 
 isManager ? (
-  rows.map((row, index) => (
+  transctionToDisplay.map((row, index) => (
     <TableRow key={index}>
       <TableCell sx={headStyle} align="center">{row.transactionNumber}</TableCell>
       <TableCell align="center">
@@ -364,7 +372,7 @@ isManager ? (
 ):isSub_Admin?(
 
 (
-  rows.map((row, index) => (
+  transctionToDisplay.map((row, index) => (
     <TableRow key={index}>
       <TableCell sx={headStyle} align="center">{row.transactionNumber}</TableCell>
       <TableCell align="center">
@@ -419,7 +427,7 @@ isManager ? (
 
 
 ):(
-                rows.map((row, index) => (
+                transctionToDisplay.map((row, index) => (
                   <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)" }}>
                     <TableCell sx={{ fontWeight: "700", fontSize: '16px' }} align="center">{row.form_name}</TableCell>
                     <TableCell align="center">

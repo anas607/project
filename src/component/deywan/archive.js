@@ -12,7 +12,11 @@ import {
  
   IconButton,
  
-} from "@mui/material";import {   Select, MenuItem,
+} from "@mui/material";
+ import {useDispatch,useSelector }  from "react-redux"
+
+
+import {   Select, MenuItem,
   FormControl,
  
   InputLabel,
@@ -23,17 +27,17 @@ import SidBar from "./dachboard/SIDEBAR/sidbar";
 import Appar from "./dachboard/SIDEBAR/appar";
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { useEffect, useState } from "react";
 import { BaseUrl ,ARCHIV,INTERNAL,MAILS,TRANSACTION,ARCHIVED_EXPORT, IMPORT, FETCHOFFICE, PATH} from "../../API/api";
 import { getData } from "../../API/apiService";
 import Loading from "../../wrong/mails/loading";
 import EXPORTMAILS from "../mails/form/exportmails";
 import EnternalMails from "../mails/form/enternalimportmodal";
-import NoData from "../../wrong/mails/noData";
-import { useSelector } from "react-redux";
 import FlashlightOnIcon from '@mui/icons-material/FlashlightOn';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import ShowReicipet from "../mails/form/showRecipiet";
+import NoARCHIVE from "../../wrong/emptydata/no_archive";
+import { useEffect, useState } from "react";
+import { SearchARCHIVE } from "../../reducer/search/archive";
 
 
   const headStyle = {
@@ -60,8 +64,21 @@ const [openInternalModal, setOpenInternalModal] = useState(false);
 const [selectedUuid, setSelectedUuid] = useState(null);
 const [showrecipit,setShowRecipit]=  useState(false)
    const [selectedStatus, setSelectedStatus] = useState(null);
-
+ const [searchTerm, setSearchTerm] = useState("");
+  const dispatch=useDispatch();
+    useEffect(() => {
+      if (searchTerm) {
+        dispatch(SearchARCHIVE(searchTerm));
+      }
+    }, [searchTerm, dispatch]);
+     const { data: searchResults, isloading: searchLoading } = useSelector(
+      (state) => state.searchtransction
+    );
 function handleEditeTransction(uuid,type ){
+ 
+  
+   
+  
   setuuid(uuid)
   setOpenModal(true)
 }
@@ -180,6 +197,15 @@ useEffect(() => {
   fetcharcive();
 }, [selectedType]);
 
+    const transctionToDisplay = searchTerm
+      ? Array.isArray(searchResults)
+        ? Array.isArray(searchResults[0])
+          ? searchResults[0]
+          : searchResults
+        : []
+      : rows;
+  
+    const isEmpty = !transctionToDisplay || transctionToDisplay.length === 0;
     return(
         <>
           <Box
@@ -195,7 +221,7 @@ useEffect(() => {
 
   
   <Box sx={{ flexGrow: 1, padding: '2%', display: 'flex', flexDirection: 'column' ,backgroundColor:"rgb(233,232,232)"}}>
-    <Appar/>
+    <Appar onSearch={setSearchTerm}/>
 
    
  <Box
@@ -325,23 +351,48 @@ useEffect(() => {
   </TableRow>
 </TableHead>
 
-        <TableBody>
-{error && (
-  <Typography sx={{ color: "red", mt: 2, fontWeight: "bold" }}>
-    ⚠️ {error}
-  </Typography>
-)}
-{loading ?(
-                <TableRow>
-                  <TableCell sx={{color:"green"}} colSpan={8} align="center">
-                    <Loading />
-                  </TableCell>
-                </TableRow>
-              ) : ""}
-{rows.length === 0 && !loading && (
-  <NoData/>
-)}
-  {rows.map((row, index) => (
+<TableBody>
+  {error && (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <Typography sx={{ color: "red", mt: 2, fontWeight: "bold" }}>
+          ⚠️ {error}
+        </Typography>
+      </TableCell>
+    </TableRow>
+  )}
+
+  {/* حالة التحميل */}
+  {loading && (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <Loading />
+      </TableCell>
+    </TableRow>
+  )}
+
+  {/* حالة البحث */}
+  {!loading && searchTerm && transctionToDisplay.length === 0 && (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <Typography sx={{ color: "gray", fontWeight: "bold" }}>
+          لا توجد نتائج للبحث عن "{searchTerm}"
+        </Typography>
+      </TableCell>
+    </TableRow>
+  )}
+
+  {/* حالة عدم وجود بيانات أصلية من الفيتش */}
+  {!loading && !searchTerm && rows.length === 0 && (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <NoARCHIVE />
+      </TableCell>
+    </TableRow>
+  )}
+
+  {/* عرض البيانات */}
+  {!loading && transctionToDisplay.map((row, index) => (
     <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)" }}>
       {selectedType === "البريد الصادر الخارجي" && (
         <>

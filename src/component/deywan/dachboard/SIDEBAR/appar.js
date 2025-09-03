@@ -95,40 +95,46 @@ export default function Appar({ onSearch }) {
   }}
 />
 
-
         {/* زر الإشعارات */}
-       <Box sx={{ display: "flex", gap: 3,mt:3 }}>
-            <IconButton
-              ref={notifBtnRef}
-              onClick={handleToggleNotifications}
-              sx={{
-                border: "1px solid rgba(212, 208, 212, 0.31)",
-                borderRadius: "50px",
-                width: "64px",
-                height: "64px",
-                padding: "8px",
-                backgroundColor: (theme) => theme.palette.primary.main,
-                color: (theme) => theme.palette.secondary.main,
-                position: "relative",
-              }}
-            >
-              <NotificationsIcon sx={{ fontSize: "30px" }} />
-              <Box
-                sx={(theme) => ({
-                  position: "absolute",
-                  top: 18.4,
-                  right: 18,
-                  width: 7,
-                  height: 7,
-                  bgcolor: "white",
-                  borderRadius: "50%",
-                  border: `2px solid ${theme.palette.primary.main}`,
-                })}
-              />
-            </IconButton>
-
-           <LogeOut/>
-          </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            ml: 7,
+            mt: 3,
+            gap: 9,
+          }}
+        >
+          <IconButton
+            ref={notifBtnRef}
+            onClick={handleToggleNotifications}
+            sx={{
+              border: "1px solid rgba(212, 208, 212, 0.31)",
+              position: "relative",
+              borderRadius: "50px",
+              width: "84px",
+              height: "84px",
+              padding: "8px",
+              backgroundColor: (theme) => theme.palette.primary.main,
+              color: (theme) => theme.palette.secondary.main,
+            }}
+          >
+            <NotificationsIcon sx={{ fontSize: "45px" }} />{" "}
+            <Box
+              sx={(theme) => ({
+                position: "absolute",
+                top: 18.4,
+                right: 18,
+                width: 7,
+                height: 7,
+                bgcolor: "white",
+                borderRadius: "50%",
+                border: `2px solid ${theme.palette.primary.main}`,
+              })}
+            />
+          </IconButton>
+        <LogeOut/>
+        </Box>
       </Box>
 
       {/* بوكس الإشعارات المنبثق */}
@@ -141,8 +147,8 @@ export default function Appar({ onSearch }) {
         <Paper
           elevation={4}
           sx={{
-            width: 678,
-            height: 764,
+            width: 420,
+            height: 400,
             maxHeight: 900,
             overflowY: "auto",
             borderRadius: 2,
@@ -152,7 +158,7 @@ export default function Appar({ onSearch }) {
         >
           <Typography
             variant="h6"
-            sx={{ mb: 2, mr: 20, fontSize: "24px", fontWeight: "700",alignItems:'center' }}
+            sx={{ mb: 2, mr: 20, fontSize: "24px", fontWeight: "700" }}
           >
             الإشعارات
           </Typography>
@@ -180,7 +186,49 @@ export default function Appar({ onSearch }) {
         </Paper>
       </Popper>
 
-      
+      {
+        // <Dialog
+        //   open={showLogOut}
+        //   aria-labelledby="alert-dialog-title"
+        //   aria-describedby="alert-dialog-description"
+        // >
+        //   <DialogTitle
+        //     id="alert-dialog-title"
+        //     sx={{ direction: "rtl", fontSize: "24px", fontWeight: "700" }}
+        //   >
+        //     {"هل ترغب حقا بتسجيل الخروج؟"}
+        //   </DialogTitle>
+        //   <DialogContent>
+        //     <DialogContentText
+        //       sx={{ fontSize: "24px", fontWeight: "700" }}
+        //       id="alert-dialog-description"
+        //     >
+        //       لن تستطبع التراجع اذا قمت بالضغط على موافق
+        //     </DialogContentText>
+        //   </DialogContent>
+        //   <DialogActions sx={{ mr: 39 }}>
+        //     <Button
+        //       sx={{ color: "red", fontSize: "24px", fontWeight: "700" }}
+        //       autoFocus
+        //       // onClick={handleLogout}
+        //     >
+        //       موافق
+        //     </Button>
+        //     <Button
+        //       onClick={() => {
+        //         // setShowLogOut(false);
+        //       }}
+        //       sx={{
+        //         color: "rgb(14,74,35)",
+        //         fontSize: "24px",
+        //         fontWeight: "700",
+        //       }}
+        //     >
+        //       تراجع
+        //     </Button>
+        //   </DialogActions>
+        // </Dialog>
+      }
     </>
   );
 }

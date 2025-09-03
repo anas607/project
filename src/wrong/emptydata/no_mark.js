@@ -1,5 +1,5 @@
 import { TableCell, TableRow, Typography, Box } from "@mui/material";
-import { keyframes } from '@mui/system';
+import { keyframes } from '@mui/system';import NineteenMpIcon from '@mui/icons-material/NineteenMp';
 import FactCheckIcon from '@mui/icons-material/FactCheck';export default function NoMARK() {
 
   // أنميشن للأيقونة تتحرك لأعلى ولأسفل
@@ -19,7 +19,7 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';export default functio
         color: 'gray'
       }}
     >
-      <FactCheckIcon 
+      <NineteenMpIcon 
         sx={{
           fontSize:'105px',
           animation: `${bounce} 1.5s ease-in-out infinite`

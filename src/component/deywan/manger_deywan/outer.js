@@ -197,21 +197,27 @@ function handleEditeTransction(uuid,type ){
 
 
 
-<TableBody> {(isInbox ? stateimport.isloading : stateexport.isloading) ? (
-                <TableRow>
-                  <TableCell sx={{color:"rgba(29, 216, 94, 1)"}} colSpan={8} align="center">
-                    <Loading />
-                  </TableCell>
-                </TableRow>
-              ) : (isInbox ? stateimport.error : stateexport.error) ? (
-                <TableRow>
-                  <TableCell colSpan={8} align="center" sx={{ color: 'red', fontWeight: 'bold' }}>
-                    {(isInbox ? stateimport.error : stateexport.error)}
-                  </TableCell>
-                </TableRow>
-              ) : rows.length === 0 ? (
-                
-<NoData/>                 
+<TableBody>
+  {searchTerm && searchLoading ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <Loading />
+      </TableCell>
+    </TableRow>
+  ) : (isInbox ? stateimport.isloading : stateexport.isloading) ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center">
+        <Loading />
+      </TableCell>
+    </TableRow>
+  ) : (isInbox ? stateimport.error : stateexport.error) ? (
+    <TableRow>
+      <TableCell colSpan={8} align="center" sx={{ color: "red", fontWeight: "bold" }}>
+        {(isInbox ? stateimport.error : stateexport.error)}
+      </TableCell>
+    </TableRow>
+  ) : rows.length === 0 ? (
+    <NoData />            
               ) :( isMaleaManager ? (
                 rows.map((row, index) => (
                   <TableRow key={index}>

@@ -73,3 +73,4 @@ export const Announcements ="Announcements"
 export const UPLOUD_WORD ="upload-word"
 export const ARCHIVED ="archived"
 export const TRANSACTIONN = "transaction";
+

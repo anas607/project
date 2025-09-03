@@ -33,7 +33,11 @@ import { ALL_ROLL, BaseUrl, BY, EMPLOYEES, FETCHOFFICE, Show } from "../../../AP
 import Loading from "../../../wrong/mails/loading";
 import ADDEmployees from "./addemployee";
 import EditEmployeeModal from "./editemployee";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SearchEmployees } from "../../../reducer/search/employeesSearch";
+import NoEmployees from "../../../wrong/emptydata/noEmployyess";
+import NOEMPLOYEESearch from "../../../wrong/search/noEmployyesearch";
+import SearchingEmployees from "../../../wrong/loading/searchEmployees";
 
 
 
@@ -45,7 +49,6 @@ const headStyle = {
 const Employyes = () => {
   const state = useSelector((state) => state.user);
 const isSub_Admin=state.roles[0].includes("نائب المدير")
-  const [searchResults, setSearchResults] = useState([]);
 
 const [selectedEmployee, setSelectedEmployee] = useState(null);
 
@@ -53,21 +56,37 @@ const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [showEditEmployee, setShowEditEmployee] = useState(false);
 const [selectedOffice, setSelectedOffice] = useState(null);
   const [offices, setOffices] = useState([]);
- 
+ const dispatch=useDispatch()
 
     const [employees, setEmployees] = useState([]);
     const [loading, setloading] = useState(false);
 
+const { data: searchResults, isloading } = useSelector(
+    (state) => state.search
+  );
 
+  const [searchTerm, setSearchTerm] = useState("");
 
 function handleEditEmployees(employee) {
   console.log("Employee to edit:", employee);
   setSelectedEmployee(employee);
   setShowEditEmployee(true);
 }
+  const employessToDisplay = searchTerm
+    ? searchResults?.[0] ?? [] // فك المصفوفة الداخلية أو fallback لمصفوفة فارغة
+    : employees ?? [];
+        const isEmpty = !employessToDisplay || employessToDisplay.length === 0;
 
 
 
+//search
+
+
+  useEffect(() => {
+    if (searchTerm) {
+      dispatch(SearchEmployees(searchTerm));
+    }
+  }, [searchTerm, dispatch]);
 
 useEffect(() => {
 
@@ -117,7 +136,7 @@ async function fetchEmployeesByOfficeName(officeName) {
 
           
         </Box>
- <Appar setSearchResults={setSearchResults}/>
+ <Appar onSearch={setSearchTerm} />
       <Box
           
             display="flex"
@@ -257,8 +276,24 @@ sx={{backgroundColor:"rgb(14,75,35)",color:'white',
     <TableCell sx={{ color: "green" }} align="center">
       <Loading />
     </TableCell>
-  ) : (
-    employees.map((row, index) => (
+  ) : 
+  isloading? (
+  <SearchingEmployees term={searchTerm}/>
+                
+              )  :searchTerm ? (
+                              <TableRow>
+                            <TableCell colSpan={8} align="center">
+                              <NOEMPLOYEESearch />
+                            </TableCell>
+                          </TableRow>
+                                                                                                
+                                                   ):
+  
+  
+  
+  
+  (
+    employessToDisplay.map((row, index) => (
       <TableRow
         key={index}
         sx={{

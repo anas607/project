@@ -26,6 +26,9 @@ import { SearchEmployees } from "../../reducer/search/employeesSearch";
 import { CircularProgress } from "@mui/material";
 import NOSERACH from "../../wrong/search/search";
 import NoEmployees from "../../wrong/emptydata/noEmployyess";
+import NOEMPLOYEE from "../../wrong/search/noEmployyesearch";
+import SearchingEmployees from "../../wrong/loading/searchEmployees";
+import NOEMPLOYEESearch from "../../wrong/search/noEmployyesearch";
 
 export default function Employee() {
   const dispatch = useDispatch();
@@ -99,7 +102,7 @@ export default function Employee() {
               minHeight: 600, // مساحة مناسبة للعرض
             }}
           >
-            {loading || isloading ? (
+            {loading ? (
               <Box
                 sx={{
                   display: "flex",
@@ -110,8 +113,12 @@ export default function Employee() {
               >
                 <CircularProgress sx={{ color: "green" }} />
               </Box>
-            ) : employessToDisplay.length === 0 ? (
-              <NOSERACH/>
+            ) : 
+              isloading? (
+<SearchingEmployees term={searchTerm}/>
+              
+            ) :employessToDisplay.length === 0 ? (
+              <NOEMPLOYEESearch />
             ) :!searchTerm && isEmpty ? (
                 <TableRow>
               <TableCell colSpan={8} align="center">

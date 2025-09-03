@@ -8,6 +8,7 @@ export const fetchspeclise = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getData(`${BaseUrl}${Specializations}${Show_All}`) 
+      console.log(response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error?.message);

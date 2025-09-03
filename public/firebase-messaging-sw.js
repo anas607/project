@@ -18,8 +18,10 @@ const messaging = firebase.messaging();
 // optional: استقبال الإشعارات بالخلفية
 messaging.onBackgroundMessage((payload) => {
   console.log("[firebase-messaging-sw.js] Received background message ", payload);
-  self.registration.showNotification(payload.notification.title, {
-    body: payload.notification.body,
+  const { title, body } = payload.notification;
+  console.log(payload)
+  self.registration.showNotification(title, {
+    body,
     icon: "/logo192.png",
   });
 });

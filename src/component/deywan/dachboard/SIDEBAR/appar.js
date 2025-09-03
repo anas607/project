@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 
@@ -20,25 +19,13 @@ import Cookies from "universal-cookie";
 import LogeOut from "../../logout";
 import { postData } from "../../../../API/apiService";
 import { BaseUrl, EMPLOYEE, SEARCH } from "../../../../API/api";
-import { useDispatch, useSelector } from "react-redux";
+import { useTheme, useMediaQuery } from "@mui/material";
+import Popaps from "../../../notifay/poppas";
 
-const notifications = [
-  { id: 1, avatar: "/user1.jpg", message: "تمت إضافة موظف جديد" },
-  { id: 2, avatar: "/user2.jpg", message: "تم تحديث البيانات بنجاح" },
-  { id: 3, avatar: "/user3.jpg", message: "لديك مهمة جديدة" },
-];
+
 
 export default function Appar({ onSearch }) {
-  const [showNotifications, setShowNotifications] = useState(false);
   const [search, setsearch] = useState("");
-
- 
-  const notifBtnRef = useRef(null);
-
- 
-  const handleToggleNotifications = () => {
-    setShowNotifications((prev) => !prev);
-  };
 
   return (
     <>
@@ -105,87 +92,13 @@ export default function Appar({ onSearch }) {
             gap: 9,
           }}
         >
-          <IconButton
-            ref={notifBtnRef}
-            onClick={handleToggleNotifications}
-            sx={{
-              border: "1px solid rgba(212, 208, 212, 0.31)",
-              position: "relative",
-              borderRadius: "50px",
-              width: "84px",
-              height: "84px",
-              padding: "8px",
-              backgroundColor: (theme) => theme.palette.primary.main,
-              color: (theme) => theme.palette.secondary.main,
-            }}
-          >
-            <NotificationsIcon sx={{ fontSize: "45px" }} />{" "}
-            <Box
-              sx={(theme) => ({
-                position: "absolute",
-                top: 18.4,
-                right: 18,
-                width: 7,
-                height: 7,
-                bgcolor: "white",
-                borderRadius: "50%",
-                border: `2px solid ${theme.palette.primary.main}`,
-              })}
-            />
-          </IconButton>
+          <Popaps/>
         <LogeOut/>
         </Box>
       </Box>
 
       {/* بوكس الإشعارات المنبثق */}
-      <Popper
-        open={showNotifications}
-        anchorEl={notifBtnRef.current}
-        placement="bottom-start"
-        sx={{ zIndex: 1300 }}
-      >
-        <Paper
-          elevation={4}
-          sx={{
-            width: 420,
-            height: 400,
-            maxHeight: 900,
-            overflowY: "auto",
-            borderRadius: 2,
-            p: 2,
-            direction: "rtl",
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{ mb: 2, mr: 20, fontSize: "24px", fontWeight: "700" }}
-          >
-            الإشعارات
-          </Typography>
-
-          <List sx={{ width: "100%" }}>
-            {notifications.map((notif, index) => (
-              <ListItem
-                key={index}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  px: 0,
-                  py: 1.5,
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                <Avatar sx={{ height: 50, width: 50 }} src={notif.avatar} />
-                <Typography sx={{ fontSize: "18px", fontWeight: 700 }}>
-                  {notif.message}
-                </Typography>
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </Popper>
-
+      
       {
         // <Dialog
         //   open={showLogOut}

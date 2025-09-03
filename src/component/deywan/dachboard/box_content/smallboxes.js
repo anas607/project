@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Avatar, Typography, List, ListItem, Container } from "@mui/material";
+import { Box, Avatar, Typography, List, ListItem, Container, useTheme, useMediaQuery } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { getData } from "../../../../API/apiService";
 import { BaseUrl, showEmployees } from "../../../../API/api";
@@ -8,6 +8,11 @@ import NOEMPLOYEE from "../../../../wrong/search/noEmployyesearch";
 import SearchingEmployees from "../../../../wrong/loading/searchEmployees";
 
 export default function SmallBoxes({ searchTerm }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // شاشات صغيرة
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md")); // تابلت
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md")); // شاشات كبيرة
+
   const state = useSelector((state) => state.user);
   const isSub_Admin = state.roles?.[0]?.includes("نائب المدير");
 
@@ -69,26 +74,37 @@ export default function SmallBoxes({ searchTerm }) {
   return (
     <Box
       sx={{
-        width: "600px",
-        height: "987px",
+        width: { xs: "100%", sm: "90%", md: "600px" }, // ريسبونسيف
+        height: { xs: "auto", md: "987px" }, // بالموبايل auto، بالديسكتوب ثابت
         flexShrink: 0,
         backgroundColor: "rgb(250,250,250)",
-        borderRadius: "2%",
+        borderRadius: { xs: "0", md: "12px" }, // موبايل بدون حواف، ديسكتوب بحواف
         mt: 3,
         overflowY: "auto",
       }}
     >
-      <Container maxWidth="bg">
+      <Container maxWidth="lg">
         <Box
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          sx={{ marginTop: "7%", padding: "0 5%", gap: 16 }}
+          sx={{
+            marginTop: { xs: "5%", md: "7%" },
+            padding: { xs: "0 2%", md: "0 5%" },
+            gap: { xs: 2, md: 16 },
+          }}
         >
-          <Typography sx={{ fontSize: "24px", mr: -2, fontWeight: "700" }} variant="h5">
+          <Typography
+            sx={{
+              fontSize: { xs: "18px", sm: "20px", md: "24px" },
+              mr: { xs: 0, md: -2 },
+              fontWeight: "700",
+            }}
+            variant="h5"
+          >
             الموظفين
           </Typography>
-          <FilterListIcon sx={{ fontSize: "24px" }} />
+          <FilterListIcon sx={{ fontSize: { xs: "20px", md: "24px" } }} />
         </Box>
 
         {loading ? (
@@ -108,7 +124,7 @@ export default function SmallBoxes({ searchTerm }) {
           <List
             sx={{
               width: "100%",
-              maxHeight: "calc(100% - 120px)",
+              maxHeight: { xs: "auto", md: "calc(100% - 120px)" },
               overflowY: "auto",
             }}
           >
@@ -119,32 +135,51 @@ export default function SmallBoxes({ searchTerm }) {
                   display: "flex",
                   alignItems: "center",
                   gap: 2,
-                  px: 0,
+                  px: { xs: 1, md: 0 },
                   borderBottom: "1px solid #e0e0e0",
-                  py: 1.5,
+                  py: { xs: 1, md: 1.5 },
                 }}
               >
                 <Avatar
-                  sx={{ width: 64, height: 64, fontWeight: "900", fontSize: "22px", mr: 2 }}
+                  sx={{
+                    width: { xs: 48, md: 64 },
+                    height: { xs: 48, md: 64 },
+                    fontWeight: "900",
+                    fontSize: { xs: "16px", md: "22px" },
+                    mr: 2,
+                  }}
                   src={emp.avatar}
                 />
                 <Box sx={{ flexGrow: 1, textAlign: "right", pr: 1 }}>
-                  <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>{emp.name}</Typography>
-                  <Typography sx={{ fontSize: "12px", fontWeight: "700", color: "gray" }}>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "14px", md: "16px" },
+                      fontWeight: "700",
+                    }}
+                  >
+                    {emp.name}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "10px", md: "12px" },
+                      fontWeight: "700",
+                      color: "gray",
+                    }}
+                  >
                     {isSub_Admin ? emp.role : emp.phone}
                   </Typography>
                 </Box>
                 <Box
                   sx={{
-                    width: 48,
-                    height: 48,
+                    width: { xs: 36, md: 48 },
+                    height: { xs: 36, md: 48 },
                     borderRadius: "50%",
                     backgroundColor: "red",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     color: "white",
-                    fontSize: "10px",
+                    fontSize: { xs: "9px", md: "10px" },
                     fontWeight: "600",
                   }}
                 >

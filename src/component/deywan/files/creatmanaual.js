@@ -81,7 +81,7 @@ const handleNext = async () => {
       console.log("جسم الطلب للإرسال:", body);
 
       const response = await postData(
-        "http://127.0.0.1:8000/api/form/manual",
+        `${BaseUrl}form/manual`,
         body
       );
       if (onSuccess) onSuccess();

@@ -30,7 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMark } from "../../../reducer/managerexam/mark";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
-import NoMARK from "../../../wrong/no_mark";
+import NoMARK from "../../../wrong/emptydata/no_mark";
 const outboxRows = [
   {
     id: "#789541",

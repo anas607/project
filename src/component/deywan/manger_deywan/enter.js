@@ -39,7 +39,7 @@ import Loading from "../../../wrong/mails/loading";
 import CreatMails from "../../mails/form/creatform";
 import { getData } from "../../../API/apiService";
 import { BaseUrl, show_import_internal_mails, show_internal_mails_export } from "../../../API/api";
-import NoTRANSECTION from "../../../wrong/notransiction";
+import NoTRANSECTION from "../../../wrong/emptydata/notransiction";
 
 const headStyle = {
   color: "white",

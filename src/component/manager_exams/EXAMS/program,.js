@@ -31,7 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchprogram } from "../../../reducer/managerexam/showallprograms";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
-import NoPROGRAM from "../../../wrong/no_program";
+import NoPROGRAM from "../../../wrong/emptydata/no_program";
 const outboxRows = [
   {
     id: "#789541",

@@ -20,9 +20,7 @@ import {
   MenuItem,
   AppBar,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -30,11 +28,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImportExam } from "../../../reducer/managerexam/importingexam";
 import Loading from "../../../wrong/mails/loading";
-import NoData from "../../../wrong/mails/noData";
-import EditRequest from "../EXAMS/event/edieRequest"
+
 import { SearchRequest } from "../../../reducer/search/requestSearch";
 import NOSERACH from "../../../wrong/search/search";
-import NoENCOMING from "../../../wrong/noencoming";
+import NoENCOMING from "../../../wrong/emptydata/noencoming";
 
 export default function Incoming({setShowRequest,setSelectedUuid, searchTerm }){
    const { data: searchResults, isloading } = useSelector(

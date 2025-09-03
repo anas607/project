@@ -27,7 +27,7 @@ import NoData from "../../wrong/mails/noData";
 import ShowDeatiels from "./showDeatiels";
 import { SearchAnnouncements } from "../../reducer/search/Announcements";
 import NOSERACH from "../../wrong/search/search";
-import NoANNOUNVEMTS from "../../wrong/Announcements";
+import NoANNOUNVEMTS from "../../wrong/emptydata/Announcements";
 
 // تنسيق رأس الجدول
 const headStyle = {

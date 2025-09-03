@@ -25,7 +25,7 @@ import { SearchEmployees } from "../../reducer/search/employeesSearch";
 
 import { CircularProgress } from "@mui/material";
 import NOSERACH from "../../wrong/search/search";
-import NoEmployees from "../../wrong/noEmployyess";
+import NoEmployees from "../../wrong/emptydata/noEmployyess";
 
 export default function Employee() {
   const dispatch = useDispatch();

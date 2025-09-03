@@ -26,6 +26,7 @@ export const getData = async (url, customHeaders = {}) => {
       },
       withCredentials: true, // مهم جداً لإرسال HttpOnly cookie تلقائياً
     });
+    console.log(response)
     return response.data;
   } catch (error) {
     console.error("AXIOS GET ERROR:", error);
@@ -44,6 +45,8 @@ export const postData = async (url, body = {}, customHeaders = {}, isFormData = 
         ...customHeaders,
       },      withCredentials: true,
     });
+        console.log(response)
+
     return response.data;
   } catch (error) {
     console.error("AXIOS POST ERROR:", error);

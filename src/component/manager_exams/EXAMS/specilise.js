@@ -1,18 +1,14 @@
-import SidBar from "../../deywan/dachboard/SIDEBAR/sidbar";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import SvgIcon from "@mui/material/SvgIcon";
 import { CircularProgress } from "@mui/material";
-import AddToQueueIcon from '@mui/icons-material/AddToQueue';import {
+import{
   Typography,
   Grid,
   Paper,
   TableCell,
   TableRow,
-  StepLabel,
-  TextField,
+  
 } from "@mui/material";
-        import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import { useEffect, useState } from "react";
 import AddSpeclist from "./event/ADDspeclist";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +18,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { SearchSpeclise } from "../../../reducer/search/spiclicet";
 import NOSERACH from "../../../wrong/search/search";
-import NoANNOUNVEMTS from "../../../wrong/Announcements";
+import NoANNOUNVEMTS from "../../../wrong/emptydata/Announcements";
 
 export default function Speclist({ searchTerm }){
   

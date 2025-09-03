@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 import { getData } from "../../../../API/apiService";
 import { BaseUrl, CANDIDATES, EXAM } from "../../../../API/api";
 import Loading from "../../../../wrong/mails/loading";
-import NOSTUDENT from "../../../../wrong/nostudent"
 
 
 export default function Candidates(id ){

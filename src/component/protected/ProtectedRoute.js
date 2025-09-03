@@ -58,7 +58,7 @@ useEffect(() => {
   const checkSession = async () => {
     setLoading(true);
     try {
-      const data = await getData(`${BaseUrl}${CHECK_SESSION}`);
+      const data = await getData(`${BaseUrl}${CHECK_SESSION}`,true);
       dispatch(setUserData({
         user: data.user,
         roles: data.user.roles,

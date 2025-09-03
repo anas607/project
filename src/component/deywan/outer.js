@@ -32,7 +32,7 @@ import ShowReicipet from "../mails/form/showRecipiet";
 import { SearchTransction } from "../../reducer/search/transection";
 import NOEMPLOYEE from "../../wrong/search/noEmployyesearch";
 import NOSERACH from "../../wrong/search/search";
-import NoTRANSECTION from "../../wrong/notransiction";
+import NoTRANSECTION from "../../wrong/emptydata/notransiction";
 // بيانات البريد الوارد (وارد)
 
 

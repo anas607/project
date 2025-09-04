@@ -42,7 +42,7 @@ const Enter = () => {
   const [selectedStatus, setSelectedStatus] = useState(null);
 
   const isSub_Admin = stateRole.includes("نائب المدير");
-  const isAdmin = stateRole.includes(" المدير");
+  const isAdmin = stateRole.includes("المدير");
 
   const [selectedUuid, setSelectedUuid] = useState(null);
   const [inboxRows, setInboxRows] = useState([]);

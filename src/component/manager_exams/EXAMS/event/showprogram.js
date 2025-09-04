@@ -6,7 +6,6 @@ import { Box, Button, Select, MenuItem, Typography, IconButton,Avatar,
   TableHead,
   TableRow, } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import { CircularProgress } from "@mui/material";
 import SidBar from "../../../deywan/dachboard/SIDEBAR/sidbar";
 import LogeOut from "../../../deywan/logout"
@@ -17,6 +16,7 @@ import { getData, postData } from "../../../../API/apiService";
 import { BaseUrl, EDIT_STATUS_MAIL, PROGRAM, UPDATE_STATUS } from "../../../../API/api";
 import Loading from "../../../../wrong/mails/loading";
 import { useSelector } from "react-redux";
+import Popaps from "../../../notifay/poppas";
 
 
 export default function ShowProgram({showdetials,setShowDetials, setShowProgram ,id }) {
@@ -118,34 +118,7 @@ return response.data
 
           {/* الزرين */}
           <Box sx={{ display: "flex", gap: 3 }}>
-            <IconButton
-            //   ref={notifBtnRef}
-            //   onClick={handleToggleNotifications}
-              sx={{
-                border: "1px solid rgba(212, 208, 212, 0.31)",
-                borderRadius: "50px",
-                width: "64px",
-                height: "64px",
-                padding: "8px",
-                backgroundColor: (theme) => theme.palette.primary.main,
-                color: (theme) => theme.palette.secondary.main,
-                position: "relative",
-              }}
-            >
-              <NotificationsIcon sx={{ fontSize: "30px" }} />
-              <Box
-                sx={(theme) => ({
-                  position: "absolute",
-                  top: 18.4,
-                  right: 18,
-                  width: 7,
-                  height: 7,
-                  bgcolor: "white",
-                  borderRadius: "50%",
-                  border: `2px solid ${theme.palette.primary.main}`,
-                })}
-              />
-            </IconButton>
+           <Popaps/>
 
            <LogeOut/>
           </Box>

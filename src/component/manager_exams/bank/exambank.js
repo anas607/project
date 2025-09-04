@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+
 import SidBar from "../../deywan/dachboard/SIDEBAR/sidbar";
 import TabsComponen from "./tabs/tabs";
 import ADDQUSTION from "./add";
 import Exel from "./exel";
+import Popaps from "../../notifay/poppas";
+import LogeOut from "../../deywan/logout";
 
 function Bank(props) {
   const { children, value, index, ...other } = props;
@@ -70,49 +70,9 @@ export default function BasicTabs() {
 
           {/* الزرين */}
           <Box sx={{ display: "flex", gap: 3 }}>
-            <IconButton
-              ref={notifBtnRef}
-              onClick={handleToggleNotifications}
-              sx={{
-                border: "1px solid rgba(212, 208, 212, 0.31)",
-                borderRadius: "50px",
-                width: "64px",
-                height: "64px",
-                padding: "8px",
-                backgroundColor: (theme) => theme.palette.primary.main,
-                color: (theme) => theme.palette.secondary.main,
-                position: "relative",
-              }}
-            >
-              <NotificationsIcon sx={{ fontSize: "30px" }} />
-              <Box
-                sx={(theme) => ({
-                  position: "absolute",
-                  top: 18.4,
-                  right: 18,
-                  width: 7,
-                  height: 7,
-                  bgcolor: "white",
-                  borderRadius: "50%",
-                  border: `2px solid ${theme.palette.primary.main}`,
-                })}
-              />
-            </IconButton>
+           <Popaps/>
 
-            <IconButton
-              onClick={() => setShowLogOut(true)}
-              sx={{
-                border: "1px solid rgba(212, 208, 212, 0.31)",
-                borderRadius: "50px",
-                padding: "8px",
-                width: "64px",
-                height: "64px",
-                backgroundColor: "rgb(71, 59, 68)",
-                color: (theme) => theme.palette.secondary.main,
-              }}
-            >
-              <PowerSettingsNewIcon sx={{ fontSize: "30px" }} />
-            </IconButton>
+           <LogeOut/>
           </Box>
         </Box>
 

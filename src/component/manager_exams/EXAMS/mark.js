@@ -9,32 +9,21 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-   Modal,
-  Grid,
-  Button,
-  Checkbox,
+ 
   IconButton,
-  TextField,
-  Menu,
-  MenuItem,
-  AppBar,
+ 
 } from "@mui/material";
 
-import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
 import ArticleIcon from '@mui/icons-material/Article';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMark } from "../../../reducer/managerexam/mark";
-import Loading from "../../../wrong/mails/loading";
-import NoData from "../../../wrong/mails/noData";
+
 import NoMARK from "../../../wrong/emptydata/no_mark";
 import { SearchMarks } from "../../../reducer/search/marks";
-import Searchincomming from "../../../wrong/loading/incoming";
-import NOSearchincomming from "../../../wrong/search/noincommingsearch";
+
 import Searchinmark from "../../../wrong/loading/marks";
 import NOSearchingMark from "../../../wrong/search/noSearchMark";
 import LoaderExam from "../../../wrong/loading/examloader";

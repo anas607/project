@@ -33,18 +33,7 @@ import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import NoPROGRAM from "../../../wrong/emptydata/no_program";
 import LoaderExam from "../../../wrong/loading/examloader";
-const outboxRows = [
-  {
-    id: "#789541",
-    mailTitle: "  98989",
-    officeName: "قسم الإحصاء",
-    receiverName: "د. سامي حسن",
-    receiverPhone: "+963993222111",
-    type:"شهادة ",
-    dateSubmitted: "1/5/2025",
-    dateSent: "2/5/2025",
-  }
-];
+
 
 export default function Program({addprogram, setAddProgram ,showprogram,setShowProgram, id, setSelectedUuid }){
 

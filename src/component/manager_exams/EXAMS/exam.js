@@ -1,11 +1,9 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+
 import TabsExam from "../bank/tabs/tabsexam";
 
 import Mark from "./mark";

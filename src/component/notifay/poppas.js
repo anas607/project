@@ -26,20 +26,7 @@ const theme = useTheme();
   const notifBtnRef = useRef(null);
 
  
-   async function UnderReview(id, decision) {
-      try {
-        const res = await patchData(`${BaseUrl}${Specializations}${STATUS}${id}`,
-           { status: decision }
-        );
-              console.log(res)
-      setNotifications(prev => prev.filter(n => n.id !== id));
-
-      }
-      catch (err) {
-        console.log(err);
-       
-      }
-    }
+  
  useEffect(() => {
   requestForToken();
 
@@ -49,6 +36,7 @@ const theme = useTheme();
     setNotifications(prev => [
       {
         id: data?.specialization_id || Date.now(),
+         type: data?.type || "general",   //
         title: notification?.title || "إشعار جديد",
         body: notification?.body || "لديك إشعار جديد",
         actionRequired: data?.action_required === "true" || data?.action_required === true
@@ -59,6 +47,35 @@ const theme = useTheme();
     setHasNew(true);
   });
 }, []);
+ async function UnderReview(notif, decision) {
+  try {
+    let url = "";
+    let body = { status: decision };
+
+    switch (notif.type) {
+      case "specialization":
+        url = `${BaseUrl}${Specializations}${STATUS}${notif.id}`;
+        break;
+
+      case "question":
+        url = `${BaseUrl}/questions/status/${notif.id}`;
+        break;
+
+      default:
+        console.warn("نوع غير معروف:", notif.type);
+        return;
+    }
+
+    const res = await patchData(url, body);
+    console.log("Decision Response:", res);
+
+    // بعد النجاح نشيل الإشعار
+    setNotifications(prev => prev.filter(n => n.id !== notif.id));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 
 
   return (
@@ -134,7 +151,7 @@ const theme = useTheme();
             variant="contained" 
             color="success" 
             size="small"
-            onClick={() => UnderReview(notif.id, "مقبول")}
+  onClick={() => UnderReview(notif, "مقبول")}
           >
             قبول
           </Button>
@@ -142,7 +159,7 @@ const theme = useTheme();
             variant="outlined" 
             color="error" 
             size="small"
-            onClick={() => UnderReview(notif.id, "مرفوض")}
+  onClick={() => UnderReview(notif, "مرفوض")}
           >
             رفض
           </Button>

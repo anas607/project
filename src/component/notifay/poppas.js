@@ -1,14 +1,20 @@
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Avatar, Box, IconButton, List, ListItem, Paper, Popper, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Button, Box, IconButton, List, ListItem, Paper, Popper, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { requestForToken } from "./forToken";
 import { onMessage } from "firebase/messaging";
 import { messaging } from "./firebaseConfig";
+import { useSelector } from "react-redux";
+import { patchData } from "../../API/apiService";
+import { BaseUrl, Specializations, STATUS } from "../../API/api";
 
 
 
 
 export default function Popaps() {
+    const state = useSelector((state) => state.user);
+ 
+    const isAdmin = state.roles?.some(role => role === "المدير")
   const [showNotifications, setShowNotifications] = useState(false);
   
     const [notifications, setNotifications] = useState([]);
@@ -20,28 +26,40 @@ const theme = useTheme();
   const notifBtnRef = useRef(null);
 
  
-  const handleToggleNotifications = () => {
-    setShowNotifications((prev) => !prev);
-  };
+   async function UnderReview(id, decision) {
+      try {
+        const res = await patchData(`${BaseUrl}${Specializations}${STATUS}${id}`,
+           { status: decision }
+        );
+              console.log(res)
+      setNotifications(prev => prev.filter(n => n.id !== id));
 
-  useEffect(() => {
-  requestForToken(); // تسجيل الجهاز
+      }
+      catch (err) {
+        console.log(err);
+       
+      }
+    }
+ useEffect(() => {
+  requestForToken();
 
   onMessage(messaging, (payload) => {
     const { notification, data } = payload;
 
     setNotifications(prev => [
       {
-        id: data?.announcement_id || Date.now(),
-        avatar: "/default-avatar.jpg", // أو avatar من data
-        message: notification?.body || "لديك إشعار جديد"
+        id: data?.specialization_id || Date.now(),
+        title: notification?.title || "إشعار جديد",
+        body: notification?.body || "لديك إشعار جديد",
+        actionRequired: data?.action_required === "true" || data?.action_required === true
       },
       ...prev
     ]);
 
-    setHasNew(true); // إشعار جديد → الدويرة الحمراء تظهر
+    setHasNew(true);
   });
 }, []);
+
 
   return (
     <>
@@ -91,16 +109,49 @@ const theme = useTheme();
       الإشعارات
     </Typography>
 
-    <List>
-      {notifications.map((notif) => (
-        <ListItem key={notif.id} sx={{ display: "flex", alignItems: "center", gap: 2, px: 0, py: 1.5, borderBottom: "1px solid #e0e0e0" }}>
-          <Avatar src={notif.avatar} sx={{ width: 40, height: 40 }} />
-          <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
-            {notif.message}
-          </Typography>
-        </ListItem>
-      ))}
-    </List>
+   <List>
+  {notifications.map((notif) => (
+    <ListItem 
+      key={notif.id} 
+      sx={{ 
+        display: "flex", 
+        flexDirection: "column", 
+        alignItems: "flex-start", 
+        px: 0, py: 1.5, 
+        borderBottom: "1px solid #e0e0e0" 
+      }}
+    >
+      <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
+        {notif.title}
+      </Typography>
+      <Typography sx={{ fontSize: 14, color: "text.secondary", mb: 1 }}>
+        {notif.body}
+      </Typography>
+
+      {isAdmin && notif.actionRequired && (
+        <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+          <Button 
+            variant="contained" 
+            color="success" 
+            size="small"
+            onClick={() => UnderReview(notif.id, "مقبول")}
+          >
+            قبول
+          </Button>
+          <Button 
+            variant="outlined" 
+            color="error" 
+            size="small"
+            onClick={() => UnderReview(notif.id, "مرفوض")}
+          >
+            رفض
+          </Button>
+        </Box>
+      )}
+    </ListItem>
+  ))}
+</List>
+
   </Paper>
 </Popper>
 

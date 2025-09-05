@@ -25,6 +25,7 @@ export default function FilesMail({ open, onClose ,id ,onSuccess  }) {
     const isAdmin = state.roles?.some(role => role === "المدير")
 const[details,setDetails]=useState([])
 const[Loading,setLoading]=useState(false)
+const[name,setName] =useState("")
 
 
 useEffect(()=>{
@@ -37,8 +38,9 @@ async function showDetalis() {
   setLoading(true)
   try{
     const response =await getData(`${BaseUrl}${FORM}${id}`)
-    console.log(response)
      if (response.success && response.data?.length) {
+            setName(response.data[0].form_name);
+
       const formElements = response.data[0].elements;
       setDetails(formElements);
      }
@@ -193,8 +195,8 @@ async function showDetalis() {
            pb: 1,
          }}
        >
-         بيان برنامج تدريبي
-       </Typography>
+{name}
+  </Typography>
    
      
 

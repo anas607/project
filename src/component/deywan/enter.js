@@ -260,11 +260,11 @@ const Enter = () => {
                           {row.subject}
                         </TableCell>
                         <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
-                          {row.received_at}
+                                  {new Date(row.received_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
-                          {row.sender_at || "—"}
-                        </TableCell>
+                                                    {new Date(row.sender_at).toLocaleDateString()
+ ?? '—'}                        </TableCell>
                       </>
                     ) : (
                       <>
@@ -290,13 +290,15 @@ const Enter = () => {
                                   : "black",
                           }}
                         >
+
                           {row.status}
                         </TableCell>
                         <TableCell align="center" sx={{ fontWeight: "700", fontSize: '16px' }}>
-                          {row.received_at}
+                                  {new Date(row.received_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell align="center" sx={{ fontWeight: "700", fontSize: '16px' }}>
-                          {row.sender_at || '—'}
+                                                            {new Date(row.sender_at).toLocaleDateString()
+ ?? '—'}
                         </TableCell>
                       </>
                     )}

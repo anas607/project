@@ -24,7 +24,9 @@ import ExamRequestForm from "./component/manager_exams/RQUST/talab/ExamRequestFo
 import EXPORTMAILS from "./component/mails/form/exportmails";
 import AllFILES from "./component/deywan/files/AllFiles";
 import Advertisments from "./component/Admin/Advertisments";
-import NetworkStatus from "./wrong/network/no_Connention";
+import { useEffect, useState } from "react";
+import ConnectionListener from "./component/network/connection_opserve";
+import ConnectionBanner from "./component/network/errormessage";
 
 const theme = createTheme({
   palette: {
@@ -42,18 +44,31 @@ const theme = createTheme({
 });
 
 function App() {
- 
+   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
+useEffect(() => {
+    // تحديث الحالة عند رجوع الاتصال
+    const handleOnline = () => setIsOnline(true);
+    // تحديث الحالة عند انقطاع الاتصال
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    // تنظيف الأحداث عند إلغاء تحميل الكومبوننت
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
  
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         {/* <ExamRequestForm/> */}
-       {/* //wifi// */}
-       {/* <NetworkStatus/> */}
-    
-        {/* //wifi// */}
+       <ConnectionListener />
+<ConnectionBanner/>
         <Routes>
           {/* <Login /> */}
           <Route path="/" element={<Login />} />

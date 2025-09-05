@@ -30,6 +30,7 @@ import wordReducer from "../reducer/files/word"
 import searchtransctionReducer from "../reducer/search/transection"
 import searcharchiveReducer from "../reducer/search/archive"
 import searchmarkReducer from "../reducer/search/marks"
+import connectionReducer from "../reducer/network/connectionSlice"
 export default configureStore({
   reducer: {
     login: loginReducer,
@@ -62,7 +63,8 @@ export default configureStore({
     SearchAnnouncements:SearchAnnouncementsReducer,
     searchtransction:searchtransctionReducer,
     searcharchive:searcharchiveReducer,
-    searchmark:searchmarkReducer
+    searchmark:searchmarkReducer,
+    connection:connectionReducer
     // >>>>>>> c7fac3a5599716c02cd1acfc89ab64a433305015
   },
 });

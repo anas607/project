@@ -29,7 +29,7 @@ export default function CreatMails({ open, onClose  }) {
   
 
   const [offices, setOffices] = useState([]);
-const [selectedOfficeId, setSelectedOfficeId] = useState("");
+const [selectedOfficeId, setSelectedOfficeId] = useState([]);
   const [subject,setsubject]= useState("")
     const [body,setbody]= useState("")
     const [isLoading, setIsLoading] = useState(false);
@@ -58,14 +58,15 @@ async function handleCreat(){
   const formData = new FormData();
   formData.append("subject", subject);
   formData.append("body", body);
-  if (selectedOfficeId) {
-    formData.append("to_path_ids[]", selectedOfficeId);
-  }
+  if (selectedOfficeId && selectedOfficeId.length > 0) {
+  selectedOfficeId.forEach((id) => {
+    formData.append("to_path_ids[]", id);
+  });
+}
+
 
   setIsLoading(true);
-  if (selectedOfficeId) {
-    formData.append("to_path_ids[]", selectedOfficeId);
-  }
+ 
   try{
     const response = await postData(`${BaseUrl}${CREATE_INTERNAL_MAIL}`,formData)
      console.log("Response:", response);
@@ -79,7 +80,7 @@ async function handleCreat(){
 
   setsubject("");
     setbody("");
-    setSelectedOfficeId("");
+setSelectedOfficeId([]); // بدل "" لأنه لازم يرجع Array
     onClose(); // ✅ هذا هو الصحيح
   } catch (err) {
      const errorMessage = err?.message || err?.errors?.[0] || "حدث خطأ أثناء الإرسال";
@@ -193,55 +194,40 @@ async function handleCreat(){
      
 
       {/* العمود الأيسر */}
-      <FormControl sx={{
-            minWidth: 300,
-            border: '2px solid rgb(14, 75, 35)',
-            borderRadius: '8px',
-            px: 1,
-            py: 0.5
-          }}>
-            <InputLabel
-              id="filter-label"
-              sx={{
-                color: "rgb(14, 75, 35)",
-                fontSize: '18px',
-                fontWeight: '700',
-                display: 'flex',
-                alignItems: 'center',
-                '&.Mui-focused': { color: "rgb(14, 75, 35)" },
-              }}
-            >
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                تصفية حسب الدائرة
-               
-              </Box>
-            </InputLabel>
-      
-            <Select
-              value={selectedOfficeId}
-      onChange={(e) => setSelectedOfficeId(e.target.value)}
-              labelId="filter-label"
-              fullWidth
-              sx={{
-                color: "rgb(14, 75, 35)",
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: "rgb(14, 75, 35)",
-                },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: "rgb(14, 75, 35)",
-                },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: "rgb(14, 75, 35)",
-                }
-              }}
-            >
-              {offices.map((office) => (
-                <MenuItem key={office.id} value={office.id}>
-                  {office.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+     <FormControl
+        sx={{
+          minWidth: 180,
+          borderRadius: "0 20px 20px 0",
+          overflow: "hidden",
+          border: "4px dashed rgb(14,74,35)",
+          px: 1,
+          py: 0.5,
+          backgroundColor: "white",
+        }}
+      >
+        <Select
+          multiple
+          value={selectedOfficeId}
+          onChange={(e) =>(setSelectedOfficeId(e.target.value))}
+          displayEmpty
+          renderValue={(selected) => {
+            if (!selected.length) {
+              return <Typography sx={{ fontWeight: 700 }}>مسار المعاملة</Typography>;
+            }
+            return selected
+              .map((id) => offices.find((o) => o.id === id)?.name)
+              .filter(Boolean)
+              .join(" , ");
+          }}
+          fullWidth
+        >
+          {offices.map((office) => (
+            <MenuItem key={office.id} value={office.id}>
+              {office.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
        </Box>
     </Grid>
     </Grid>

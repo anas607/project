@@ -28,6 +28,8 @@ import ShowDeatiels from "./showDeatiels";
 import { SearchAnnouncements } from "../../reducer/search/Announcements";
 import NOSERACH from "../../wrong/search/search";
 import NoANNOUNVEMTS from "../../wrong/emptydata/Announcements";
+import SearchinAdvertisments from "../../wrong/loading/advertismentsloader";
+import NOADVERTISMENTSSearch from "../../wrong/search/noadvertisments";
 
 // تنسيق رأس الجدول
 const headStyle = {
@@ -148,16 +150,7 @@ const specliseToDisplay = searchTerm
   ) : searchLoading ? (
     <TableRow>
       <TableCell colSpan={4} align="center">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: 200
-          }}
-        >
-          <CircularProgress sx={{ color: "green" }} size={60} />
-        </Box>
+        <SearchinAdvertisments term={searchTerm}/>
       </TableCell>
     </TableRow>
   ) : Array.isArray(specliseToDisplay) && specliseToDisplay.length > 0 ? (
@@ -223,7 +216,7 @@ const specliseToDisplay = searchTerm
     // انتهى البحث ومافي نتائج
     <TableRow>
        <TableCell colSpan={8} align="center">
-         <NOSERACH />
+         <NOADVERTISMENTSSearch/>
        </TableCell>
      </TableRow>
   ) : 

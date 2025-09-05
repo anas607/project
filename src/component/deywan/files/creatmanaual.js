@@ -66,7 +66,8 @@ const handleNext = async () => {
 
      const elementsForBackend = step2.map(el => ({
   label: el.label.trim(),
-  type: el.type   // صار يطابق backend مباشرة
+  type: el.type,
+  ...(el.options ? { options: el.options } : {}) // بس لو كان اختيار متعدد
 }));
 
 

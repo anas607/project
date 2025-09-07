@@ -44,23 +44,7 @@ const theme = createTheme({
 });
 
 function App() {
-   const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-useEffect(() => {
-    // تحديث الحالة عند رجوع الاتصال
-    const handleOnline = () => setIsOnline(true);
-    // تحديث الحالة عند انقطاع الاتصال
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    // تنظيف الأحداث عند إلغاء تحميل الكومبوننت
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
+  
 
  
   return (

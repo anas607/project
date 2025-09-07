@@ -57,10 +57,10 @@ export default function Login() {
     formData.append("name", form.name);
     formData.append("password", form.password);
     // إذا حاب ترسل device token
-    formData.append("device_token", fcmToken || "");
-console.log("device_token", fcmToken)
+//     formData.append("device_token", fcmToken || "");
+// console.log("device_token", fcmToken)
     // إرسال الطلب
-    const response = await postData(`${BaseUrl}${LOGIN}`, formData);
+const response = await postData(`${BaseUrl}${LOGIN}`, formData, {}, true);
 
     if (response.success) {
       // تحديث بيانات المستخدم في Redux
@@ -336,3 +336,4 @@ width: {
   );
 }
 
+///

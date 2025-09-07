@@ -87,9 +87,9 @@ export default function Appar({ onSearch }) {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            ml: 7,
+            ml: 5,
             mt: 3,
-            gap: 9,
+            gap: 3,mr:2
           }}
         >
           <Popaps/>

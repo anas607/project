@@ -7,14 +7,17 @@ import { messaging } from "./firebaseConfig";
 import { useSelector } from "react-redux";
 import { patchData } from "../../API/apiService";
 import { BaseUrl, Specializations, STATUS } from "../../API/api";
+import Cookies from "universal-cookie";
 
 
 
 
 export default function Popaps() {
+  const cookies = new Cookies();
     const state = useSelector((state) => state.user);
  
-    const isAdmin = state.roles?.some(role => role === "المدير")
+    const isAdmin=state.roles[0].includes("المدير")
+
   const [showNotifications, setShowNotifications] = useState(false);
   
     const [notifications, setNotifications] = useState([]);
@@ -25,28 +28,39 @@ const theme = useTheme();
  
   const notifBtnRef = useRef(null);
 
- 
+ useEffect(() => {
+    const saved = cookies.get("notifications");
+    if (saved) {
+      setNotifications(saved);
+    }
+  }, []);
   
  useEffect(() => {
   requestForToken();
 
-  onMessage(messaging, (payload) => {
-    const { notification, data } = payload;
+ const unsubscribe = onMessage(messaging, (payload) => {
+      const { notification, data } = payload;
 
-    setNotifications(prev => [
-      {
+      const newNotif = {
         id: data?.specialization_id || Date.now(),
-         type: data?.type || "general",   //
+        type: data?.type || "general",
         title: notification?.title || "إشعار جديد",
         body: notification?.body || "لديك إشعار جديد",
-        actionRequired: data?.action_required === "true" || data?.action_required === true
-      },
-      ...prev
-    ]);
+        actionRequired: data?.action_required === "true" || data?.action_required === true,
+        createdAt: new Date().toISOString(),
+      };
 
-    setHasNew(true);
-  });
-}, []);
+      setNotifications((prev) => {
+        const updated = [newNotif, ...prev].slice(0, 10); // ✅ آخر 10
+        cookies.set("notifications", updated, { path: "/", maxAge: 60 * 60 * 24 }); // ✅ يوم واحد
+        return updated;
+      });
+
+      setHasNew(true);
+    });
+
+    return () => unsubscribe();
+  }, []);
  async function UnderReview(notif, decision) {
   try {
     let url = "";
@@ -70,8 +84,11 @@ const theme = useTheme();
     console.log("Decision Response:", res);
 
     // بعد النجاح نشيل الإشعار
-    setNotifications(prev => prev.filter(n => n.id !== notif.id));
-  } catch (err) {
+ setNotifications((prev) => {
+        const updated = prev.filter((n) => n.id !== notif.id);
+        cookies.set("notifications", updated, { path: "/", maxAge: 60 * 60 * 24 });
+        return updated;
+      });  } catch (err) {
     console.log(err);
   }
 }

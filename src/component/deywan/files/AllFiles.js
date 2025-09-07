@@ -2,7 +2,7 @@
  import React, { use, useEffect, useState } from "react";
 import {
   Box,
-  Typography,
+  CircularProgress,
   Avatar,
   Table,
   TableBody,
@@ -18,6 +18,7 @@ import {
   IconButton,
   
 } from "@mui/material";
+import NOSearchTransection from "../../../wrong/search/noTransectionSearch";
 
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
@@ -30,6 +31,7 @@ import { fetchForm } from "../../../reducer/admin/forms";
 import Loading from "../../../wrong/mails/loading";
 import NoData from "../../../wrong/mails/noData";
 import DeatilsForm from "../../mails/form/detealsform";
+import { SearchForms } from "../../../reducer/search/formSearch";
 
 const headStyle = {
   color: "white",
@@ -44,6 +46,7 @@ export default function AllFILES(){
  
   const[shoeDeatils,setShoeDeatils]=useState(false)
     const state=useSelector((state)=>state.fetchform)
+    console.log(state)
     const dispatch=useDispatch()
     useEffect(()=>{
         dispatch(fetchForm())
@@ -53,16 +56,23 @@ export default function AllFILES(){
       setSelectedStatus(status)
 setShoeDeatils(true)
     }
-      
+
+  const { data: searchResults, isloading } = useSelector(
+      (state) => state.searchForms
+    );
+      const [searchTerm, setSearchTerm] = useState("");  
+const formsToDisplay = searchTerm 
+  ? searchResults?.[0] ?? []   // فك المصفوفة الداخلية أو fallback لمصفوفة فارغة
+  : state.data?.[0] ?? [];
+        useEffect(() => {
+        if (searchTerm) {
+          dispatch(SearchForms(searchTerm));
+        }
+      }, [searchTerm, dispatch]);
     
     return(
         <>
   
-
-
-
-
-
 
   
      <Box sx={{ display: "flex", height: "100vh", direction: "rtl",backgroundColor:"rgb(233,232,232)" }}>
@@ -77,11 +87,11 @@ setShoeDeatils(true)
             >
             
             </Box>
-     <Appar/>
+     <Appar onSearch={setSearchTerm}/>
       
           
     
-         <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:6,  maxHeight: "600px",   // 👈 أقصى ارتفاع
+         <TableContainer sx={{ mr: 1, backgroundColor: "transparent", boxShadow: "none" ,mt:9,  maxHeight: "1000px",   // 👈 أقصى ارتفاع
     overflowY: "auto",}}>
                <Table sx={{width:"1573px", height:'88px'}}>
                 <TableHead sx={{width:"1573px", height:'88px'}}>
@@ -105,16 +115,25 @@ setShoeDeatils(true)
         حدث خطأ في جلب المعلومات
       </TableCell>
     </TableRow>
-  ) : state.isloading ? (
-    <TableRow>
-      <TableCell sx={{color:'green'}} colSpan={8} align="center">
-        <Loading />
-      </TableCell>
-    </TableRow>
+  
   ) : Array.isArray(state.data?.[0]) && state.data[0].length === 0 ? (
     <NoData />
-  ) : Array.isArray(state.data?.[0]) ? (
-    state.data[0].map((row, index) => (
+  ) :
+  
+  state.isloading ?  <Box
+      sx={{
+        position: "fixed", // تثبيت اللودر بالنسبة للشاشة
+        top: "50%",        // منتصف ارتفاع الشاشة
+        left: "50%",       // منتصف عرض الشاشة
+        transform: "translate(-50%, -50%)", // تحريك العنصر إلى الوسط بالضبط
+        zIndex: 9999,      // ليكون فوق كل العناصر الأخرى
+      }}
+    >
+      <CircularProgress />
+    </Box> 
+   : formsToDisplay.length > 0 ? (
+  
+    formsToDisplay.map((row, index) => (
       <TableRow
         key={index}
         sx={{
@@ -180,13 +199,9 @@ setShoeDeatils(true)
         </TableCell>
       </TableRow>
     ))
-  ) : (
-    <TableRow>
-      <TableCell colSpan={5} align="center">
-        <Loading />
-      </TableCell>
-    </TableRow>
-  )}
+  )  : (
+  <NOSearchTransection/>
+      )}
 </TableBody>
 
       </Table>

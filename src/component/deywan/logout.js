@@ -27,13 +27,13 @@ export default function LogeOut(){
                 border: "1px solid rgba(212, 208, 212, 0.31)",
                 borderRadius: "50px",
                 padding: "8px",
-                width: "64px",
-                height: "64px",
+                width: { xs: 40, sm: 60, md: 70 },
+    height: { xs: 40, sm: 60, md: 70 },
                 backgroundColor: "rgb(71, 59, 68)",
                 color: (theme) => theme.palette.secondary.main,
               }}
             >
-              <PowerSettingsNewIcon sx={{ fontSize: "30px" }} />
+              <PowerSettingsNewIcon sx={{ fontSize: { xs: 22, sm: 32, md: 40 } }} />
             </IconButton>  
         
         {

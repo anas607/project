@@ -256,7 +256,7 @@ async function ReviewDetalis(status) {
       gap: 2,
       justifyContent: "center",
       position: "absolute",
-      bottom: 80,
+      bottom: 50,
       left: -470,
       right: 0,
     }}

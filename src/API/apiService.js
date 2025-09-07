@@ -39,12 +39,15 @@ export const getData = async (url, customHeaders = {}) => {
 // // دالة POST
 export const postData = async (url, body = {}, customHeaders = {}, isFormData = false) => {
   try {
-    const response = await axios.post(url, body, {
+   const response = await axios.post(url, body, {
   headers: {
-        "X-Use-Cookie": "true",
-        ...customHeaders,
-      },      withCredentials: true,
-    });
+    "Content-Type": isFormData ? "multipart/form-data" : "application/json",
+    "X-Use-Cookie": "true",
+    ...customHeaders,
+  },
+  withCredentials: true,
+});
+
         console.log(response)
 
     return response.data;

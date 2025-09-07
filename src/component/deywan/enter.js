@@ -179,10 +179,8 @@ const Enter = () => {
                     <TableCell align="center" sx={headStyle}>اسم المكتب</TableCell>
                     <TableCell align="center" sx={headStyle}>رقم المكتب</TableCell>
                     <TableCell align="center" sx={headStyle}>عنوان البريد</TableCell>
-                                        <TableCell align="center" sx={headStyle}>عنوان البريد</TableCell>
 
-                    <TableCell align="center" sx={headStyle}>حالة البريد </TableCell>
-                                        <TableCell align="center" sx={headStyle}>تاريخ الإستلام</TableCell>
+                                        <TableCell align="center" sx={headStyle}>تاريخ الإرسال</TableCell>
 
                   </>
                 ) : (
@@ -252,7 +250,7 @@ const Enter = () => {
                           {new Date(row.received_at).toLocaleDateString()}
                         </TableCell>
                       </>
-                    ) : isSub_Admin || isAdmin? (
+                    ) : isSub_Admin || isAdmin  ? (
                       <>
                         <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
                           {row.to.join(", ")}
@@ -263,21 +261,8 @@ const Enter = () => {
                         <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
                           {row.subject}
                         </TableCell>
-                         <TableCell align="center"  sx={{
-                            fontWeight: "700",
-                            fontSize: '16px',
-                            color:
-                              row.status === "مرفوضة"
-                                ? "red"
-                                : row.status === "مرسلة"
-                                  ? "green"
-                                  : "black",
-                          }}>
-                          {row.status}
-                        </TableCell>
-                        <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
-                                  {new Date(row.received_at).toLocaleDateString()}
-                        </TableCell>
+                        
+                       
                         <TableCell align="center" sx={{ fontWeight: "700", fontSize: "16px" }}>
                                                     {new Date(row.sender_at).toLocaleDateString()
  ?? '—'}                        </TableCell>

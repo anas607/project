@@ -68,7 +68,8 @@ const theme = useTheme();
 
     switch (notif.type) {
       case "specialization":
-        url = `${BaseUrl}${Specializations}${STATUS}${notif.id}`;
+        url = `${BaseUrl}specializations/status/${notif.id}`;
+        console.log(url)
         break;
 
       case "question":
@@ -138,8 +139,8 @@ const theme = useTheme();
   placement="bottom-start"
   sx={{ zIndex: 1300 }}
 >
-  <Paper sx={{ width: 350, maxHeight: 400, overflowY: "auto", p: 2, borderRadius: 2, direction: "rtl" }}>
-    <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
+  <Paper sx={{ width: '350px', maxHeight: '400px', overflowY: "auto", p: 2, borderRadius: 2, direction: "rtl" }}>
+    <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 ,fontSize:'32px'}}>
       الإشعارات
     </Typography>
 
@@ -162,7 +163,7 @@ const theme = useTheme();
         {notif.body}
       </Typography>
 
-      {isAdmin && notif.actionRequired && (
+      {isAdmin && (
         <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
           <Button 
             variant="contained" 

@@ -122,29 +122,37 @@ const isEmpty = !markToDisplay || markToDisplay.length === 0;
                                                 <NoMARK  />
                                               </TableCell>
                                             </TableRow>):
+
             markToDisplay.map((row, index) => (
               <TableRow key={index} sx={{ borderBottom: "3px solid rgb(14, 74, 35)"}}>
           
-                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">{row.exam_number }</TableCell>
+                <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">                                                    {row["الرقم الامتحاني"]}
+</TableCell>
                 <TableCell align="center">
                   <Avatar  sx={{margin:'auto'}} src={row.receiverImg} />
                 </TableCell>
                 <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.receiverName}
+                 { row["اسم الطبيب"]}
                 </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 {  row.receiverPhone}
+                 { row["صورة الطبيب"]}
                 </TableCell>
                  <TableCell sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                 { row.status}
+                 { row["الاختصاص"]}
                 </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
-                  {row.degree}
+                 { row["الحالة"]}
                 </TableCell>
-                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">{row.rating}</TableCell>
+                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }}align="center">
+                 { row["العلامة"]}
+                  </TableCell>
                 <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
-                  { row.dateSent}
+                 { row["التقدير"]}
                 </TableCell>
+                <TableCell  sx={{  fontWeight: "700" ,fontSize:'16px'  }} align="center">
+                  {new Date(row["تاريخ التقديم"]).toLocaleDateString('EG') }
+                </TableCell>
+
                 <TableCell align="center">
                   <IconButton
                     sx={{

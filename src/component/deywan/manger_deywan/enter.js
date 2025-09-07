@@ -24,11 +24,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ArrowDropDownCircleOutlinedIcon from '@mui/icons-material/ArrowDropDownCircleOutlined';import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
 import { SidBarComponent } from './SIDEBAR/sidbar';
-import Appar from './SIDEBAR/appar'
 import ArticleIcon from '@mui/icons-material/Article';
 import EnternalMails from "../../mails/form/enternalimportmodal";
 import { useDispatch, useSelector } from "react-redux";
-
+import Appar from "../../deywan/dachboard/SIDEBAR/appar";
 import Loading from "../../../wrong/mails/loading";
 import CreatMails from "../../mails/form/creatform";
 import { getData } from "../../../API/apiService";
